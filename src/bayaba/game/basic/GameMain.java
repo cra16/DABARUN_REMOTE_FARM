@@ -75,7 +75,7 @@ public class GameMain extends Activity
 	{
 		// 게임 데이터를 로드합니다.
 		ButtonObject temp = new ButtonObject();
-		backSpr.LoadSprite(mGL, MainContext,"backg2.spr");
+		backSpr.LoadSprite(mGL, MainContext,"background/farmBackground.spr");
 		cropSpr.LoadSprite(mGL, MainContext, "crop/seed_v1.spr");
 		emptySpr.LoadSprite(mGL, MainContext, "crop/empty.spr");
 		ButtonSpr.LoadSprite( mGL, MainContext, "button/button.spr" );
