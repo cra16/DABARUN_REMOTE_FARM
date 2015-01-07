@@ -64,8 +64,7 @@ public class GameMain extends Activity
 	public ArrayList<GameObject> ProgBackList = new ArrayList<GameObject> ();
 	
 	public GameMain( Context context, GameInfo info ) // 클래스 생성자 (메인 액티비티에서 호출)
-	{
-		
+	{	
 		MainContext = context; // 메인 컨텍스트를 변수에 보관한다.
 		gInfo = info; // 메인 액티비티에서 생성된 클래스를 가져온다.
 		
@@ -123,8 +122,6 @@ public class GameMain extends Activity
 	
 	public void PushButton( boolean push ) // OpenGL 화면에 터치가 발생하면 GLView에서 호출된다.
 	{
-		
-		
 		if ( push )
 		{
 		
@@ -143,8 +140,7 @@ public class GameMain extends Activity
 					CropList.add( defaultCrop ); // 어레이 리스트에 추가
 					*/
 				}
-			}
-			
+			}		
 		}
 		
 		Button.get(0).CheckButton(gInfo, push, TouchX, TouchY ); //지금 여기 터치했대, 버튼아 너가 클릭된건지 알아봐
@@ -160,36 +156,19 @@ public class GameMain extends Activity
 		/*cropObj.x = TouchX;
 		cropObj.y = TouchY;
 		*/
-		
-		//cropObj.SetObject(cropSpr, 0, 0, TouchX, TouchY, 0, 0);
-		
-		
-		
-		
+		//cropObj.SetObject(cropSpr, 0, 0, TouchX, TouchY, 0, 0);	
 	}
-	
-	
-	
-	
-	
-	
 	
 	public void GenerateBar(float paramX, float paramY){
 		
 		GameObject bar = new GameObject();
 		bar.SetObject(ProgBackSpr, 0, 0, paramX, paramY -40, 0, 0);
 		bar.move = 1;
-		ProgBackList.add(bar);
-		
-		
+		ProgBackList.add(bar);	
 	}
 	
-	
-	
 	public void DoGame() // 1/60초에 한번씩 SurfaceClass에서 호출된다. 게임의 코어 부분을 넣는다.
-	{
-		
-		
+	{	
 		synchronized ( mGL )
 		{
 			font.BeginFont(gInfo);
@@ -203,12 +182,8 @@ public class GameMain extends Activity
 				if(ProgList.get(i).move > 0) //움직여야 할 프로그레스바 라면
 				{
 					ProgList.get(i).energy++;
-					
 				}
-				
-				
 			}
-			
 //			
 //			ProgBack.DrawSprite(mGL, 0, gInfo, font); //프로그레스 백 그려주기
 //			ProgBtn.DrawSprite(mGL, 0, gInfo, font); //프로그레스 바 그려주기
@@ -219,9 +194,6 @@ public class GameMain extends Activity
 			{
 				EmptyList.get(i).DrawSprite( gInfo );
 			}
-			
-			
-			
 			
 			
 			//TODO: 현재 Current가 emptylist를 가리키고 있기 때문에 모션을 증가시켜줘도 아무런 변화가 없다...
@@ -237,11 +209,6 @@ public class GameMain extends Activity
 					CropList.get(i).DrawSprite( gInfo );
 				}
 			}
-			
-			
-			
-			
-			
 			
 			
 			
@@ -277,25 +244,18 @@ public class GameMain extends Activity
 			if ( Button.get(0).type == ButtonType.TYPE_ONE_CLICK ) // 심기 버튼 타입이 클릭 모드일때 
  			{
 				if(Button.get(0).click == ButtonType.STATE_CLK_BUTTON) // 만약 클릭 되었으면
-				{
-					
-					
-					
+				{	
 					//농작물 생성 후 어레이에 넣기
 					GameObject defaultCrop = new GameObject(); // GameObject 변수 선언
 					defaultCrop.SetObject( cropSpr, 0, 0, Current.x, Current.y, 0, 0 ); 
-					CropList.add( defaultCrop ); // 어레이 리스트에 추가-> 추가가 계속 되는게 문제 ㅠㅠ
+					//CropList.add( defaultCrop ); // 어레이 리스트에 추가-> 추가가 계속 되는게 문제 ㅠㅠ
 					
 					//프로그레스바 등록
 					GenerateBar(Current.x, Current.y);
 					
-					
 //					GameObject bar = new GameObject();
 //					bar.SetObject(ProgBackSpr, 0, 0, Current.x, Current.y, 0, 0);
 //					ProgBackList.add(bar);
-					
-					
-					
 					
 //					ProgBtn.move = 1; //프로그레스 작동하게 함 -> 어레이 부분에서 처리하도록 바꿈
 					Button.get(0).ResetButton(); //버튼은 다시 누를 수 있게 초기화.
