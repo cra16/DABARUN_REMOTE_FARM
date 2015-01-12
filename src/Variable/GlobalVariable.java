@@ -5,7 +5,7 @@ package Variable;
 
 public class GlobalVariable {
 	//public final static String url = "http://211.39.253.201/game/";
-	public final static String url = "http://cra16.handong.edu/dragonflight/";
+	public final static String url = "http://cra16.handong.edu/Dabarun/";
 	
 	public final static String login = url + "login.php";
 	
