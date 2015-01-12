@@ -95,12 +95,16 @@ public class GameMain extends Activity
 		
 		
 		//나중에는 결국 type_one_click으로 바꿔줘야함
-		
-		temp = new ButtonObject();
-		temp.SetButton( ButtonSpr, ButtonType.TYPE_POPUP, 0, 400, 330, 3 ); // 버튼1
-		//temp.SetText( 0, 20, 8, 1, 1, 1, 20f, "심기" );
-		temp.show = false;
-		Button.add( temp );
+		//버튼 들을 생서
+		for ( int i = 0; i < 4; i++ )
+		{
+			temp = new ButtonObject();
+			//나중에는 결국 type_one_click으로 바꿔줘야함, 일단 고치기
+			temp.SetButton( ButtonSpr, ButtonType.TYPE_POPUP, 0, 400, 330, 3 ); // 버튼1
+			//temp.SetText( 0, 20, 8, 1, 1, 1, 20f, "심기" );
+			temp.show = false;
+			Button.add( temp );
+		}
 		
 		
 		//#프로그레스바
@@ -133,9 +137,22 @@ public class GameMain extends Activity
 				if ( EmptyList.get(i).CheckPos((int)TouchX, (int)TouchY) ) // 빈땅을 터치 했는지 체크
 				{
 					Current = EmptyList.get(i); // Current 오브젝트를 터치된 오브젝트를 가리키도록 한다.
-					Button.get(0).SetButton(ButtonSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x, Current.y + 40, 3);
+					Button.get(0).SetButton(ButtonSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x + 80, Current.y, 3);
 					Button.get(0).SetText( 0, 20, 8, 1, 1, 1, 20f, "심기" );
 					Button.get(0).show = true;
+					
+					
+					Button.get(1).SetButton(ButtonSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x, Current.y - 45, 3);
+					Button.get(1).SetText( 0, 20, 8, 1, 1, 1, 20f, "거름주기" );
+					Button.get(1).show = true;
+					
+					Button.get(2).SetButton(ButtonSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x-80, Current.y , 3);
+					Button.get(2).SetText( 0, 20, 8, 1, 1, 1, 20f, "잡초제거" );
+					Button.get(2).show = true;
+					
+					Button.get(3).SetButton(ButtonSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x, Current.y + 45, 3);
+					Button.get(3).SetText( 0, 20, 8, 1, 1, 1, 20f, "물주기" );
+					Button.get(3).show = true;
 					
 					/* 이거는 심기 버튼을 눌렀을 때 비로소.. 만들어야 하는 것이 아닌가 한다.
 					GameObject defaultCrop = new GameObject(); // GameObject 변수 선언
@@ -220,6 +237,11 @@ public class GameMain extends Activity
 				EmptyList.get(i).DrawSprite( gInfo );
 			}
 			
+
+			Button.get(0).DrawSprite(mGL, 0, gInfo, font); //심기 버튼
+			Button.get(1).DrawSprite(mGL, 0, gInfo, font); // 거름 주기
+			Button.get(2).DrawSprite(mGL, 0, gInfo, font); // 잡초 제거
+			Button.get(3).DrawSprite(mGL, 0, gInfo, font); // 물주기
 			
 			
 			
