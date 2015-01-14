@@ -181,60 +181,59 @@ public class GameMain extends Activity {
 
 	public void PushButton(boolean push) // OpenGL 화면에 터치가 발생하면 GLView에서 호출된다.
 	{
+
+		// 어레이 리스트에 저장된 모든 오브젝트를
+		// 검색한다.
+		/**
+		 * UI용 터치 처리 전용 함수
+		 */
+		MainUI.Touch(gInfo, (int) TouchX, (int) TouchY, push);
+
 		if (push) {
-			for (int i = 0; i < EmptyList.size(); i++)
-				// 어레이 리스트에 저장된 모든 오브젝트를
-				// 검색한다.
-				/**
-				 * UI용 터치 처리 전용 함수
-				 */
-				MainUI.Touch(gInfo, (int) TouchX, (int) TouchY, push);
+			
+			//다른 곳 누르면 버튼 없어지게
+			Button.get(0).show = false;
+			Button.get(1).show = false;
+			Button.get(2).show = false;
+			Button.get(3).show = false;
 
-			if (push) {
-
-				for (int i = 0; i < EmptyList.size(); i++) // 어레이 리스트에 저장된 모든
-															// 오브젝트를 검색한다.
+			for (int i = 0; i < EmptyList.size(); i++) // 어레이 리스트에 저장된 모든
+														// 오브젝트를 검색한다.
+			{
+				if (EmptyList.get(i).CheckPos((int) TouchX, (int) TouchY)) // 빈땅을
+																			// 터치
+																			// 했는지
+																			// 체크
 				{
-					if (EmptyList.get(i).CheckPos((int) TouchX, (int) TouchY)) // 빈땅을
-																				// 터치
-																				// 했는지
-																				// 체크
-					{
-						Current = EmptyList.get(i); // Current 오브젝트를 터치된 오브젝트를
-													// 가리키도록
-													// 한다.
-						Button.get(0).SetButton(ButtonSpr,
-								ButtonType.TYPE_ONE_CLICK, 0, Current.x + 80,
-								Current.y, 3);
-						Button.get(0).SetText(0, 20, 8, 1, 1, 1, 20f, "심기");
-						Button.get(0).show = true;
+					Current = EmptyList.get(i); // Current 오브젝트를 터치된 오브젝트를
+												// 가리키도록
+												// 한다.
+					Button.get(0).SetButton(ButtonSpr,
+							ButtonType.TYPE_ONE_CLICK, 0, Current.x + 80,
+							Current.y, 3);
+					Button.get(0).SetText(0, 20, 8, 1, 1, 1, 20f, "심기");
+					Button.get(0).show = true;
+					Button.get(0).dead = true;
 
-						Button.get(1).SetButton(ButtonSpr,
-								ButtonType.TYPE_ONE_CLICK, 0, Current.x,
-								Current.y - 45, 3);
-						Button.get(1).SetText(0, 20, 8, 1, 1, 1, 20f, "거름주기");
-						Button.get(0).dead = true;
+					Button.get(1).SetButton(ButtonSpr,
+							ButtonType.TYPE_ONE_CLICK, 0, Current.x,
+							Current.y - 45, 3);
+					Button.get(1).SetText(0, 20, 8, 1, 1, 1, 20f, "거름주기");
+					Button.get(1).show = true;
 
-						Button.get(1).SetButton(ButtonSpr,
-								ButtonType.TYPE_ONE_CLICK, 0, Current.x,
-								Current.y - 45, 3);
-						Button.get(1).SetText(0, 20, 8, 1, 1, 1, 20f, "거름주기");
-						Button.get(1).show = true;
+					Button.get(2).SetButton(ButtonSpr,
+							ButtonType.TYPE_ONE_CLICK, 0, Current.x - 80,
+							Current.y, 3);
+					Button.get(2).SetText(0, 20, 8, 1, 1, 1, 20f, "잡초제거");
+					Button.get(2).show = true;
 
-						Button.get(2).SetButton(ButtonSpr,
-								ButtonType.TYPE_ONE_CLICK, 0, Current.x - 80,
-								Current.y, 3);
-						Button.get(2).SetText(0, 20, 8, 1, 1, 1, 20f, "잡초제거");
-						Button.get(2).show = true;
-
-						Button.get(3).SetButton(ButtonSpr,
-								ButtonType.TYPE_ONE_CLICK, 0, Current.x,
-								Current.y + 45, 3);
-						Button.get(3).SetText(0, 20, 8, 1, 1, 1, 20f, "물주기");
-						Button.get(3).show = true;
-					}
+					Button.get(3).SetButton(ButtonSpr,
+							ButtonType.TYPE_ONE_CLICK, 0, Current.x,
+							Current.y + 45, 3);
+					Button.get(3).SetText(0, 20, 8, 1, 1, 1, 20f, "물주기");
+					Button.get(3).show = true;
+					
 				}
-
 			}
 		}
 	}
@@ -255,98 +254,97 @@ public class GameMain extends Activity {
 			backSpr.PutAni(gInfo, 400, 240, 0, 0); // 백그라운드
 			Button.get(0).DrawSprite(mGL, 0, gInfo, font); // 심기 버튼
 
-				backSpr.PutAni(gInfo, 400, 240, 0, 0); // 백그라운드
-				// Button.get(0).DrawSprite(mGL, 0, gInfo, font); //심기 버튼
+			backSpr.PutAni(gInfo, 400, 240, 0, 0); // 백그라운드
+			// Button.get(0).DrawSprite(mGL, 0, gInfo, font); //심기 버튼
 
-				/*
-				 * 모든 UI의 버튼 터치 상태를 체크하기 위한 루프 일반적인 터치는 push함수에서 체크하고 ui는 여기서 따로
-				 * 체크한다.
-				 */
-				for (int i = 0; i < MainUI.UIList.size(); i++) {
+			/*
+			 * 모든 UI의 버튼 터치 상태를 체크하기 위한 루프 일반적인 터치는 push함수에서 체크하고 ui는 여기서 따로
+			 * 체크한다.
+			 */
+			for (int i = 0; i < MainUI.UIList.size(); i++) {
 
-					if (MainUI.UIList.get(i).index == myPop.Group0.ONE_CLICK_001) {
-						if (MainUI.UIList.get(i).click == ButtonType.STATE_CLK_BUTTON) {
-							/* 확인 버튼을 눌렀을때 여기에서 팝업창을 없애준다. */
+				if (MainUI.UIList.get(i).index == myPop.Group0.ONE_CLICK_001) {
+					if (MainUI.UIList.get(i).click == ButtonType.STATE_CLK_BUTTON) {
+						/* 확인 버튼을 눌렀을때 여기에서 팝업창을 없애준다. */
 
-							MainUI.UIList.get(i).ResetButton();
-							MainUI.DeleteLastGroup(gInfo);
-
-						}
-					}
-				}
-
-				for (int i = 0; i < ProgList.size(); i++) {
-					ProgList.get(i).DrawSprite(gInfo);
-					ProgBackList.get(i).DrawSprite(gInfo);
-					if (ProgList.get(i).move > 0) // 움직여야 할 프로그레스바 라면
-					{
-						ProgList.get(i).energy++;
+						MainUI.UIList.get(i).ResetButton();
+						MainUI.DeleteLastGroup(gInfo);
 
 					}
 				}
-
-				// 빈밭 일단 다 그려줌.
-				for (int i = 0; i < EmptyList.size(); i++) {
-					EmptyList.get(i).DrawSprite(gInfo);
-				}
-
-				// 화면이 뜨자마자 버튼들이 나타나야함
-
-				// 버튼 오브젝트들을 그려줌
-				belowButton.get(0).DrawSprite(mGL, 0, gInfo, font); // 장식 버튼
-				belowButton.get(1).DrawSprite(mGL, 0, gInfo, font); // 마켓 버튼
-				belowButton.get(2).DrawSprite(mGL, 0, gInfo, font); // 농장 체험 버튼
-				belowButton.get(3).DrawSprite(mGL, 0, gInfo, font); // 창고 버튼
-
-				Button.get(0).DrawSprite(mGL, 0, gInfo, font); // 심기 버튼
-				Button.get(1).DrawSprite(mGL, 0, gInfo, font); // 거름 주기
-				Button.get(2).DrawSprite(mGL, 0, gInfo, font); // 잡초 제거
-				Button.get(3).DrawSprite(mGL, 0, gInfo, font); // 물주기
-
-				// 농작물을 그려준다..
-				for (int i = 0; i < CropList.size(); i++) {
-					if (CropList.get(i).dead == false) {
-						CropList.get(i).DrawSprite(gInfo);
-					}
-				}
-
-				/* 심기 버튼에 대한 로직 */
-				if (Button.get(0).type == ButtonType.TYPE_ONE_CLICK) // 심기 버튼
-																		// 타입이
-																		// 클릭
-																		// 모드일때
-				{
-					if (Button.get(0).click == ButtonType.STATE_CLK_BUTTON) // 만약
-																			// 클릭
-																			// 되었으면(1회성)
-					{
-						Button.get(0).dead = false;
-
-						Log.d("test", "plant?");
-
-						// 농작물 생성 후 어레이에 넣기
-						GameObject defaultCrop = new GameObject(); // GameObject
-																	// 변수 선언
-						defaultCrop.SetObject(cropSpr, 0, 0, Current.x,
-								Current.y, 0, 0);
-						CropList.add(defaultCrop); // 어레이 리스트에 추가-> 추가가 계속 되는게
-													// 문제 ㅠㅠ
-
-						// 프로그레스바 등록
-						GenerateBar(Current.x, Current.y);
-					}
-				}
-
-				/* 버튼이 눌렸으면 */
-				if (Button.get(0).dead == false) {
-
-					MainUI.Draw(mGL, gInfo, font); // 등록한 모든 UI를 화면에 그려준다.
-					Log.d("debug", "dead=false");
-				}
-
-				font.EndFont(gInfo);
 			}
-		}
 
+			for (int i = 0; i < ProgList.size(); i++) {
+				ProgList.get(i).DrawSprite(gInfo);
+				ProgBackList.get(i).DrawSprite(gInfo);
+				if (ProgList.get(i).move > 0) // 움직여야 할 프로그레스바 라면
+				{
+					ProgList.get(i).energy++;
+
+				}
+			}
+
+			// 빈밭 일단 다 그려줌.
+			for (int i = 0; i < EmptyList.size(); i++) {
+				EmptyList.get(i).DrawSprite(gInfo);
+			}
+
+			// 화면이 뜨자마자 버튼들이 나타나야함
+
+			// 버튼 오브젝트들을 그려줌
+			belowButton.get(0).DrawSprite(mGL, 0, gInfo, font); // 장식 버튼
+			belowButton.get(1).DrawSprite(mGL, 0, gInfo, font); // 마켓 버튼
+			belowButton.get(2).DrawSprite(mGL, 0, gInfo, font); // 농장 체험 버튼
+			belowButton.get(3).DrawSprite(mGL, 0, gInfo, font); // 창고 버튼
+
+			Button.get(0).DrawSprite(mGL, 0, gInfo, font); // 심기 버튼
+			Button.get(1).DrawSprite(mGL, 0, gInfo, font); // 거름 주기
+			Button.get(2).DrawSprite(mGL, 0, gInfo, font); // 잡초 제거
+			Button.get(3).DrawSprite(mGL, 0, gInfo, font); // 물주기
+
+			// 농작물을 그려준다..
+			for (int i = 0; i < CropList.size(); i++) {
+				if (CropList.get(i).dead == false) {
+					CropList.get(i).DrawSprite(gInfo);
+				}
+			}
+
+			/* 심기 버튼에 대한 로직 */
+			if (Button.get(0).type == ButtonType.TYPE_ONE_CLICK) // 심기 버튼
+																	// 타입이
+																	// 클릭
+																	// 모드일때
+			{
+				if (Button.get(0).click == ButtonType.STATE_CLK_BUTTON) // 만약
+																		// 클릭
+																		// 되었으면(1회성)
+				{
+					Button.get(0).dead = false;
+
+					Log.d("test", "plant?");
+
+					// 농작물 생성 후 어레이에 넣기
+					GameObject defaultCrop = new GameObject(); // GameObject
+																// 변수 선언
+					defaultCrop.SetObject(cropSpr, 0, 0, Current.x, Current.y,
+							0, 0);
+					CropList.add(defaultCrop); // 어레이 리스트에 추가-> 추가가 계속 되는게
+												// 문제 ㅠㅠ
+
+					// 프로그레스바 등록
+					GenerateBar(Current.x, Current.y);
+				}
+			}
+
+			/* 버튼이 눌렸으면 */
+			if (Button.get(0).dead == false) {
+
+				MainUI.Draw(mGL, gInfo, font); // 등록한 모든 UI를 화면에 그려준다.
+				Log.d("debug", "dead=false");
+			}
+
+			font.EndFont(gInfo);
+		}
 	}
 
+}
