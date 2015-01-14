@@ -40,15 +40,11 @@ public class GameMain extends Activity {
 	public Sprite cropSpr = new Sprite(); // 점점 변경되는 농작물 스프라이트
 	public Sprite backSpr = new Sprite();// background sprite
 	public Sprite emptySpr = new Sprite(); // 빈땅 스프라이트
-	public Sprite belowButtonSpr1 = new Sprite(); //화면 아래에 뜨는 버튼 스프라이트
-	public Sprite belowButtonSpr2 = new Sprite(); //화면 아래에 뜨는 버튼 스프라이트
-	public Sprite belowButtonSpr3 = new Sprite(); //화면 아래에 뜨는 버튼 스프라이트
-	public Sprite belowButtonSpr4 = new Sprite(); //화면 아래에 뜨는 버튼 스프라이트
 
 	// object
 	private ButtonObject ProgBtn = new ButtonObject(); // 프로그레스바 오브젝트
 	private ButtonObject ProgBack = new ButtonObject(); // 프로그레스배경 오브젝트
-	private ButtonObject below = new ButtonObject(); // 화면 아래에 뜨는 버튼 오브젝트
+	
 	private ButtonObject temp = new ButtonObject(); //밭 누르면 나오는 버튼들에 대한 버튼 오브젝트
 	
 	public GameObject Current = null; // 터치한 오브젝트를 가리키기 위한 빈칸.. 포인터 대용
@@ -56,22 +52,27 @@ public class GameMain extends Activity {
 	public GameObject EmptyObj = new GameObject(); // 빈땅입니다
 	public GameObject PointerObj = null;
 
+	//스프라이트 저장을 위한 배열, 화면 하단의 버튼들
+	private Sprite Pattern[] = new Sprite[5];
+	
 	// object arrayList
-	public ArrayList<GameObject> CropList = new ArrayList<GameObject>(); // 농작물들을
-																			// 담는
-																			// 어레이
-	public ArrayList<GameObject> EmptyList = new ArrayList<GameObject>(); // 빈칸
-																			// 어레이
+	// 농작물들을 담은 어레이
+	public ArrayList<GameObject> CropList = new ArrayList<GameObject>(); 
+	//빈칸 어레이
+	public ArrayList<GameObject> EmptyList = new ArrayList<GameObject>(); 
 	public ArrayList<GameObject> ProgList = new ArrayList<GameObject>();
 	public ArrayList<GameObject> ProgBackList = new ArrayList<GameObject>();
-	public ArrayList<ButtonObject> Button = new ArrayList<ButtonObject>(); //밭 누르면 나오는 버튼들
-	public ArrayList<ButtonObject> belowButton = new ArrayList<ButtonObject>(); //화면 아래에 나오는 버튼들 
-	public ArrayList<Sprite> belowSprList = new ArrayList<Sprite>();
+	//밭 누르면 나오는 버튼들
+	public ArrayList<ButtonObject> Button = new ArrayList<ButtonObject>(); 
+	//화면 아래에 나오는 버튼들을 저장할 리스트
+	public ArrayList<ButtonObject> belowButton = new ArrayList<ButtonObject>();
 	
 	public GameMain(Context context, GameInfo info) // 클래스 생성자 (메인 액티비티에서 호출)
 	{
 		MainContext = context; // 메인 컨텍스트를 변수에 보관한다.
 		gInfo = info; // 메인 액티비티에서 생성된 클래스를 가져온다.
+		
+		for(int i =0;i< Pattern.length;i++) Pattern[i] = new Sprite(); //스프라이트용 배열 초기화
 
 	}
 
@@ -83,23 +84,41 @@ public class GameMain extends Activity {
 		cropSpr.LoadSprite(mGL, MainContext, "crop/seed_v1.spr");
 		emptySpr.LoadSprite(mGL, MainContext, "crop/empty.spr");
 		ButtonSpr.LoadSprite(mGL, MainContext, "button/button.spr");
-		belowButtonSpr1.LoadSprite(mGL, MainContext, "belowButton/experienceButton.spr");
-		belowButtonSpr2.LoadSprite(mGL, MainContext, "belowButton/itemButton.spr");
-		belowButtonSpr3.LoadSprite(mGL, MainContext, "belowButton/storageButton.spr");
-		belowButtonSpr4.LoadSprite(mGL, MainContext, "belowButton/marketIcon.spr");
+		
+		Pattern[0].LoadSprite( mGL, MainContext, "experienceButton.spr" );
+		Pattern[1].LoadSprite( mGL, MainContext, "itemButton.spr");
+		Pattern[2].LoadSprite( mGL, MainContext, "storageButton.spr");
+		Pattern[3].LoadSprite( mGL, MainContext, "marketIcon.spr" );
+		
 		ProgressSpr.LoadSprite(mGL, MainContext, "button/progress.spr");
 		ProgBackSpr.LoadSprite(mGL, MainContext, "button/progBack.spr");
 
+		
 		cropObj.SetObject(cropSpr, 0, 0, 400, 280, 0, 0);
 		cropObj.dead = true; // 농작물은 죽어있는 상태다. false로 바꿔줘야만 메인에서 그려준다.
 
-		belowSprList.add(belowButtonSpr1);
-		belowSprList.add(belowButtonSpr2);
-		belowSprList.add(belowButtonSpr3);
-		belowSprList.add(belowButtonSpr4);
 		
 		
 		
+		ButtonObject below = new ButtonObject(); // 화면 아래에 뜨는 버튼 오브젝트
+		below.SetButton( Pattern[0], ButtonType.TYPE_ONE_CLICK, 0, 100, 450, 0 ); // 농장체험 버튼
+		belowButton.add(below);
+		belowButton.get(0).SetText(0, 20, 8, 1, 1, 1, 20f, "농장 체험");
+		
+		below = new ButtonObject(); // 화면 아래에 뜨는 버튼 오브젝트
+		below.SetButton( Pattern[1], ButtonType.TYPE_ONE_CLICK, 0, 300, 450, 0 ); // 장식 버튼
+		belowButton.add(below);
+		belowButton.get(1).SetText(0, 20, 8, 1, 1, 1, 20f, "장식");
+		
+		below = new ButtonObject(); // 화면 아래에 뜨는 버튼 오브젝트
+		below.SetButton( Pattern[2], ButtonType.TYPE_ONE_CLICK, 0, 500, 450, 0 ); // 창고 버튼
+		belowButton.add(below);
+		belowButton.get(2).SetText(0, 20, 8, 1, 1, 1, 20f, "창고");
+		
+		below = new ButtonObject(); // 화면 아래에 뜨는 버튼 오브젝트
+		below.SetButton( Pattern[3], ButtonType.TYPE_ONE_CLICK, 0, 700, 450, 0 ); // 마켓 버튼
+		belowButton.add(below);
+		belowButton.get(3).SetText(0, 20, 8, 1, 1, 1, 20f, "마켓");
 		
 		// 빈칸 생성해서 어레이에 넣어주기
 		for (int i = 0; i < 3; i++) {
@@ -109,27 +128,15 @@ public class GameMain extends Activity {
 		}
 
 		// 나중에는 결국 type_one_click으로 바꿔줘야함
-		// 버튼 들을 생성
+		// 버튼 들을 생성, 밭을 누르면 나오는 버튼들
 		for (int i = 0; i < 4; i++) {
 			temp = new ButtonObject();
 			// 나중에는 결국 type_one_click으로 바꿔줘야함, 일단 고치기
 			temp.SetButton(ButtonSpr, ButtonType.TYPE_POPUP, 0, 400, 330, 3); // 버튼1
-			// temp.SetText( 0, 20, 8, 1, 1, 1, 20f, "심기" );
 			temp.show = false;
 			Button.add(temp);
 		}
 		
-		// 나중에는 결국 type_one_click으로 바꿔줘야함
-		// 버튼 들을 생성
-		for (int i = 0; i < 4; i++) {
-			below = new ButtonObject();
-			// 나중에는 결국 type_one_click으로 바꿔줘야함, 일단 고치기
-			below.SetButton(belowSprList.get(i), ButtonType.TYPE_POPUP, 0, 400, 330, 3); // 버튼1
-			// temp.SetText( 0, 20, 8, 1, 1, 1, 20f, "심기" );
-			below.show = false;
-			belowButton.add(below);
-		}
-
 		// #프로그레스바
 		ProgBtn.SetButton(ProgressSpr, ButtonType.TYPE_PROGRESS_RIGHT, 0, 400,
 				220, 0); // 오른쪽으로 증가 감소하는 프로그레스바로 세팅
@@ -235,30 +242,9 @@ public class GameMain extends Activity {
 			}
 			
 			//화면이 뜨자마자 버튼들이 나타나야함
-			belowButton.get(0).SetButton(belowButtonSpr1,
-					ButtonType.TYPE_ONE_CLICK, 0, 240,
-					240, 3);
-			belowButton.get(0).SetText(0, 20, 8, 1, 1, 1, 20f, "장식");
-			belowButton.get(0).show = true;
 			
-			belowButton.get(1).SetButton(belowButtonSpr2,
-					ButtonType.TYPE_ONE_CLICK, 0, 320,
-					240, 3);
-			belowButton.get(1).SetText(0, 20, 8, 1, 1, 1, 20f, "마켓");
-			belowButton.get(1).show = true;
 			
-			belowButton.get(2).SetButton(belowButtonSpr3,
-					ButtonType.TYPE_ONE_CLICK, 0, 400,
-					240, 3);
-			belowButton.get(2).SetText(0, 20, 8, 1, 1, 1, 20f, "농장 체험");
-			belowButton.get(2).show = true;
-			
-			belowButton.get(3).SetButton(belowButtonSpr4,
-					ButtonType.TYPE_ONE_CLICK, 0, 480,
-					240, 3);
-			belowButton.get(3).SetText(0, 20, 8, 1, 1, 1, 20f, "창고");
-			belowButton.get(3).show = true;
-			
+			//버튼 오브젝트들을 그려줌
 			belowButton.get(0).DrawSprite(mGL, 0, gInfo, font); // 장식 버튼
 			belowButton.get(1).DrawSprite(mGL, 0, gInfo, font); // 마켓 버튼
 			belowButton.get(2).DrawSprite(mGL, 0, gInfo, font); // 농장 체험 버튼
@@ -268,9 +254,6 @@ public class GameMain extends Activity {
 			Button.get(1).DrawSprite(mGL, 0, gInfo, font); // 거름 주기
 			Button.get(2).DrawSprite(mGL, 0, gInfo, font); // 잡초 제거
 			Button.get(3).DrawSprite(mGL, 0, gInfo, font); // 물주기
-			
-			
-			
 
 			// 농작물을 그려준다..
 			for (int i = 0; i < CropList.size(); i++) {
