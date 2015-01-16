@@ -11,10 +11,13 @@ package bayaba.game.basic;
 
 import java.util.ArrayList;
 import java.util.Random;
+
 import javax.microedition.khronos.opengles.GL10;
+
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
+
 import bayaba.engine.lib.ButtonObject;
 import bayaba.engine.lib.ButtonType;
 import bayaba.engine.lib.Font;
@@ -33,6 +36,19 @@ public class GameMain extends Activity {
 		}
 
 	}
+	static class Select
+	{
+		static class Group0
+		{
+			static final int	POPUP_000		=	0;
+			static final int	ONE_CLICK_001		=	1;
+			static final int	ONE_CLICK_002		=	2;
+			static final int	ONE_CLICK_003		=	3;
+		}
+
+	}
+
+
 
 	public boolean flag = false;
 	
@@ -116,12 +132,11 @@ public class GameMain extends Activity {
 		cropObj.SetObject(cropSpr, 0, 0, 400, 280, 0, 0);
 		cropObj.dead = true; // 농작물은 죽어있는 상태다. false로 바꿔줘야만 메인에서 그려준다.
 
-		// ui 적용중
-		MainUI.LoadUI(mGL, MainContext, "UI/myTest.ui"); // UI 파일을 로드한다.
-		MainUI.AddGroup(0, 1);
+		// ui 적용
+		MainUI.LoadUI(mGL, MainContext, "UI/UIPack.ui"); // UI 파일을 로드한다.
+		MainUI.AddGroup(0, 1); /*이걸 해주지 않으면 쓰레기값이 열리게 되더라..*/
 
-		//test 
-		SuperBtn.SetButton(ButtonSpr, ButtonType.TYPE_ONE_CLICK, 0, 50 , 50, 3);
+		
 		
 		
 		// 빈칸 생성해서 어레이에 넣어주기
@@ -130,65 +145,28 @@ public class GameMain extends Activity {
 			emptyTemp.SetObject(emptySpr, 0, 0, 50 + ((i % 4) * 200), 300 + ((i / 4) * 80), 0, 0);
 			EmptyList.add(emptyTemp); // 어레이 리스트에 추가
 		}
-
-		/*
-		 * 버튼 4개 메뉴 생성처음엔 터치 불가능한 popup type으로 생성하고 보이지 않게 감춘다.나중에 click type으로
-		 * 타입을 변형한다.
-		 */
-
-		String buttonType[] = { "심기", "거름주기", "잡초제거", "물주기" };
-
+		
+		/* 십자모양 4개 생성*/
+		
 		for (int i = 0; i < 4; i++) {
 			temp = new ButtonObject();
-			temp.SetButton(ButtonSpr, ButtonType.TYPE_POPUP, 0, 400, 330, 3); //
-			temp.dead = true;
-			// temp.SetText( 0, 20, 8, 1, 1, 1, 20f, "심기" );
+			temp.SetButton(ButtonSpr, ButtonType.TYPE_POPUP, 0, 400, 330, 3); 
 			temp.show = false;
 			Button.add(temp);
 		}
 
-		ButtonObject below = new ButtonObject(); // 화면 아래에 뜨는 버튼 오브젝트
-		below.SetButton(Pattern[0], ButtonType.TYPE_ONE_CLICK, 0, 100, 450, 0); // 농장체험
-																				// 버튼
-		belowButton.add(below);
-		belowButton.get(0).SetText(0, 20, 8, 1, 1, 1, 20f, "농장 체험");
-
-		below = new ButtonObject(); // 화면 아래에 뜨는 버튼 오브젝트
-		below.SetButton(Pattern[1], ButtonType.TYPE_ONE_CLICK, 0, 300, 450, 0); // 장식
-																				// 버튼
-		belowButton.add(below);
-		belowButton.get(1).SetText(0, 20, 8, 1, 1, 1, 20f, "장식");
-
-		below = new ButtonObject(); // 화면 아래에 뜨는 버튼 오브젝트
-		below.SetButton(Pattern[2], ButtonType.TYPE_ONE_CLICK, 0, 500, 450, 0); // 창고
-																				// 버튼
-		belowButton.add(below);
-		belowButton.get(2).SetText(0, 20, 8, 1, 1, 1, 20f, "창고");
-
-		below = new ButtonObject(); // 화면 아래에 뜨는 버튼 오브젝트
-		below.SetButton(Pattern[3], ButtonType.TYPE_ONE_CLICK, 0, 700, 450, 0); // 마켓
-																				// 버튼
-		belowButton.add(below);
-		belowButton.get(3).SetText(0, 20, 8, 1, 1, 1, 20f, "마켓");
-
-		// 나중에는 결국 type_one_click으로 바꿔줘야함
-		// 버튼 들을 생성, 밭을 누르면 나오는 버튼들
-		for (int i = 0; i < 4; i++) {
+		
+		/* 밑에 4개 버튼 생성*/
+		
+		String buttonName[] = { "농장체험", "장식", "창고", "마켓" };
+		
+		for(int i = 0; i<4; i++){
 			temp = new ButtonObject();
-			// 나중에는 결국 type_one_click으로 바꿔줘야함, 일단 고치기
-			temp.SetButton(ButtonSpr, ButtonType.TYPE_POPUP, 0, 400, 330, 3); // 버튼1
-			temp.show = false;
-			Button.add(temp);
+			temp.SetButton(Pattern[i], ButtonType.TYPE_ONE_CLICK, 0, 100 + 200*i, 450, 0); // 농장체험
+			temp.SetText(0, 20, 8, 1, 1, 1, 20f, buttonName[i]);
+			belowButton.add(temp);
 		}
-
-		// #프로그레스바
-		ProgBtn.SetButton(ProgressSpr, ButtonType.TYPE_PROGRESS_RIGHT, 0, 400,
-				220, 0); // 오른쪽으로 증가 감소하는 프로그레스바로 세팅
-		ProgBtn.move = -1; // 계속 변하도록 허락하는 값 -1이되면 프로그레스에 변화를 주지 않기로 함.
-		ProgBtn.energy = 0;// 초기값을 0으로 설정해주지 않으면 처음부터 100%가 되어있기 때문에 0으로 초기화.
-		ProgBack.SetButton(ProgBackSpr, ButtonType.TYPE_POPUP, 0, 400, 220, 0); // #프로그레스바
-																				// 배경
-																				// (검정색)
+		
 	}
 
 	public void PushButton(boolean push) // OpenGL 화면에 터치가 발생하면 GLView에서 호출된다.
@@ -206,8 +184,8 @@ public class GameMain extends Activity {
 			if ( Button.get(i).click == ButtonType.STATE_CLK_BUTTON ) 
 			{
 				Button.get(i).dead = false;
-				MainUI.AddGroup(0,0);
-				//MainUI.AddGroup(0,1);
+				//MainUI.AddGroup(0,0);
+				MainUI.AddGroup(0,1);
 				
 				flag = true;
 				Button.get(i).ResetButton();
@@ -219,38 +197,62 @@ public class GameMain extends Activity {
 		
 		if (push) {
 
+			/*버튼 없어지게*/
+			for(int i=0; i<4; i++)
+				Button.get(i).show = false;
 			
-			//다른 곳 누르면 버튼 없어지게
-			Button.get(0).show = false;
-			Button.get(1).show = false;
-			Button.get(2).show = false;
-			Button.get(3).show = false;
+			
+			/*
+			String CtrlBtnName[] = {"심기","거름주기", "잡초제거", "물주기"};
+			int CtrlBtnX[] = {20,40,60,80};
+			int CtrlBtnY[] = {0,-45,0,45};
+			*/
+			
 			
 			for (int i = 0; i < EmptyList.size(); i++) /*모든 빈땅 어레이리스트를 체크한다*/
 			{
 				if (EmptyList.get(i).CheckPos((int) TouchX, (int) TouchY)) 
 
 				{
-					Current = EmptyList.get(i); // Current 오브젝트를 터치된 오브젝트를
-												// 가리키도록
-												// 한다.
+					Current = EmptyList.get(i); /* currnt : 터치된 오브젝트*/
 
-					Button.get(0).SetButton(ButtonSpr,ButtonType.TYPE_ONE_CLICK, 0, Current.x + 80, Current.y, 3);
+					Button.get(0).SetButton(ButtonSpr,
+							ButtonType.TYPE_ONE_CLICK, 0, Current.x + 80,
+							Current.y, 3);
 					Button.get(0).SetText(0, 20, 8, 1, 1, 1, 20f, "심기");
 					Button.get(0).show = true;
-					
 
-					Button.get(1).SetButton(ButtonSpr,ButtonType.TYPE_ONE_CLICK, 0, Current.x, Current.y - 45, 3);
+					Button.get(1).SetButton(ButtonSpr,
+							ButtonType.TYPE_ONE_CLICK, 0, Current.x,
+							Current.y - 45, 3);
 					Button.get(1).SetText(0, 20, 8, 1, 1, 1, 20f, "거름주기");
 					Button.get(1).show = true;
 
-					Button.get(2).SetButton(ButtonSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x - 80, Current.y, 3);
+					Button.get(2).SetButton(ButtonSpr,
+							ButtonType.TYPE_ONE_CLICK, 0, Current.x - 80,
+							Current.y, 3);
 					Button.get(2).SetText(0, 20, 8, 1, 1, 1, 20f, "잡초제거");
 					Button.get(2).show = true;
 
-					Button.get(3).SetButton(ButtonSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x, Current.y + 45, 3);
+					Button.get(3).SetButton(ButtonSpr,
+							ButtonType.TYPE_ONE_CLICK, 0, Current.x,
+							Current.y + 45, 3);
 					Button.get(3).SetText(0, 20, 8, 1, 1, 1, 20f, "물주기");
 					Button.get(3).show = true;
+					
+					
+					
+					
+					/*
+					for(int j=0; j<4; j++){
+
+						Button.get(i).SetButton(ButtonSpr,ButtonType.TYPE_ONE_CLICK, 0, Current.x + CtrlBtnX[j], Current.y + CtrlBtnY[j], 3);
+						Button.get(i).SetText(0, 20, 8, 1, 1, 1, 20f, CtrlBtnName[j]);
+						Button.get(i).show = true;
+						
+					}
+					*/
+					
 
 				}
 			}
@@ -275,12 +277,12 @@ public class GameMain extends Activity {
 			backSpr.PutAni(gInfo, 400, 240, 0, 0); // 백그라운드
 
 			
-			
+			/*
 			for (int i = 0; i < MainUI.UIList.size(); i++) {
 
 				if (MainUI.UIList.get(i).index == myPop.Group0.ONE_CLICK_001) {
 					if (MainUI.UIList.get(i).click == ButtonType.STATE_CLK_BUTTON) {
-						/* 확인 버튼을 눌렀을때 여기에서 팝업창을 없애준다. */
+						
 						flag = false;
 						MainUI.UIList.get(i).ResetButton();
 						MainUI.DeleteLastGroup(gInfo);
@@ -289,6 +291,24 @@ public class GameMain extends Activity {
 					}
 				}
 			}
+
+			*/
+			
+			for (int i = 0; i < MainUI.UIList.size(); i++) {
+
+				if (MainUI.UIList.get(i).index == Select.Group0.ONE_CLICK_001) {
+					if (MainUI.UIList.get(i).click == ButtonType.STATE_CLK_BUTTON) {
+						
+						flag = false;
+						MainUI.UIList.get(i).ResetButton();
+						MainUI.DeleteLastGroup(gInfo);
+						
+						
+					}
+				}
+				
+			}
+			
 			// 빈밭 일단 다 그려줌.
 			
 			for (int i = 0; i < EmptyList.size(); i++) {
@@ -298,17 +318,13 @@ public class GameMain extends Activity {
 			// 화면이 뜨자마자 버튼들이 나타나야함
 
 			
-			// 버튼 오브젝트들을 그려줌
-			belowButton.get(0).DrawSprite(mGL, 0, gInfo, font); // 장식 버튼
-			belowButton.get(1).DrawSprite(mGL, 0, gInfo, font); // 마켓 버튼
-			belowButton.get(2).DrawSprite(mGL, 0, gInfo, font); // 농장 체험 버튼
-			belowButton.get(3).DrawSprite(mGL, 0, gInfo, font); // 창고 버튼
-		
-			Button.get(0).DrawSprite(mGL, 0, gInfo, font); // 심기 버튼
-			Button.get(1).DrawSprite(mGL, 0, gInfo, font); // 거름 주기
-			Button.get(2).DrawSprite(mGL, 0, gInfo, font); // 잡초 제거
-			Button.get(3).DrawSprite(mGL, 0, gInfo, font); // 물주기
+			//버튼들 그려주기
+			for (int i=0; i<4; i++){
+				belowButton.get(i).DrawSprite(mGL, 0, gInfo, font); 
+				Button.get(i).DrawSprite(mGL, 0, gInfo, font); // 심기 버튼
 
+			}
+			
 			// 농작물을 그려준다..
 			for (int i = 0; i < CropList.size(); i++) {
 				if (CropList.get(i).dead == false) {

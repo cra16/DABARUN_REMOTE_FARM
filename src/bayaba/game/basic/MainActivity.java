@@ -26,7 +26,7 @@ public class MainActivity extends Activity
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setVolumeControlStream( AudioManager.STREAM_MUSIC );
         
-        gInfo = new GameInfo( 800, 480 ); // ¼¼·Î ¸ðµåÀÌ´Ù. °¡·Î ¸ðµå¸¦ ÇÏ°í ½ÍÀ»¶© 800, 480À¸·Î ÁöÁ¤ÇÏ¸é µÈ´Ù. °íÇØ»óµµ·Î º¯È¯ÇØµµ ¹«¹æÇÏ´Ù.
+        gInfo = new GameInfo( 800, 480 ); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ì´ï¿½. ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½å¸¦ ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 800, 480ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ ï¿½È´ï¿½. ï¿½ï¿½ï¿½Ø»óµµ·ï¿½ ï¿½ï¿½È¯ï¿½Øµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.
         gInfo.ScreenXsize = getResources().getDisplayMetrics().widthPixels;
         gInfo.ScreenYsize = getResources().getDisplayMetrics().heightPixels;
         gInfo.SetScale();
