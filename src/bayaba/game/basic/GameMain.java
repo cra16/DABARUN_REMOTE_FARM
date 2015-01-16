@@ -33,10 +33,7 @@ public class GameMain extends Activity {
 		}
 
 	}
-
 	public boolean flag = false;
-	
-	
 	
 	// general variable
 	public GL10 mGL = null; // OpenGL 객체
@@ -83,8 +80,6 @@ public class GameMain extends Activity {
 	public ArrayList<ButtonObject> Button = new ArrayList<ButtonObject>();
 	// 화면 아래에 나오는 버튼들을 저장할 리스트
 	public ArrayList<ButtonObject> belowButton = new ArrayList<ButtonObject>();
-	
-	
 
 	public GameMain(Context context, GameInfo info) // 클래스 생성자 (메인 액티비티에서 호출)
 	{
@@ -93,7 +88,6 @@ public class GameMain extends Activity {
 
 		for (int i = 0; i < Pattern.length; i++)
 			Pattern[i] = new Sprite(); // 스프라이트용 배열 초기화
-
 	}
 
 	public void LoadGameData() // SurfaceClass에서 OpenGL이 초기화되면 최초로 호출되는 함수
@@ -198,7 +192,6 @@ public class GameMain extends Activity {
 		 */
 		MainUI.Touch(gInfo, (int) TouchX, (int) TouchY, push);
 
-
 		/*버튼 체크 */
 		for ( int i = 0; i < Button.size(); i++ )
 		{
@@ -211,15 +204,10 @@ public class GameMain extends Activity {
 				
 				flag = true;
 				Button.get(i).ResetButton();
-				
-				
 			}
 		}
-		
-		
-		if (push) {
 
-			
+		if (push) {
 			//다른 곳 누르면 버튼 없어지게
 			Button.get(0).show = false;
 			Button.get(1).show = false;
@@ -258,7 +246,6 @@ public class GameMain extends Activity {
 		}
 	}
 	
-
 	public void GenerateBar(float paramX, float paramY) {
 
 		GameObject bar = new GameObject();
@@ -274,8 +261,6 @@ public class GameMain extends Activity {
 			font.BeginFont(gInfo);
 			backSpr.PutAni(gInfo, 400, 240, 0, 0); // 백그라운드
 
-			
-			
 			for (int i = 0; i < MainUI.UIList.size(); i++) {
 
 				if (MainUI.UIList.get(i).index == myPop.Group0.ONE_CLICK_001) {
@@ -284,20 +269,15 @@ public class GameMain extends Activity {
 						flag = false;
 						MainUI.UIList.get(i).ResetButton();
 						MainUI.DeleteLastGroup(gInfo);
-						
-						
 					}
 				}
 			}
 			// 빈밭 일단 다 그려줌.
-			
 			for (int i = 0; i < EmptyList.size(); i++) {
 				EmptyList.get(i).DrawSprite(gInfo);
 			}
 
 			// 화면이 뜨자마자 버튼들이 나타나야함
-
-			
 			// 버튼 오브젝트들을 그려줌
 			belowButton.get(0).DrawSprite(mGL, 0, gInfo, font); // 장식 버튼
 			belowButton.get(1).DrawSprite(mGL, 0, gInfo, font); // 마켓 버튼
@@ -316,14 +296,10 @@ public class GameMain extends Activity {
 				}
 			}
 
-
 			/* 심기 버튼에 대한 로직 */
 			if (Button.get(0).type == ButtonType.TYPE_ONE_CLICK) /*심기 버튼 타입이 클릭 모드일때*/
-																	
 			{
-
 				if (Button.get(0).click == ButtonType.STATE_CLK_BUTTON) /*만약 클릭 되었으면*/
-																		
 				{
 					// 농작물 생성 후 어레이에 넣기
 					GameObject defaultCrop = new GameObject(); // GameObject
@@ -335,15 +311,12 @@ public class GameMain extends Activity {
 					// 프로그레스바 등록
 					GenerateBar(Current.x, Current.y);
 				}
-
 			}
 			Log.d("test", "out");
 			if(flag == true)
 				MainUI.Draw(mGL, gInfo, font);
 
-				
 			font.EndFont(gInfo);
 		}
 	}
-
 }
