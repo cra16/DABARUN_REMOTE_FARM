@@ -3,7 +3,10 @@ package bayaba.game.basic;
 import android.app.Activity;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -14,6 +17,29 @@ public class MainActivity extends Activity
 	private GLView play;
 	private GameMain gMain;
 	public GameInfo gInfo;
+	
+	public Handler m_handler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			super.handleMessage( msg );
+			
+			switch (msg.what) {
+			case 0:
+				break;
+			case 1: {
+				Toast.makeText( MainActivity.this, "gameMain에서 버튼이 눌러짐", 0 ).show();
+				Log.d("test","handler works!!");
+				
+				//Toast tMsg = Toast.makeText(MainActivity.this, "click",Toast.LENGTH_LONG);
+				//tMsg.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+				//tMsg.show();
+				break;
+			}
+			}
+			
+		}
+	};
+	
 	
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -32,12 +58,14 @@ public class MainActivity extends Activity
         gInfo.SetScale();
         
         
-        gMain = new GameMain( this, gInfo );
+        gMain = new GameMain( this, gInfo, m_handler );
         play = new GLView( this, gMain );
         play.setRenderer( new SurfaceClass(gMain) );
         
         setContentView( play );
-       
-        
     }
+    
+    
+
+    
 }

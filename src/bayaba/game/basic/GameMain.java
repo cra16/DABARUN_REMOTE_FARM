@@ -16,8 +16,9 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
-
 import bayaba.engine.lib.ButtonObject;
 import bayaba.engine.lib.ButtonType;
 import bayaba.engine.lib.Font;
@@ -28,14 +29,7 @@ import bayaba.engine.lib.UITool;
 
 public class GameMain extends Activity {
 	// general variable
-	static class myPop {
-		static class Group0 {
-			static final int POPUP_000 = 0;
-			static final int ONE_CLICK_001 = 1;
-			static final int ONE_CLICK_002 = 2;
-		}
-
-	}
+	
 	static class Select
 	{
 		static class Group0
@@ -61,7 +55,8 @@ public class GameMain extends Activity {
 	public GameInfo gInfo; // 게임 환경 설정용 클래스 : MainActivity에 선언된 것을 전달 받는다.
 	public float TouchX, TouchY; // 터치 좌표
 	public Font font = new Font(); // 글 쓸때 필요?? 사실 뭔지 모름
-
+	public Handler mHandler;
+	
 	// sprite variable
 	private Sprite ButtonSpr = new Sprite(); // 심기 버튼 스프라이트
 	private Sprite ProgressSpr = new Sprite(); // 파란색 프로그레스바 스프라이트
@@ -102,11 +97,13 @@ public class GameMain extends Activity {
 	
 	
 
-	public GameMain(Context context, GameInfo info) // 클래스 생성자 (메인 액티비티에서 호출)
+	public GameMain(Context context, GameInfo info, Handler p_Handler) // 클래스 생성자 (메인 액티비티에서 호출)
 	{
 		MainContext = context; // 메인 컨텍스트를 변수에 보관한다.
 		gInfo = info; // 메인 액티비티에서 생성된 클래스를 가져온다.
-
+		mHandler = p_Handler; //메인 액티비티에서 생성된 핸들러를 가져온다.
+		
+		
 		for (int i = 0; i < Pattern.length; i++)
 			Pattern[i] = new Sprite(); // 스프라이트용 배열 초기화
 
@@ -294,20 +291,49 @@ public class GameMain extends Activity {
 
 			*/
 			
+			
+			/* 팝업 UI 터치를 체크함*/
+			
 			for (int i = 0; i < MainUI.UIList.size(); i++) {
 
-				if (MainUI.UIList.get(i).index == Select.Group0.ONE_CLICK_001) {
-					if (MainUI.UIList.get(i).click == ButtonType.STATE_CLK_BUTTON) {
-						
+				if ( (MainUI.UIList.get(i).index == Select.Group0.ONE_CLICK_001)
+						&& (MainUI.UIList.get(i).click == ButtonType.STATE_CLK_BUTTON) ) 
+				{
+
+					((MainActivity)MainContext).m_handler.sendEmptyMessage(1);
+					
+					
 						flag = false;
 						MainUI.UIList.get(i).ResetButton();
 						MainUI.DeleteLastGroup(gInfo);
 						
-						
-					}
+				}
+				/*
+				else if ( (MainUI.UIList.get(i).index == Select.Group0.ONE_CLICK_002)
+						&& (MainUI.UIList.get(i).click == ButtonType.STATE_CLK_BUTTON) ) 
+				{
+					
+					
+					
+					flag = false;
+					MainUI.UIList.get(i).ResetButton();
+					MainUI.DeleteLastGroup(gInfo);
+	                
 				}
 				
+				else if ( (MainUI.UIList.get(i).index == Select.Group0.ONE_CLICK_003)
+						&& (MainUI.UIList.get(i).click == ButtonType.STATE_CLK_BUTTON) ) 
+				{
+					flag = false;
+					MainUI.UIList.get(i).ResetButton();
+					MainUI.DeleteLastGroup(gInfo);
+					
+						
+				}
+				*/
 			}
+			
+			
 			
 			// 빈밭 일단 다 그려줌.
 			
