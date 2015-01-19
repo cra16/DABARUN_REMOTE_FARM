@@ -26,6 +26,7 @@ public class MainActivity extends Activity
 			case 0:
 				break;
 			case 1: 
+				//이에 해당하는 다른 메세지문 필요
 				Toast.makeText( MainActivity.this, "gameMain에서 버튼이 눌러짐", Toast.LENGTH_SHORT ).show();
 				//Log.d("test","handler works!!");
 				
