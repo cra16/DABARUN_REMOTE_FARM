@@ -9,12 +9,17 @@
 //
 package bayaba.game.basic;
 
+import android.os.Handler; //handler
+
 import java.util.ArrayList;
 import java.util.Random;
+
 import javax.microedition.khronos.opengles.GL10;
+
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
+
 import bayaba.engine.lib.ButtonObject;
 import bayaba.engine.lib.ButtonType;
 import bayaba.engine.lib.Font;
@@ -34,6 +39,10 @@ public class GameMain extends Activity {
 
 	}
 	public boolean flag = false;
+	
+	//핸들러
+	private SendMassgeHandler mMainHandler = null;
+
 	
 	// general variable
 	public GL10 mGL = null; // OpenGL 객체
