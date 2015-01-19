@@ -1,27 +1,15 @@
-/* Farm prototype ver.
- * last-modified 2014.11.20
- * made by kiwan 
- * 
- * */
-
 // 1.프로그레스바를 어레이리스트로 만들고, 그 값에 따라서 작물의 모션++ 되도록!
 // 2.gcm으로 메세지 주고 받도록
 //
 package bayaba.game.basic;
 
 import android.os.Handler; //handler
-
 import java.util.ArrayList;
 import java.util.Random;
-
 import javax.microedition.khronos.opengles.GL10;
-
 import android.app.Activity;
 import android.content.Context;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
-
 import bayaba.engine.lib.ButtonObject;
 import bayaba.engine.lib.ButtonType;
 import bayaba.engine.lib.Font;
@@ -31,8 +19,7 @@ import bayaba.engine.lib.Sprite;
 import bayaba.engine.lib.UITool;
 
 public class GameMain extends Activity {
-	// general variable
-
+	//팝업 창
 	static class Select {
 		static class Group0 {
 			static final int POPUP_000 = 0;
@@ -40,13 +27,9 @@ public class GameMain extends Activity {
 			static final int ONE_CLICK_002 = 2;
 			static final int ONE_CLICK_003 = 3;
 		}
-
 	}
 
 	public boolean flag = false;
-
-	// 핸들러
-	private SendMassgeHandler mMainHandler = null;
 
 	// general variable
 	public GL10 mGL = null; // OpenGL 객체
@@ -54,7 +37,7 @@ public class GameMain extends Activity {
 	public Random MyRand = new Random(); // 랜덤 발생기
 	public GameInfo gInfo; // 게임 환경 설정용 클래스 : MainActivity에 선언된 것을 전달 받는다.
 	public float TouchX, TouchY; // 터치 좌표
-	public Font font = new Font(); // 글 쓸때 필요?? 사실 뭔지 모름
+	public Font font = new Font(); // 글 쓸때 필요한 듯,버튼에 
 	public Handler mHandler;
 
 	// sprite variable
@@ -67,13 +50,10 @@ public class GameMain extends Activity {
 
 	// object
 	public ButtonObject SuperBtn = new ButtonObject();
-
 	private ButtonObject ProgBtn = new ButtonObject(); // 프로그레스바 오브젝트
 	private ButtonObject ProgBack = new ButtonObject(); // 프로그레스배경 오브젝트
 	public UITool MainUI = new UITool();
-
 	private ButtonObject temp = new ButtonObject(); // 밭 누르면 나오는 버튼들에 대한 버튼 오브젝트
-
 	public GameObject Current = null; // 터치한 오브젝트를 가리키기 위한 빈칸.. 포인터 대용
 	public GameObject cropObj = new GameObject(); // 농작물 오브젝트! 가장 중요한 것!
 	public GameObject EmptyObj = new GameObject(); // 빈땅입니다
@@ -94,11 +74,8 @@ public class GameMain extends Activity {
 	// 화면 아래에 나오는 버튼들을 저장할 리스트
 	public ArrayList<ButtonObject> belowButton = new ArrayList<ButtonObject>();
 
-	public GameMain(Context context, GameInfo info, Handler p_Handler) // 클래스
-																		// 생성자
-																		// (메인
-																		// 액티비티에서
-																		// 호출)
+	//클래스 생성자 (메인 엑티비티에서 호출)
+	public GameMain(Context context, GameInfo info, Handler p_Handler) 
 	{
 		MainContext = context; // 메인 컨텍스트를 변수에 보관한다.
 		gInfo = info; // 메인 액티비티에서 생성된 클래스를 가져온다.
@@ -111,7 +88,6 @@ public class GameMain extends Activity {
 	public void LoadGameData() // SurfaceClass에서 OpenGL이 초기화되면 최초로 호출되는 함수
 	{
 		// 게임 데이터를 로드합니다.
-
 		backSpr.LoadSprite(mGL, MainContext, "background/farmBackground.spr");
 		cropSpr.LoadSprite(mGL, MainContext, "crop/seed_v1.spr");
 		emptySpr.LoadSprite(mGL, MainContext, "crop/empty.spr");
@@ -141,7 +117,6 @@ public class GameMain extends Activity {
 		}
 
 		/* 십자모양 4개 생성 */
-
 		for (int i = 0; i < 4; i++) {
 			temp = new ButtonObject();
 			temp.SetButton(ButtonSpr, ButtonType.TYPE_POPUP, 0, 400, 330, 3);
@@ -150,7 +125,6 @@ public class GameMain extends Activity {
 		}
 
 		/* 밑에 4개 버튼 생성 */
-
 		String buttonName[] = { "농장체험", "장식", "창고", "마켓" };
 
 		for (int i = 0; i < 4; i++) {
@@ -160,14 +134,11 @@ public class GameMain extends Activity {
 			temp.SetText(0, 20, 8, 1, 1, 1, 20f, buttonName[i]);
 			belowButton.add(temp);
 		}
-
 	}
 
 	public void PushButton(boolean push) // OpenGL 화면에 터치가 발생하면 GLView에서 호출된다.
 	{
-		/**
-		 * UI용 터치 처리 전용 함수
-		 */
+		//UI용 터치 처리 전용 함수
 		MainUI.Touch(gInfo, (int) TouchX, (int) TouchY, push);
 
 		/* 버튼 체크 */
@@ -177,14 +148,12 @@ public class GameMain extends Activity {
 				Button.get(i).dead = false;
 				// MainUI.AddGroup(0,0);
 				MainUI.AddGroup(0, 1);
-
 				flag = true;
 				Button.get(i).ResetButton();
 			}
 		}
 
 		if (push) {
-
 			/* 버튼 없어지게 */
 			for (int i = 0; i < 4; i++)
 				Button.get(i).show = false;
@@ -192,7 +161,6 @@ public class GameMain extends Activity {
 			for (int i = 0; i < EmptyList.size(); i++) /* 모든 빈땅 어레이리스트를 체크한다 */
 			{
 				if (EmptyList.get(i).CheckPos((int) TouchX, (int) TouchY))
-
 				{
 					Current = EmptyList.get(i); /* currnt : 터치된 오브젝트 */
 
@@ -222,12 +190,10 @@ public class GameMain extends Activity {
 
 				}
 			}
-
 		}
 	}
 
 	public void GenerateBar(float paramX, float paramY) {
-
 		GameObject bar = new GameObject();
 		bar.SetObject(ProgBackSpr, 0, 0, paramX, paramY - 40, 0, 0);
 		bar.move = 1;
@@ -242,20 +208,35 @@ public class GameMain extends Activity {
 			backSpr.PutAni(gInfo, 400, 240, 0, 0); // 백그라운드
 
 			/* 팝업 UI 터치를 체크함 */
-
 			for (int i = 0; i < MainUI.UIList.size(); i++) {
 
 				if ((MainUI.UIList.get(i).index == Select.Group0.ONE_CLICK_001)
 						&& (MainUI.UIList.get(i).click == ButtonType.STATE_CLK_BUTTON)) {
-
+					//MainActivity에  메시지를 보냄 버튼이 눌렸다고, 취소 버튼
 					((MainActivity) MainContext).m_handler.sendEmptyMessage(1);
 
 					flag = false;
 					MainUI.UIList.get(i).ResetButton();
 					MainUI.DeleteLastGroup(gInfo);
 
+				//배추 버튼이 눌렸을때	
+				}else if((MainUI.UIList.get(i).index == Select.Group0.ONE_CLICK_002)
+						&& (MainUI.UIList.get(i).click == ButtonType.STATE_CLK_BUTTON)){
+					
+					((MainActivity) MainContext).m_handler.sendEmptyMessage(2);
+					//배추 버튼
+					MainUI.UIList.get(i).ResetButton();
+					//MainUI.DeleteLastGroup(gInfo);
+					
+				//딸기 버튼이 눌렸을 때	
+				}else if((MainUI.UIList.get(i).index == Select.Group0.ONE_CLICK_003)
+						&& (MainUI.UIList.get(i).click == ButtonType.STATE_CLK_BUTTON)){
+					//딸기 버튼
+					((MainActivity) MainContext).m_handler.sendEmptyMessage(3);
+					
+					MainUI.UIList.get(i).ResetButton();
+					//MainUI.DeleteLastGroup(gInfo);
 				}
-
 			}
 
 			// 빈밭 일단 다 그려줌.
@@ -279,7 +260,6 @@ public class GameMain extends Activity {
 			for (int i = 0; i < 4; i++) {
 				belowButton.get(i).DrawSprite(mGL, 0, gInfo, font);
 				Button.get(i).DrawSprite(mGL, 0, gInfo, font); // 심기 버튼
-
 			}
 
 			// 농작물을 그려준다..
@@ -290,15 +270,9 @@ public class GameMain extends Activity {
 			}
 
 			/* 심기 버튼에 대한 로직 */
-			if (Button.get(0).type == ButtonType.TYPE_ONE_CLICK) /*
-																 * 심기 버튼 타입이 클릭
-																 * 모드일때
-																 */
+			if (Button.get(0).type == ButtonType.TYPE_ONE_CLICK) //심기 버튼 타입이 클릭 모드일 때 
 			{
-				if (Button.get(0).click == ButtonType.STATE_CLK_BUTTON) /*
-																		 * 만약 클릭
-																		 * 되었으면
-																		 */
+				if (Button.get(0).click == ButtonType.STATE_CLK_BUTTON) //만약 클릭 되었으면
 				{
 					// 농작물 생성 후 어레이에 넣기
 					GameObject defaultCrop = new GameObject(); // GameObject
@@ -307,12 +281,11 @@ public class GameMain extends Activity {
 							0, 0);
 					CropList.add(defaultCrop); // 어레이 리스트에 추가-> 추가가 계속 되는게
 												// 문제 ㅠㅠ
-
 					// 프로그레스바 등록
 					GenerateBar(Current.x, Current.y);
 				}
 			}
-			Log.d("test", "out");
+//			Log.d("test", "out");
 			if (flag == true)
 				MainUI.Draw(mGL, gInfo, font);
 

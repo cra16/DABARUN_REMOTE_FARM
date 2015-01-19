@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -26,20 +25,27 @@ public class MainActivity extends Activity
 			switch (msg.what) {
 			case 0:
 				break;
-			case 1: {
-				Toast.makeText( MainActivity.this, "gameMain에서 버튼이 눌러짐", 0 ).show();
-				Log.d("test","handler works!!");
+			case 1: 
+				Toast.makeText( MainActivity.this, "gameMain에서 버튼이 눌러짐", Toast.LENGTH_SHORT ).show();
+				//Log.d("test","handler works!!");
 				
 				//Toast tMsg = Toast.makeText(MainActivity.this, "click",Toast.LENGTH_LONG);
 				//tMsg.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
 				//tMsg.show();
 				break;
+			case 2: 
+				Toast.makeText( MainActivity.this, "5p가 차감 됩니다.\n배추를 심으시겠습니까?", Toast.LENGTH_SHORT ).show();
+				Log.d("test","handler works!!");
+				break;
+			case 3: 
+				Toast.makeText( MainActivity.this, "5p가 차감 됩니다. \n딸기를 심으시겠습니까?", Toast.LENGTH_SHORT ).show();
+				Log.d("test","handler works!!");
+				break;
+			default:
+				break;
 			}
-			}
-			
 		}
 	};
-	
 	
     @Override
     public void onCreate(Bundle savedInstanceState)
