@@ -141,6 +141,8 @@ public class MainActivity extends Activity
   	    				
   	    				Log.d("test", "before execute");
   	    				
+  	    				Log.d("test", "url : "+ GlobalVariable.getCropList);
+  	    				
   	    				//위에서 세팅한 정보를 기반으로 서버로 쏜다.
   	    				String result2 = client.execute(httpPost1, handler1);
   	    				
@@ -149,7 +151,7 @@ public class MainActivity extends Activity
   	    				//Toast.makeText( MainActivity.this, result2, Toast.LENGTH_SHORT ).show();
   	    				Log.d("test", "result : "+result2);
   	    				JSONObject jsonObj = new JSONObject(result2);
-	  						 return jsonObj;  	
+  	    				return jsonObj;  	
   	    				
   	    				/* php에서 not exist 처리를 안한것은 아닐까 제대로 값을 받아오기는하나*/
   						//when login is successful
@@ -161,7 +163,7 @@ public class MainActivity extends Activity
   		        		}*/	        		
   		        		
   	    			}catch(Exception e){
-  	    				
+  	    				e.printStackTrace();
   	    			}					
   				}catch(Exception e){
   					
