@@ -11,9 +11,10 @@ public class GlobalVariable {
 	
 	public final static String push = url + "push_all.php";
 	
-	public final static String getCropList= url + "getCropList.php";
+	public final static String getCropList= url + "getCropList.php"; //테이블에서 정보 받아오기	
 	public final static String getPoint = url + "getPoint.php";
 	public final static String setPoint = url + "setPoint.php";
+	public final static String insertCrop = url + "insertCrop.php"; //심기 버튼에 테이블 생성
 	
 	public final static String SPF_LOGIN = "LOGIN";
 	public final static String SPF_ID = "ID";
