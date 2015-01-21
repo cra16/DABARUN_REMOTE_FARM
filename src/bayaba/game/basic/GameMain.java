@@ -226,7 +226,7 @@ public class GameMain extends Activity {
 					((MainActivity) MainContext).m_handler.sendEmptyMessage(2);
 					//배추 버튼
 					MainUI.UIList.get(i).ResetButton();
-					//MainUI.DeleteLastGroup(gInfo);
+					MainUI.DeleteLastGroup(gInfo);
 					
 				//딸기 버튼이 눌렸을 때	
 				}else if((MainUI.UIList.get(i).index == Select.Group0.ONE_CLICK_003)
@@ -235,7 +235,7 @@ public class GameMain extends Activity {
 					((MainActivity) MainContext).m_handler.sendEmptyMessage(3);
 					
 					MainUI.UIList.get(i).ResetButton();
-					//MainUI.DeleteLastGroup(gInfo);
+					MainUI.DeleteLastGroup(gInfo);
 				}
 			}
 

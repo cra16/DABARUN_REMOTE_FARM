@@ -150,6 +150,8 @@ public class MainActivity extends Activity
   	    				result2 = result2.trim().toString();
   	    				//Toast.makeText( MainActivity.this, result2, Toast.LENGTH_SHORT ).show();
   	    				Log.d("test", "result : "+result2);
+  	    				
+  	    				
   	    				JSONObject jsonObj = new JSONObject(result2);
   	    				return jsonObj;  	
   	    				
@@ -181,7 +183,8 @@ public class MainActivity extends Activity
 				//String crop_type = c.getString("type");
 				//String crop_mod = c.getString("modNum");
 				
-				//Toast.makeText( MainActivity.this, "타입은" + crop_type, Toast.LENGTH_SHORT ).show();
+				if(json == null)
+					Toast.makeText( MainActivity.this, "정보 받아오기 실패", Toast.LENGTH_SHORT ).show();
 				
 				// Getting JSON Array from URL
 				JsonArr = json.getJSONArray(TAG_RESULT);
