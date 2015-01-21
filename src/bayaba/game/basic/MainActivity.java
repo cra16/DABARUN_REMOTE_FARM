@@ -69,11 +69,14 @@ public class MainActivity extends Activity
 					Log.d("test","case2");
 					//CropInfo cropInstance = new CropInfo();
 					//cropInstance.execute();
-					new CropInfo().execute();
+					new CropInfo(2).execute();
 				}
 				break;
 			case 3: 
 				//Toast.makeText( MainActivity.this, "5p가 차감 됩니다. \n딸기를 심으시겠습니까?", Toast.LENGTH_SHORT ).show();
+				
+				new CropInfo(3).execute();
+				
 				break;
 			default:
 				break;
@@ -108,6 +111,16 @@ public class MainActivity extends Activity
   //AsyncTask
   	private class CropInfo extends AsyncTask<String, String, JSONObject>{
   		
+  		
+  		public int fromWhere;
+  		
+  		
+  		private CropInfo(int fromWhere){
+  			
+  			this.fromWhere = fromWhere;
+  		}
+  		
+  		
       	protected void onPreExecute() {
       		
       		super.onPreExecute();
@@ -118,7 +131,6 @@ public class MainActivity extends Activity
   		protected JSONObject doInBackground(String... params){
 			Log.d("test","doInBackground");
 
-  			//if(checkAllEditTextsFull()){
   				try{
   					
   					HttpClient client = new DefaultHttpClient();
@@ -126,22 +138,47 @@ public class MainActivity extends Activity
   	    			try{
   	    				/*idValue를 song으로 집어넣고*/
   	    				ArrayList<NameValuePair> idValuePair = new ArrayList<NameValuePair>();
-  	    				idValuePair.add(new BasicNameValuePair("id", "song"));
+  	    				HttpPost httpPost1;
+  	    				
+  	    				switch(fromWhere)
+  	    				{
+  	    				case 2: 
+  	    					{
+  	    						idValuePair.add(new BasicNameValuePair("id", "song"));
+  	    	    				httpPost1 = new HttpPost(GlobalVariable.getCropList);
+
+  	    					}
+  	    				 break;
+  	    				case 3:
+  	    				{
+  	    					idValuePair.add(new BasicNameValuePair("id", "song"));
+  	    					idValuePair.add(new BasicNameValuePair("type", "3"));
+  	    					idValuePair.add(new BasicNameValuePair("modNum", "3"));
+  	  	    				httpPost1 = new HttpPost(GlobalVariable.insertCrop);
+
+  	    				}
+  	    					break;
+  	    				
+  	    				default: 
+  	    					{
+  	    						
+  	    					httpPost1 = new HttpPost(GlobalVariable.getCropList);} 
+  	    					break;
+
+  	    				}
   	    				
   	    				/*url을 명시한 후에*/
   	    				//HttpPost httpPost1 = new HttpPost(GlobalVariable.getCropList);
-  	    				HttpPost httpPost1 = new HttpPost(GlobalVariable.getCropList);
-  	    				
-  	    				
   	    				
   	    				/*httpPost 변수에 idValue를 추가한다 */
   	    				UrlEncodedFormEntity entityRequest1 = new UrlEncodedFormEntity(idValuePair,"UTF-8");
   	    				httpPost1.setEntity(entityRequest1);
-  	    				ResponseHandler<String> handler1 = new BasicResponseHandler();
   	    				
+  	    				
+  	    				ResponseHandler<String> handler1 = new BasicResponseHandler();
   	    				Log.d("test", "before execute");
   	    				
-  	    				Log.d("test", "url : "+ GlobalVariable.getCropList);
+  	    				//Log.d("test", "url : "+ GlobalVariable.getCropList);
   	    				
   	    				//위에서 세팅한 정보를 기반으로 서버로 쏜다.
   	    				String result2 = client.execute(httpPost1, handler1);
@@ -179,25 +216,26 @@ public class MainActivity extends Activity
 				
 				Log.d("test", "Post in");
 				
-				//JSONObject c = json.getJSONObject("result");
-				//String crop_type = c.getString("type");
-				//String crop_mod = c.getString("modNum");
 				
+				/* 통신이 정상적이지 않으면*/
 				if(json == null)
-					Toast.makeText( MainActivity.this, "정보 받아오기 실패", Toast.LENGTH_SHORT ).show();
-				
-				// Getting JSON Array from URL
-				JsonArr = json.getJSONArray(TAG_RESULT);
-				
-				
-				for (int i = 0; i < JsonArr.length(); i++) {
-					JSONObject c = JsonArr.getJSONObject(i);
-					// Storing JSON item in a Variable
-					String crop_type = c.getString(TAG_TYPE);
-					String crop_mod = c.getString(TAG_MODULE);
-					
-					Toast.makeText( MainActivity.this, "타입은" + crop_type, Toast.LENGTH_SHORT ).show();
+				{
+					if(fromWhere == 3)
+						Toast.makeText( MainActivity.this, "정보 삽입 성공", Toast.LENGTH_SHORT ).show();
 				}
+				else{
+					/*통신이 정상적이면 파싱하여 정보를 빼낸다*/
+					JsonArr = json.getJSONArray(TAG_RESULT);
+					for (int i = 0; i < JsonArr.length(); i++) {
+						JSONObject c = JsonArr.getJSONObject(i);
+						// Storing JSON item in a Variable
+						String crop_type = c.getString(TAG_TYPE);
+						String crop_mod = c.getString(TAG_MODULE);						
+						Toast.makeText( MainActivity.this, "타입은" + crop_type, Toast.LENGTH_SHORT ).show();
+					}
+				}
+				
+				
 
 				
 				
