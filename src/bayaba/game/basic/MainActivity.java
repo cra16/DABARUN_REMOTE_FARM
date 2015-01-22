@@ -42,9 +42,6 @@ public class MainActivity extends Activity
 	public String crop_level;
 	public String crop_mod;
 	
-	public MyApplication myApp =(MyApplication)getApplicationContext();
-	
-	
 	public Handler m_handler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
@@ -76,7 +73,7 @@ public class MainActivity extends Activity
     {
         super.onCreate(savedInstanceState);
 		
-		
+       
         
         Log.d("debug", "GAME MAIN ONCREATE");
         getWindow().addFlags( WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON );
@@ -175,9 +172,12 @@ public class MainActivity extends Activity
   		
 		@Override
 		protected void onPostExecute(JSONObject json) {
+			
 			try {
+				 MyApplication myApp =(MyApplication)getApplicationContext();
 				Log.d("test", "Post in");
 				
+			    	
 				/* 통신이 정상적이지 않으면*/
 				if(json == null)
 				{
@@ -196,7 +196,16 @@ public class MainActivity extends Activity
 						myApp.setType(crop_type);	//전역 변수들 set
 						myApp.setModNum(crop_mod);
 						myApp.setLevel(crop_level);
-						Log.d("type", "type : "+myApp.getType());
+						
+						
+						
+						if(i == Integer.parseInt(crop_mod)){
+							gMain.cType[i] = Integer.parseInt(crop_type);
+							gMain.cLevel[i] = Integer.parseInt(crop_level);
+							gMain.cMod[i] = Integer.parseInt(crop_mod);
+						}
+						
+						Log.d("test", "modNum "+gMain.cMod[i]);
 						
 						Toast.makeText( MainActivity.this, "타입은" + crop_type, Toast.LENGTH_SHORT ).show();
 					}
@@ -204,6 +213,9 @@ public class MainActivity extends Activity
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
+			
+
+//			Log.d("test", "modNum : "+myApp.getModNum());
 		}
   	}
 }

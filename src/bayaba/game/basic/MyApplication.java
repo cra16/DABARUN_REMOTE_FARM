@@ -8,7 +8,18 @@ public class MyApplication  extends Application{
 	private String gType;
 	private String gModNum;
 	
+	private int state;
 	
+	public MyApplication(){
+		//전역 변수 초기화
+		state = 0;
+		super.onCreate();
+	}
+	
+	public void onTerminate(){
+		super.onTerminate();
+		
+	}
 	
 	public String getLevel(){
 		return gLevel;
