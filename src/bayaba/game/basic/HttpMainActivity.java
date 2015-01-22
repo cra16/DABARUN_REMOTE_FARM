@@ -45,7 +45,8 @@ public class HttpMainActivity extends Activity {
     HttpClient httpclient;
     List<NameValuePair> nameValuePairs;
     ProgressDialog dialog = null;
-     
+
+    //static String id = null;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -124,9 +125,10 @@ public class HttpMainActivity extends Activity {
   					HttpClient client = new DefaultHttpClient();
   					Log.d("test","ing");				
   	    			try{
+  	    				//id = id_Edt.getText().toString();
   	    				// 14.4.4 �߰�
   	    				ArrayList<NameValuePair> nameValuePairs1 = new ArrayList<NameValuePair>();
-  	    				nameValuePairs1.add(new BasicNameValuePair("id", id_Edt.getText().toString()));
+  	    				nameValuePairs1.add(new BasicNameValuePair("id",  id_Edt.getText().toString()));
   	    				nameValuePairs1.add(new BasicNameValuePair("pw", pw_Edt.getText().toString()));
   	    				Log.d("test","i7");
   	    				// 14.4.4 �߰���

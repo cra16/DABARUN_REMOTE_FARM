@@ -44,22 +44,26 @@ public class MainActivity extends Activity
 	private static final String TAG_RESULT = "result";
 	private static final String TAG_TYPE = "type";
 	private static final String TAG_MODULE = "modNum";
+	private static final String TAG_LEVEL = "level";
 	
 	public Handler m_handler = new Handler() {
+		
+		
+		public int someVal;
+		
 		@Override
 		public void handleMessage(Message msg) {
 			super.handleMessage( msg );
 			
+			
+			
+			/*버튼 처리*/
 			switch (msg.what) {
 			case 0:
+				new CropInfo(msg.what).execute();
 				break;
 			case 1: 
-				//Toast.makeText( MainActivity.this, "gameMain에서 버튼이 눌러짐", Toast.LENGTH_SHORT ).show();
-				//Log.d("test","handler works!!");
 				
-				//Toast tMsg = Toast.makeText(MainActivity.this, "click",Toast.LENGTH_LONG);
-				//tMsg.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-				//tMsg.show();
 				break;
 			case 2: 
 				{
@@ -69,18 +73,29 @@ public class MainActivity extends Activity
 					Log.d("test","case2");
 					//CropInfo cropInstance = new CropInfo();
 					//cropInstance.execute();
-					new CropInfo(2).execute();
+					new CropInfo(msg.what).execute();
 				}
 				break;
 			case 3: 
 				//Toast.makeText( MainActivity.this, "5p가 차감 됩니다. \n딸기를 심으시겠습니까?", Toast.LENGTH_SHORT ).show();
 				
-				new CropInfo(3).execute();
+				new CropInfo(msg.what).execute();
 				
 				break;
 			default:
 				break;
 			}
+			
+			
+		}
+		
+		
+		public int getValue(){
+			
+			someVal = 2;
+			
+			
+			return this.someVal;
 		}
 	};
 	
@@ -138,37 +153,39 @@ public class MainActivity extends Activity
   	    			try{
   	    				/*idValue를 song으로 집어넣고*/
   	    				ArrayList<NameValuePair> idValuePair = new ArrayList<NameValuePair>();
-  	    				HttpPost httpPost1;
+  	    				HttpPost httpPost1 = null;
   	    				
   	    				switch(fromWhere)
   	    				{
+  	    				/*QQQQQQ song 대신에 아이디가 들어가야 한다*/
+  	    				/*getCropList 최초 로딩시 불러진다*/
+  	    				case 0:
+  	    				 
+  	    					idValuePair.add(new BasicNameValuePair("id", "song"));
+  	    					//idValuePair.add(new BasicNameValuePair("id", HttpMainActivity.id));
+	    	    			httpPost1 = new HttpPost(GlobalVariable.getCropList);
+  	    					break;
+  	    				
   	    				case 2: 
-  	    					{
-  	    						idValuePair.add(new BasicNameValuePair("id", "song"));
-  	    	    				httpPost1 = new HttpPost(GlobalVariable.getCropList);
-
-  	    					}
+  	    					
   	    				 break;
   	    				case 3:
-  	    				{
+  	    				
   	    					idValuePair.add(new BasicNameValuePair("id", "song"));
   	    					idValuePair.add(new BasicNameValuePair("type", "3"));
   	    					idValuePair.add(new BasicNameValuePair("modNum", "3"));
   	  	    				httpPost1 = new HttpPost(GlobalVariable.insertCrop);
-
-  	    				}
+  	    				
   	    					break;
   	    				
   	    				default: 
-  	    					{
-  	    						
-  	    					httpPost1 = new HttpPost(GlobalVariable.getCropList);} 
+  	    					
+  	    					httpPost1 = new HttpPost(GlobalVariable.getCropList); 
   	    					break;
 
   	    				}
   	    				
-  	    				/*url을 명시한 후에*/
-  	    				//HttpPost httpPost1 = new HttpPost(GlobalVariable.getCropList);
+  	    			
   	    				
   	    				/*httpPost 변수에 idValue를 추가한다 */
   	    				UrlEncodedFormEntity entityRequest1 = new UrlEncodedFormEntity(idValuePair,"UTF-8");
@@ -226,12 +243,39 @@ public class MainActivity extends Activity
 				else{
 					/*통신이 정상적이면 파싱하여 정보를 빼낸다*/
 					JsonArr = json.getJSONArray(TAG_RESULT);
+					
+					String crop_type;
+					String crop_mod;
+					String crop_level;
+					int i_crop_type;
+					int i_crop_mod;
+					int i_crop_level;
+					
+					gMain.update_flag = true;
+					
+					
 					for (int i = 0; i < JsonArr.length(); i++) {
 						JSONObject c = JsonArr.getJSONObject(i);
 						// Storing JSON item in a Variable
-						String crop_type = c.getString(TAG_TYPE);
-						String crop_mod = c.getString(TAG_MODULE);						
-						Toast.makeText( MainActivity.this, "타입은" + crop_type, Toast.LENGTH_SHORT ).show();
+						
+						crop_type = c.getString(TAG_TYPE);
+						crop_mod = c.getString(TAG_MODULE);
+						crop_level = c.getString(TAG_LEVEL);
+						
+						i_crop_type = Integer.parseInt(crop_type);
+						i_crop_mod = Integer.parseInt(crop_mod);
+						i_crop_level = Integer.parseInt(crop_level);
+						
+						if(i_crop_level >0)
+						{
+							gMain.crop_level[i_crop_mod] = i_crop_level;
+							gMain.crop_type[i_crop_mod] = i_crop_type;
+						}
+//						gMain.crop_type[i] = i_crop_type;
+//						gMain.crop_mod[i] = i_crop_mod;
+//						gMain.crop_level[i] = i_crop_level;
+						
+						//Toast.makeText( MainActivity.this, "타입은" + crop_type, Toast.LENGTH_SHORT ).show();
 					}
 				}
 				

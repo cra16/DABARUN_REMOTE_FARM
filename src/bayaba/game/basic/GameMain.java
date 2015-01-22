@@ -29,8 +29,17 @@ public class GameMain extends Activity {
 		}
 	}
 
-	public boolean flag = false;
-
+	public boolean popup_flag = false; /* 팝업을 띄울지 말지 판단하는 불린*/
+	public boolean update_flag = false;
+	
+	public int[] crop_type = new int[8];
+	public int[] crop_level = new int[8];
+	public int[] crop_mod = new int[8];
+	
+	
+	
+	
+	
 	// general variable
 	public GL10 mGL = null; // OpenGL 객체
 	public Context MainContext;
@@ -110,10 +119,12 @@ public class GameMain extends Activity {
 
 		// 빈칸 생성해서 어레이에 넣어주기
 		for (int i = 0; i < 8; i++) {
+			
 			GameObject emptyTemp = new GameObject(); // GameObject 변수 선언
 			emptyTemp.SetObject(emptySpr, 0, 0, 50 + ((i % 4) * 200),
 					300 + ((i / 4) * 80), 0, 0);
 			EmptyList.add(emptyTemp); // 어레이 리스트에 추가
+			
 		}
 
 		/* 십자모양 4개 생성 */
@@ -134,6 +145,9 @@ public class GameMain extends Activity {
 			temp.SetText(0, 20, 8, 1, 1, 1, 20f, buttonName[i]);
 			belowButton.add(temp);
 		}
+		((MainActivity) MainContext).m_handler.sendEmptyMessage(0);
+
+		
 	}
 
 	public void PushButton(boolean push) // OpenGL 화면에 터치가 발생하면 GLView에서 호출된다.
@@ -141,14 +155,47 @@ public class GameMain extends Activity {
 		//UI용 터치 처리 전용 함수
 		MainUI.Touch(gInfo, (int) TouchX, (int) TouchY, push);
 
-		/* 버튼 체크 */
+		/* 팝업 UI 터치를 체크함 */
+		for (int i = 0; i < MainUI.UIList.size(); i++) {
+
+			if ((MainUI.UIList.get(i).index == Select.Group0.ONE_CLICK_001)
+					&& (MainUI.UIList.get(i).click == ButtonType.STATE_CLK_BUTTON)) {
+				//MainActivity에  메시지를 보냄 버튼이 눌렸다고, 취소 버튼
+				//((MainActivity) MainContext).m_handler.sendEmptyMessage(0);
+
+				popup_flag = false;
+				MainUI.UIList.get(i).ResetButton();
+				MainUI.DeleteLastGroup(gInfo);
+
+			//배추 버튼이 눌렸을때	
+			}else if((MainUI.UIList.get(i).index == Select.Group0.ONE_CLICK_002)
+					&& (MainUI.UIList.get(i).click == ButtonType.STATE_CLK_BUTTON)){
+				
+				((MainActivity) MainContext).m_handler.sendEmptyMessage(2);
+				//배추 버튼
+				MainUI.UIList.get(i).ResetButton();
+				MainUI.DeleteLastGroup(gInfo);
+				
+			//딸기 버튼이 눌렸을 때	
+			}else if((MainUI.UIList.get(i).index == Select.Group0.ONE_CLICK_003)
+					&& (MainUI.UIList.get(i).click == ButtonType.STATE_CLK_BUTTON)){
+				//딸기 버튼
+				((MainActivity) MainContext).m_handler.sendEmptyMessage(3);
+				
+				MainUI.UIList.get(i).ResetButton();
+				MainUI.DeleteLastGroup(gInfo);
+			}
+		}
+		
+		/* 십자 버튼 체크 */
 		for (int i = 0; i < Button.size(); i++) {
 			Button.get(i).CheckButton(gInfo, push, TouchX, TouchY);
+			
 			if (Button.get(i).click == ButtonType.STATE_CLK_BUTTON) {
-				Button.get(i).dead = false;
-				// MainUI.AddGroup(0,0);
+				
+				//Button.get(i).dead = false;
 				MainUI.AddGroup(0, 1);
-				flag = true;
+				popup_flag = true;
 				Button.get(i).ResetButton();
 			}
 		}
@@ -193,12 +240,6 @@ public class GameMain extends Activity {
 		}
 	}
 
-	public void GenerateBar(float paramX, float paramY) {
-		GameObject bar = new GameObject();
-		bar.SetObject(ProgBackSpr, 0, 0, paramX, paramY - 40, 0, 0);
-		bar.move = 1;
-		ProgBackList.add(bar);
-	}
 
 	// 농장 체험, 마켓
 	public void DoGame() // 1/60초에 한번씩 SurfaceClass에서 호출된다. 게임의 코어 부분을 넣는다.
@@ -207,37 +248,37 @@ public class GameMain extends Activity {
 			font.BeginFont(gInfo);
 			backSpr.PutAni(gInfo, 400, 240, 0, 0); // 백그라운드
 
-			/* 팝업 UI 터치를 체크함 */
-			for (int i = 0; i < MainUI.UIList.size(); i++) {
+			if(update_flag == true)
+			{
+				
+				for(int i=0; i < crop_type.length; i++)
+				{ 
+					// 농작물 생성 후 어레이에 넣기
+					GameObject defaultCrop = new GameObject(); // GameObject
+																// 변수 선언
+					defaultCrop.SetObject(cropSpr, 0, 0, EmptyList.get(i).x, EmptyList.get(i).y, 0, 0);
+					defaultCrop.dead = true;
 
-				if ((MainUI.UIList.get(i).index == Select.Group0.ONE_CLICK_001)
-						&& (MainUI.UIList.get(i).click == ButtonType.STATE_CLK_BUTTON)) {
-					//MainActivity에  메시지를 보냄 버튼이 눌렸다고, 취소 버튼
-					((MainActivity) MainContext).m_handler.sendEmptyMessage(1);
-
-					flag = false;
-					MainUI.UIList.get(i).ResetButton();
-					MainUI.DeleteLastGroup(gInfo);
-
-				//배추 버튼이 눌렸을때	
-				}else if((MainUI.UIList.get(i).index == Select.Group0.ONE_CLICK_002)
-						&& (MainUI.UIList.get(i).click == ButtonType.STATE_CLK_BUTTON)){
 					
-					((MainActivity) MainContext).m_handler.sendEmptyMessage(2);
-					//배추 버튼
-					MainUI.UIList.get(i).ResetButton();
-					MainUI.DeleteLastGroup(gInfo);
+					//level이 0이 아닌 놈들만 즉 생성되어있는 놈들만 살려서 그려질 수 있게 한다.
+					if(crop_level[i] >0)
+						defaultCrop.dead = false;
 					
-				//딸기 버튼이 눌렸을 때	
-				}else if((MainUI.UIList.get(i).index == Select.Group0.ONE_CLICK_003)
-						&& (MainUI.UIList.get(i).click == ButtonType.STATE_CLK_BUTTON)){
-					//딸기 버튼
-					((MainActivity) MainContext).m_handler.sendEmptyMessage(3);
+					CropList.add(defaultCrop); // 어레이 리스트에 추가
 					
-					MainUI.UIList.get(i).ResetButton();
-					MainUI.DeleteLastGroup(gInfo);
+				
 				}
+				
+				update_flag = false;
+				
+				
 			}
+			
+			
+			
+			
+			
+			
 
 			// 빈밭 일단 다 그려줌.
 			for (int i = 0; i < EmptyList.size(); i++) {
@@ -262,31 +303,52 @@ public class GameMain extends Activity {
 				Button.get(i).DrawSprite(mGL, 0, gInfo, font); // 심기 버튼
 			}
 
-			// 농작물을 그려준다..
-			for (int i = 0; i < CropList.size(); i++) {
-				if (CropList.get(i).dead == false) {
-					CropList.get(i).DrawSprite(gInfo);
-				}
-			}
-
+			
 			/* 심기 버튼에 대한 로직 */
 			if (Button.get(0).type == ButtonType.TYPE_ONE_CLICK) //심기 버튼 타입이 클릭 모드일 때 
 			{
 				if (Button.get(0).click == ButtonType.STATE_CLK_BUTTON) //만약 클릭 되었으면
 				{
-					// 농작물 생성 후 어레이에 넣기
-					GameObject defaultCrop = new GameObject(); // GameObject
-																// 변수 선언
-					defaultCrop.SetObject(cropSpr, 0, 0, Current.x, Current.y,
-							0, 0);
-					CropList.add(defaultCrop); // 어레이 리스트에 추가-> 추가가 계속 되는게
-												// 문제 ㅠㅠ
-					// 프로그레스바 등록
-					GenerateBar(Current.x, Current.y);
+					
+
+					for (int i = 0; i < EmptyList.size(); i++) /* 모든 빈땅 어레이리스트를 체크한다 */
+					{
+						if (EmptyList.get(i).CheckPos((int) TouchX, (int) TouchY))
+						{
+
+							//Log.d("test", "checkpos");
+							Current = EmptyList.get(i); /* currnt : 터치된 오브젝트 */
+		
+							// 농작물 생성 후 어레이에 넣기
+							GameObject defaultCrop = new GameObject(); // GameObject
+																		// 변수 선언
+							defaultCrop.SetObject(cropSpr, 0, 0, Current.x, Current.y, 0, 0);
+							defaultCrop.dead = false;
+							
+							CropList.add(defaultCrop); // 어레이 리스트에 생성&추가
+														
+						}
+					}
 				}
 			}
-//			Log.d("test", "out");
-			if (flag == true)
+			
+			
+			//로딩된 농작물 모두 뿌려주기.
+			for (int i = 0; i < CropList.size(); i++) {
+
+				//Log.d("test", "in for");
+				if (CropList.get(i).dead == false) {
+
+					String str = Integer.toString(i);
+					Log.d("test", "print:" + str);
+					CropList.get(i).SetObject(cropSpr, 0, 0, EmptyList.get(i).x, EmptyList.get(i).y, 0, 0);
+
+					CropList.get(i).DrawSprite(gInfo);
+				}
+			}
+			
+			/*팝업 그려주기 */
+			if (popup_flag == true)
 				MainUI.Draw(mGL, gInfo, font);
 
 			font.EndFont(gInfo);
