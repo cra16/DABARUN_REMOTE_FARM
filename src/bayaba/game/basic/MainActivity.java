@@ -1,7 +1,6 @@
 package bayaba.game.basic;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -14,27 +13,20 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import android.content.SharedPreferences;
 
 import Variable.GlobalVariable;
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.Toast;
 import bayaba.engine.lib.GameInfo;
-import android.app.Application;
-
 
 public class MainActivity extends Activity
 {
@@ -48,26 +40,21 @@ public class MainActivity extends Activity
 	private static final String TAG_MODULE = "modNum";
 	private static final String TAG_LEVEL = "level";
 	
-	public String id;
+	//public String id;
 	
 	public Handler m_handler = new Handler() {
-		
 		
 		public int someVal;
 		
 		@Override
 		public void handleMessage(Message msg) {
 			super.handleMessage( msg );
-			
-			
-			
 			/*버튼 처리*/
 			switch (msg.what) {
 			case 0:
 				new CropInfo(msg.what).execute();
 				break;
 			case 1: 
-				
 				break;
 			case 2: 
 				{
@@ -82,23 +69,16 @@ public class MainActivity extends Activity
 				break;
 			case 3: 
 				//Toast.makeText( MainActivity.this, "5p가 차감 됩니다. \n딸기를 심으시겠습니까?", Toast.LENGTH_SHORT ).show();
-				
 				new CropInfo(msg.what).execute();
-				
 				break;
 			default:
 				break;
 			}
-			
-			
 		}
 		
 		
 		public int getValue(){
-			
 			someVal = 2;
-			
-			
 			return this.someVal;
 		}
 	};
@@ -120,7 +100,6 @@ public class MainActivity extends Activity
         gInfo.ScreenYsize = getResources().getDisplayMetrics().heightPixels;
         gInfo.SetScale();
         
-        
         gMain = new GameMain( this, gInfo, m_handler );
         play = new GLView( this, gMain );
         play.setRenderer( new SurfaceClass(gMain) );
@@ -130,16 +109,13 @@ public class MainActivity extends Activity
     
   //AsyncTask
   	private class CropInfo extends AsyncTask<String, String, JSONObject>{
-  		
-  		
   		public int fromWhere;
   		
-  		
   		private CropInfo(int fromWhere){
-  			
+
   			this.fromWhere = fromWhere;
-  		}
   		
+  		}
   		
       	protected void onPreExecute() {
       		
@@ -151,8 +127,13 @@ public class MainActivity extends Activity
   		protected JSONObject doInBackground(String... params){
 			Log.d("test","doInBackground");
 
-			id = ((MyApplication)MainActivity.this.getApplication()).getId();
-			Log.d("test", "id "+ id);
+			// retrieve user info from shared preference
+			SharedPreferences spf = getSharedPreferences(GlobalVariable.SPF_LOGIN, 0);
+      		//session key value,암호화,나중에
+      
+      		//프리퍼런스 가져오기(자동로그인 사용)
+      		String id = spf.getString(GlobalVariable.SPF_ID,"");
+      		Log.d("test", "id mainActivity "+ id);
 			
   				try{
   					
@@ -168,42 +149,27 @@ public class MainActivity extends Activity
   	    				/*QQQQQQ song 대신에 아이디가 들어가야 한다*/
   	    				/*getCropList 최초 로딩시 불러진다*/
   	    				case 0:
-  	    				 
-  	    					//idValuePair.add(new BasicNameValuePair("id", "song"));
   	    					idValuePair.add(new BasicNameValuePair("id", id));
   	    					
-  	    					
-  	    					
-  	    					
-  	    					//idValuePair.add(new BasicNameValuePair("id", HttpMainActivity.id));
 	    	    			httpPost1 = new HttpPost(GlobalVariable.getCropList);
   	    					break;
-  	    				
   	    				case 2: 
   	    					
   	    				 break;
   	    				case 3:
-  	    				
   	    					idValuePair.add(new BasicNameValuePair("id", id));
   	    					idValuePair.add(new BasicNameValuePair("type", "3"));
   	    					idValuePair.add(new BasicNameValuePair("modNum", "3"));
   	  	    				httpPost1 = new HttpPost(GlobalVariable.insertCrop);
-  	    				
   	    					break;
-  	    				
   	    				default: 
-  	    					
   	    					httpPost1 = new HttpPost(GlobalVariable.getCropList); 
   	    					break;
-
   	    				}
-  	    				
-  	    			
   	    				
   	    				/*httpPost 변수에 idValue를 추가한다 */
   	    				UrlEncodedFormEntity entityRequest1 = new UrlEncodedFormEntity(idValuePair,"UTF-8");
   	    				httpPost1.setEntity(entityRequest1);
-  	    				
   	    				
   	    				ResponseHandler<String> handler1 = new BasicResponseHandler();
   	    				Log.d("test", "before execute");
@@ -217,7 +183,6 @@ public class MainActivity extends Activity
   	    				result2 = result2.trim().toString();
   	    				//Toast.makeText( MainActivity.this, result2, Toast.LENGTH_SHORT ).show();
   	    				Log.d("test", "result : "+result2);
-  	    				
   	    				
   	    				JSONObject jsonObj = new JSONObject(result2);
   	    				return jsonObj;  	
@@ -243,9 +208,7 @@ public class MainActivity extends Activity
 		@Override
 		protected void onPostExecute(JSONObject json) {
 			try {
-				
-				Log.d("test", "Post in");
-				
+				//Log.d("test", "Post in");
 				
 				/* 통신이 정상적이지 않으면*/
 				if(json == null)
@@ -266,7 +229,6 @@ public class MainActivity extends Activity
 					
 					gMain.update_flag = true;
 					
-					
 					for (int i = 0; i < JsonArr.length(); i++) {
 						JSONObject c = JsonArr.getJSONObject(i);
 						// Storing JSON item in a Variable
@@ -279,27 +241,17 @@ public class MainActivity extends Activity
 						i_crop_mod = Integer.parseInt(crop_mod);
 						i_crop_level = Integer.parseInt(crop_level);
 						
-						if(i_crop_level >0)
+						if(i_crop_level > 0)
 						{
 							gMain.crop_level[i_crop_mod] = i_crop_level;
 							gMain.crop_type[i_crop_mod] = i_crop_type;
 						}
-//						gMain.crop_type[i] = i_crop_type;
-//						gMain.crop_mod[i] = i_crop_mod;
-//						gMain.crop_level[i] = i_crop_level;
-						
 						//Toast.makeText( MainActivity.this, "타입은" + crop_type, Toast.LENGTH_SHORT ).show();
 					}
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-		
 		}
-  		
-  		
-  		
   	}
-
-    
 }

@@ -36,10 +36,6 @@ public class GameMain extends Activity {
 	public int[] crop_level = new int[8];
 	public int[] crop_mod = new int[8];
 	
-	
-	
-	
-	
 	// general variable
 	public GL10 mGL = null; // OpenGL 객체
 	public Context MainContext;
@@ -258,27 +254,15 @@ public class GameMain extends Activity {
 																// 변수 선언
 					defaultCrop.SetObject(cropSpr, 0, 0, EmptyList.get(i).x, EmptyList.get(i).y, 0, 0);
 					defaultCrop.dead = true;
-
 					
 					//level이 0이 아닌 놈들만 즉 생성되어있는 놈들만 살려서 그려질 수 있게 한다.
 					if(crop_level[i] >0)
 						defaultCrop.dead = false;
 					
 					CropList.add(defaultCrop); // 어레이 리스트에 추가
-					
-				
 				}
-				
 				update_flag = false;
-				
-				
 			}
-			
-			
-			
-			
-			
-			
 
 			// 빈밭 일단 다 그려줌.
 			for (int i = 0; i < EmptyList.size(); i++) {
@@ -302,20 +286,16 @@ public class GameMain extends Activity {
 				belowButton.get(i).DrawSprite(mGL, 0, gInfo, font);
 				Button.get(i).DrawSprite(mGL, 0, gInfo, font); // 심기 버튼
 			}
-
 			
 			/* 심기 버튼에 대한 로직 */
 			if (Button.get(0).type == ButtonType.TYPE_ONE_CLICK) //심기 버튼 타입이 클릭 모드일 때 
 			{
 				if (Button.get(0).click == ButtonType.STATE_CLK_BUTTON) //만약 클릭 되었으면
 				{
-					
-
 					for (int i = 0; i < EmptyList.size(); i++) /* 모든 빈땅 어레이리스트를 체크한다 */
 					{
 						if (EmptyList.get(i).CheckPos((int) TouchX, (int) TouchY))
 						{
-
 							//Log.d("test", "checkpos");
 							Current = EmptyList.get(i); /* currnt : 터치된 오브젝트 */
 		
@@ -332,15 +312,13 @@ public class GameMain extends Activity {
 				}
 			}
 			
-			
 			//로딩된 농작물 모두 뿌려주기.
 			for (int i = 0; i < CropList.size(); i++) {
-
 				//Log.d("test", "in for");
 				if (CropList.get(i).dead == false) {
 
 					String str = Integer.toString(i);
-					Log.d("test", "print:" + str);
+					//Log.d("test", "print:" + str);
 					CropList.get(i).SetObject(cropSpr, 0, 0, EmptyList.get(i).x, EmptyList.get(i).y, 0, 0);
 
 					CropList.get(i).DrawSprite(gInfo);

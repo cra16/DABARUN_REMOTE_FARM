@@ -28,7 +28,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.app.Application;
 //import bayaba.game.main.MenuMainActivity;
 
 //we do not use gcm in this java code.
@@ -46,8 +45,10 @@ public class HttpMainActivity extends Activity {
     HttpClient httpclient;
     List<NameValuePair> nameValuePairs;
     ProgressDialog dialog = null;
-    public String id;
+    
     //static String id = null;
+    public String id;
+    public String pw;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,26 +68,30 @@ public class HttpMainActivity extends Activity {
       		SharedPreferences spf = getSharedPreferences(GlobalVariable.SPF_LOGIN, 0);
       		//session key value
       
-      		//String id = ""+spf.getString(GlobalVariable.SPF_ID, "");
-      		id = ""+spf.getString(GlobalVariable.SPF_ID, "");
+      		//프리퍼런스 가져오기(자동로그인 사용)
+      		id = spf.getString(GlobalVariable.SPF_ID,"");
+      		pw = spf.getString(GlobalVariable.SPF_PW,"");
+      		
+      		Log.d("test", "check if id exist: "+ id);
+			Log.d("test", "check if pw exist: "+ pw);
+      		
+      		//sharedpreference 사용해서 기존에 입력된 값이 있다면
       		if(id != null)
       		{
       			id_Edt.setText(id);
+      			pw_Edt.setText(pw);
       		}
 
         Log.d("debug", "onCreate3");
         
-        
         b.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-            	
             	 Log.d("debug", "onClick");
             	new Register().execute();
             }
         });
     }
-     
     
     public void showAlert(){
     	 Log.d("debug", "alert");
@@ -119,50 +124,45 @@ public class HttpMainActivity extends Activity {
   			
   			//if(checkAllEditTextsFull()){
   				try{
-  					
   					HttpClient client = new DefaultHttpClient();
   					Log.d("test","ing");				
   	    			try{
   	    				//id = id_Edt.getText().toString();
   	    				// 14.4.4 �߰�
   	    				ArrayList<NameValuePair> nameValuePairs1 = new ArrayList<NameValuePair>();
-  	    				nameValuePairs1.add(new BasicNameValuePair("id",  id_Edt.getText().toString()));
+  	    				nameValuePairs1.add(new BasicNameValuePair("id", id_Edt.getText().toString()));
   	    				nameValuePairs1.add(new BasicNameValuePair("pw", pw_Edt.getText().toString()));
   	    				Log.d("test","i7");
   	    				// 14.4.4 �߰���
-  	    				
   	    				
   	    				HttpPost httpPost1 = new HttpPost(GlobalVariable.login);			
   	    				UrlEncodedFormEntity entityRequest1 = new UrlEncodedFormEntity(nameValuePairs1,"UTF-8");
   	    				httpPost1.setEntity(entityRequest1);
   	    				ResponseHandler<String> handler1 = new BasicResponseHandler();
   	    				String result1 = client.execute(httpPost1, handler1);
-  	    				
   						result1 = result1.trim().toString();
 //  						result1 = "�α���";
   						Log.d("test", "result1:"+result1);
-  						
   		        		Log.d("test","check3");
-  		        		
-  		        		
   		        		
   		        		//when login is successful
   		        		if(!result1.equals("not_exist")){
   		        			/*registerGCM(id_Edt.getText().toString());*/
-
+  		        			//프리퍼런스 설정
   		        			SharedPreferences spf = getSharedPreferences(GlobalVariable.SPF_LOGIN, 0);
-  							SharedPreferences.Editor spfEdit = spf.edit();
-  							
-  							//spf 정보 지우기
-  							spfEdit.putString(GlobalVariable.SPF_ID, id_Edt.getText().toString());
-  							spfEdit.commit();
-  		        			Log.d("debug", "before startActivity");
-  		        	        
-  		        			//id global 변수 set
-  		        			((MyApplication)HttpMainActivity.this.getApplication()).setId(id);
-  		        			Log.d("test", "id httpMain "+ ((MyApplication)HttpMainActivity.this.getApplication()).getId());
+  							//prefnam이름을 prefname으로
+  		        			SharedPreferences.Editor spfEdit = spf.edit();
   		        			
-  		        			//Execute activity below
+  							//spf 정보 넣기
+  							id = id_Edt.getText().toString();
+  							pw = pw_Edt.getText().toString();
+  		        			spfEdit.putString(GlobalVariable.SPF_ID, id); //사용자에게 입력 받은 id 저장
+  							spfEdit.putString(GlobalVariable.SPF_PW, pw); //시용자에게 입력 받은 pw 저장
+  							spfEdit.commit();	//commit
+  							Log.d("test", "put id: "+ id);
+  							Log.d("test", "put pw: "+ pw);
+
+  							//Execute activity below
   		        			Intent intent = new Intent(HttpMainActivity.this, MainActivity.class);                                                                                                                                             
   							startActivity(intent);		        			 
   		        		}	        		
@@ -173,14 +173,9 @@ public class HttpMainActivity extends Activity {
   				}catch(Exception e){
   					
   				}				
-  			
   			return -1;
-
   		}
-  		
   		//doinbackground ��
-  		
-  		
   	}
   	/* we do not use gcm in this code*/
   	
