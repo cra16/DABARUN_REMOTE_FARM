@@ -78,8 +78,9 @@ public class HttpMainActivity extends Activity {
       		//sharedpreference 사용해서 기존에 입력된 값이 있다면
       		if(id != null)
       		{
-      			id_Edt.setText(id);
-      			pw_Edt.setText(pw);
+      			//Execute activity below
+      			Intent intent = new Intent(HttpMainActivity.this, MainActivity.class);                                                                                                                                             
+				startActivity(intent);	
       		}
 
         Log.d("debug", "onCreate3");
@@ -157,10 +158,8 @@ public class HttpMainActivity extends Activity {
   							id = id_Edt.getText().toString();
   							pw = pw_Edt.getText().toString();
   		        			spfEdit.putString(GlobalVariable.SPF_ID, id); //사용자에게 입력 받은 id 저장
-  							spfEdit.putString(GlobalVariable.SPF_PW, pw); //시용자에게 입력 받은 pw 저장
   							spfEdit.commit();	//commit
   							Log.d("test", "put id: "+ id);
-  							Log.d("test", "put pw: "+ pw);
 
   							//Execute activity below
   		        			Intent intent = new Intent(HttpMainActivity.this, MainActivity.class);                                                                                                                                             
