@@ -152,6 +152,7 @@ public class MainActivity extends Activity
 			Log.d("test","doInBackground");
 
 			id = ((MyApplication)MainActivity.this.getApplication()).getId();
+			Log.d("test", "id "+ id);
 			
   				try{
   					
@@ -170,6 +171,8 @@ public class MainActivity extends Activity
   	    				 
   	    					//idValuePair.add(new BasicNameValuePair("id", "song"));
   	    					idValuePair.add(new BasicNameValuePair("id", id));
+  	    					
+  	    					
   	    					
   	    					
   	    					//idValuePair.add(new BasicNameValuePair("id", HttpMainActivity.id));
@@ -288,12 +291,6 @@ public class MainActivity extends Activity
 						//Toast.makeText( MainActivity.this, "타입은" + crop_type, Toast.LENGTH_SHORT ).show();
 					}
 				}
-				
-				
-
-				
-				
-				
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}

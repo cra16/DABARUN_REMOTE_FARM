@@ -46,7 +46,7 @@ public class HttpMainActivity extends Activity {
     HttpClient httpclient;
     List<NameValuePair> nameValuePairs;
     ProgressDialog dialog = null;
-
+    public String id;
     //static String id = null;
     
     @Override
@@ -63,11 +63,12 @@ public class HttpMainActivity extends Activity {
         pw_Edt = (EditText)findViewById(R.id.pw_Edt);
         tv = (TextView)findViewById(R.id.tv);
          
-      //ID, PW 정보를 사용하기 위한 SPF를 GET한다
+        	//ID, PW 정보를 사용하기 위한 SPF를 GET한다
       		SharedPreferences spf = getSharedPreferences(GlobalVariable.SPF_LOGIN, 0);
       		//session key value
       
-      		String id = ""+spf.getString(GlobalVariable.SPF_ID, "");
+      		//String id = ""+spf.getString(GlobalVariable.SPF_ID, "");
+      		id = ""+spf.getString(GlobalVariable.SPF_ID, "");
       		if(id != null)
       		{
       			id_Edt.setText(id);
@@ -112,7 +113,6 @@ public class HttpMainActivity extends Activity {
       		// TODO Auto-generated method stub
       		super.onPreExecute();
       	}
-      	
   	
   		@Override
   		protected Integer doInBackground(String... params){
@@ -159,8 +159,8 @@ public class HttpMainActivity extends Activity {
   		        			Log.d("debug", "before startActivity");
   		        	        
   		        			//id global 변수 set
-  		        			((MyApplication)HttpMainActivity.this.getApplication()).setId(GlobalVariable.SPF_ID);
-  		        			
+  		        			((MyApplication)HttpMainActivity.this.getApplication()).setId(id);
+  		        			Log.d("test", "id httpMain "+ ((MyApplication)HttpMainActivity.this.getApplication()).getId());
   		        			
   		        			//Execute activity below
   		        			Intent intent = new Intent(HttpMainActivity.this, MainActivity.class);                                                                                                                                             
