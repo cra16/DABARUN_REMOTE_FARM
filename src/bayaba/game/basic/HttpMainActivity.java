@@ -28,6 +28,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.app.Application;
 //import bayaba.game.main.MenuMainActivity;
 
 //we do not use gcm in this java code.
@@ -50,13 +51,10 @@ public class HttpMainActivity extends Activity {
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        
     	
     	Log.d("debug", "onCreate1");
     	super.onCreate(savedInstanceState);
-       
         setContentView(R.layout.activity_http_main);
-        
        
         Log.d("debug", "onCreate2");
         
@@ -160,6 +158,9 @@ public class HttpMainActivity extends Activity {
   							spfEdit.commit();
   		        			Log.d("debug", "before startActivity");
   		        	        
+  		        			//id global 변수 set
+  		        			((MyApplication)HttpMainActivity.this.getApplication()).setId(GlobalVariable.SPF_ID);
+  		        			
   		        			
   		        			//Execute activity below
   		        			Intent intent = new Intent(HttpMainActivity.this, MainActivity.class);                                                                                                                                             

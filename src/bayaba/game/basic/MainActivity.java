@@ -14,6 +14,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import android.content.SharedPreferences;
 
 import Variable.GlobalVariable;
 import android.app.Activity;
@@ -32,6 +33,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 import bayaba.engine.lib.GameInfo;
+import android.app.Application;
 
 
 public class MainActivity extends Activity
@@ -45,6 +47,8 @@ public class MainActivity extends Activity
 	private static final String TAG_TYPE = "type";
 	private static final String TAG_MODULE = "modNum";
 	private static final String TAG_LEVEL = "level";
+	
+	public String id;
 	
 	public Handler m_handler = new Handler() {
 		
@@ -103,6 +107,7 @@ public class MainActivity extends Activity
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        
      
         Log.d("debug", "GAME MAIN ONCREATE");
         getWindow().addFlags( WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON );
@@ -146,6 +151,8 @@ public class MainActivity extends Activity
   		protected JSONObject doInBackground(String... params){
 			Log.d("test","doInBackground");
 
+			id = ((MyApplication)MainActivity.this.getApplication()).getId();
+			
   				try{
   					
   					HttpClient client = new DefaultHttpClient();
@@ -161,7 +168,10 @@ public class MainActivity extends Activity
   	    				/*getCropList 최초 로딩시 불러진다*/
   	    				case 0:
   	    				 
-  	    					idValuePair.add(new BasicNameValuePair("id", "song"));
+  	    					//idValuePair.add(new BasicNameValuePair("id", "song"));
+  	    					idValuePair.add(new BasicNameValuePair("id", id));
+  	    					
+  	    					
   	    					//idValuePair.add(new BasicNameValuePair("id", HttpMainActivity.id));
 	    	    			httpPost1 = new HttpPost(GlobalVariable.getCropList);
   	    					break;
@@ -171,7 +181,7 @@ public class MainActivity extends Activity
   	    				 break;
   	    				case 3:
   	    				
-  	    					idValuePair.add(new BasicNameValuePair("id", "song"));
+  	    					idValuePair.add(new BasicNameValuePair("id", id));
   	    					idValuePair.add(new BasicNameValuePair("type", "3"));
   	    					idValuePair.add(new BasicNameValuePair("modNum", "3"));
   	  	    				httpPost1 = new HttpPost(GlobalVariable.insertCrop);
