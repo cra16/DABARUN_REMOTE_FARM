@@ -58,8 +58,9 @@ public class MainActivity extends Activity
 				break;
 			case 2: 
 				{
+					//배추
 					//Toast.makeText( MainActivity.this, "5p가 차감 됩니다.\n배추를 심으시겠습니까?", Toast.LENGTH_SHORT ).show();
-					Toast.makeText( MainActivity.this, "heello", Toast.LENGTH_SHORT ).show();
+					Toast.makeText( MainActivity.this, "cabbage", Toast.LENGTH_SHORT ).show();
 
 					Log.d("test","case2");
 					//CropInfo cropInstance = new CropInfo();
@@ -68,6 +69,8 @@ public class MainActivity extends Activity
 				}
 				break;
 			case 3: 
+				//딸기
+				Toast.makeText( MainActivity.this, "strawberry", Toast.LENGTH_SHORT ).show();
 				//Toast.makeText( MainActivity.this, "5p가 차감 됩니다. \n딸기를 심으시겠습니까?", Toast.LENGTH_SHORT ).show();
 				new CropInfo(msg.what).execute();
 				break;
@@ -75,7 +78,6 @@ public class MainActivity extends Activity
 				break;
 			}
 		}
-		
 		
 		public int getValue(){
 			someVal = 2;
@@ -87,7 +89,6 @@ public class MainActivity extends Activity
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        
      
         Log.d("debug", "GAME MAIN ONCREATE");
         getWindow().addFlags( WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON );
@@ -107,7 +108,7 @@ public class MainActivity extends Activity
         setContentView( play );
     }
     
-  //AsyncTask
+    //AsyncTask
   	private class CropInfo extends AsyncTask<String, String, JSONObject>{
   		public int fromWhere;
   		
@@ -133,7 +134,7 @@ public class MainActivity extends Activity
       
       		//프리퍼런스 가져오기(자동로그인 사용)
       		String id = spf.getString(GlobalVariable.SPF_ID,"");
-      		Log.d("test", "id mainActivity "+ id);
+      		//Log.d("test", "id mainActivity "+ id);
 			
   				try{
   					
@@ -154,12 +155,19 @@ public class MainActivity extends Activity
 	    	    			httpPost1 = new HttpPost(GlobalVariable.getCropList);
   	    					break;
   	    				case 2: 
-  	    					
+  	    					//배추
+  	    					idValuePair.add(new BasicNameValuePair("id", id));
+  	    					idValuePair.add(new BasicNameValuePair("type", "1"));
+  	    					idValuePair.add(new BasicNameValuePair("modNum", "3"));
+  	    					idValuePair.add(new BasicNameValuePair("point", "500"));
+  	  	    				httpPost1 = new HttpPost(GlobalVariable.insertCrop);
   	    				 break;
   	    				case 3:
+  	    					//딸기
   	    					idValuePair.add(new BasicNameValuePair("id", id));
-  	    					idValuePair.add(new BasicNameValuePair("type", "3"));
+  	    					idValuePair.add(new BasicNameValuePair("type", "2"));
   	    					idValuePair.add(new BasicNameValuePair("modNum", "3"));
+  	    					idValuePair.add(new BasicNameValuePair("point", "1000"));
   	  	    				httpPost1 = new HttpPost(GlobalVariable.insertCrop);
   	    					break;
   	    				default: 

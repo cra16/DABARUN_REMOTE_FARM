@@ -72,8 +72,8 @@ public class HttpMainActivity extends Activity {
       		id = spf.getString(GlobalVariable.SPF_ID,"");
       		pw = spf.getString(GlobalVariable.SPF_PW,"");
       		
-      		Log.d("test", "check if id exist: "+ id);
-			Log.d("test", "check if pw exist: "+ pw);
+      		//Log.d("test", "check if id exist: "+ id);
+			//Log.d("test", "check if pw exist: "+ pw);
       		
       		//sharedpreference 사용해서 기존에 입력된 값이 있다면
       		if(id != null)
@@ -83,19 +83,19 @@ public class HttpMainActivity extends Activity {
 				startActivity(intent);	
       		}
 
-        Log.d("debug", "onCreate3");
+        //Log.d("debug", "onCreate3");
         
         b.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-            	 Log.d("debug", "onClick");
+            	// Log.d("debug", "onClick");
             	new Register().execute();
             }
         });
     }
     
     public void showAlert(){
-    	 Log.d("debug", "alert");
+    	// Log.d("debug", "alert");
         HttpMainActivity.this.runOnUiThread(new Runnable() {
             public void run() {
                 AlertDialog.Builder builder = new AlertDialog.Builder(HttpMainActivity.this);
@@ -133,7 +133,7 @@ public class HttpMainActivity extends Activity {
   	    				ArrayList<NameValuePair> nameValuePairs1 = new ArrayList<NameValuePair>();
   	    				nameValuePairs1.add(new BasicNameValuePair("id", id_Edt.getText().toString()));
   	    				nameValuePairs1.add(new BasicNameValuePair("pw", pw_Edt.getText().toString()));
-  	    				Log.d("test","i7");
+  	    				//Log.d("test","i7");
   	    				// 14.4.4 �߰���
   	    				
   	    				HttpPost httpPost1 = new HttpPost(GlobalVariable.login);			
@@ -143,8 +143,8 @@ public class HttpMainActivity extends Activity {
   	    				String result1 = client.execute(httpPost1, handler1);
   						result1 = result1.trim().toString();
 //  						result1 = "�α���";
-  						Log.d("test", "result1:"+result1);
-  		        		Log.d("test","check3");
+  						//Log.d("test", "result1:"+result1);
+  		        		//Log.d("test","check3");
   		        		
   		        		//when login is successful
   		        		if(!result1.equals("not_exist")){
