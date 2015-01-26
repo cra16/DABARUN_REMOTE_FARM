@@ -4,9 +4,13 @@
 package bayaba.game.basic;
 
 import android.os.Handler; //handler
+import android.os.Message;
+
 import java.util.ArrayList;
 import java.util.Random;
+
 import javax.microedition.khronos.opengles.GL10;
+
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
@@ -31,6 +35,9 @@ public class GameMain extends Activity {
 
 	public boolean popup_flag = false; /* 팝업을 띄울지 말지 판단하는 불린*/
 	public boolean update_flag = false;
+	
+	//modNum 설정
+	public int modeNum=10; //초기화화 뭐로 할까
 	
 	public int[] crop_type = new int[8];
 	public int[] crop_level = new int[8];
@@ -140,7 +147,10 @@ public class GameMain extends Activity {
 			temp.SetText(0, 20, 8, 1, 1, 1, 20f, buttonName[i]);
 			belowButton.add(temp);
 		}
-		((MainActivity) MainContext).m_handler.sendEmptyMessage(0);
+		Message msg = mHandler.obtainMessage();
+		msg.what = 0;
+		((MainActivity) MainContext).m_handler.sendMessage(msg);
+		//((MainActivity) MainContext).m_handler.sendEmptyMessage();
 	}
 
 	public void PushButton(boolean push) // OpenGL 화면에 터치가 발생하면 GLView에서 호출된다.
@@ -171,7 +181,9 @@ public class GameMain extends Activity {
 				if (EmptyList.get(i).CheckPos((int) TouchX, (int) TouchY))
 				{
 					Current = EmptyList.get(i); /* currnt : 터치된 오브젝트 */
-
+					
+					modeNum =i;
+					
 					Button.get(0).SetButton(ButtonSpr,
 							ButtonType.TYPE_ONE_CLICK, 0, Current.x + 80,
 							Current.y, 3);
@@ -226,13 +238,17 @@ public class GameMain extends Activity {
 				}else if((MainUI.UIList.get(i).index == Select.Group0.ONE_CLICK_002)
 						&& (MainUI.UIList.get(i).click == ButtonType.STATE_CLK_BUTTON)){
 					
-					////
-					Log.d("test", "in message");
-					((MainActivity) MainContext).m_handler.sendEmptyMessage(2);
-					//Log.d("test", "checkpos");
-					
 					//배추 버튼을 누르면  object 보임
-					CropList.get(i).dead = false;
+					CropList.get(modeNum).dead = false;
+					
+					//Log.d("test", "in message");
+					Message msg = mHandler.obtainMessage();
+					msg.what = 2;  //cabbage, case
+					msg.arg1 = modeNum; //modNum
+					//Log.d("test", "gamaMain i modeNum:  " + modeNum);
+					//Log.d("test", "main msg.arg1:  " + msg.arg1);
+					
+					((MainActivity) MainContext).m_handler.sendMessage(msg);
 					
 					//배추 버튼
 					MainUI.UIList.get(i).ResetButton();
@@ -241,11 +257,16 @@ public class GameMain extends Activity {
 				//딸기 버튼이 눌렸을 때	
 				}else if((MainUI.UIList.get(i).index == Select.Group0.ONE_CLICK_003)
 						&& (MainUI.UIList.get(i).click == ButtonType.STATE_CLK_BUTTON)){
-					//딸기 버튼
-					((MainActivity) MainContext).m_handler.sendEmptyMessage(3);
-					
 					//딸기 버튼을 누르면  object 보임
-					CropList.get(i).dead = false;
+					CropList.get(modeNum).dead = false;
+					
+					Message msg = mHandler.obtainMessage();
+					msg.what = 3;  //cabbage, case
+					msg.arg1 = modeNum; //modNum
+					//Log.d("test", "gamaMain i modeNum:  " + modeNum);
+					//Log.d("test", "main msg.arg2:  " + msg.arg1);
+					
+					((MainActivity) MainContext).m_handler.sendMessage(msg);
 					
 					MainUI.UIList.get(i).ResetButton();
 					MainUI.DeleteLastGroup(gInfo);
@@ -321,8 +342,6 @@ public class GameMain extends Activity {
 				}
 			}
 			
-			Log.d("test", "cropList size:"+ CropList.size());
-			
 			//로딩된 농작물 모두 뿌려주기.
 			for (int i = 0; i < CropList.size(); i++) {
 				//Log.d("test", "in for");
@@ -339,8 +358,6 @@ public class GameMain extends Activity {
 				MainUI.Draw(mGL, gInfo, font);
 
 			font.EndFont(gInfo);
-			
-			//Log.d("test", "cropList size: "+ CropList.size());
 		}
 	}
 }
