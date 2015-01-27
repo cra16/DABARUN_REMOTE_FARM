@@ -121,7 +121,7 @@ public class GameMain extends Activity {
 	{
 		// 게임 데이터를 로드합니다.
 		backSpr.LoadSprite(mGL, MainContext, "background/farmBackground.spr");
-		cropSpr.LoadSprite(mGL, MainContext, "crop/seed_v1.spr");
+		
 		emptySpr.LoadSprite(mGL, MainContext, "crop/empty.spr");
 		ButtonSpr.LoadSprite(mGL, MainContext, "button/button.spr");
 		
@@ -133,10 +133,6 @@ public class GameMain extends Activity {
 		cirBtnSpr.LoadSprite(mGL, MainContext, "button/circleBtn.spr");
 		
 		
-		MenuSpr[0].LoadSprite(mGL, MainContext, "experienceButton.spr");
-		MenuSpr[1].LoadSprite(mGL, MainContext, "itemButton.spr");
-		MenuSpr[2].LoadSprite(mGL, MainContext, "storageButton.spr");
-		MenuSpr[3].LoadSprite(mGL, MainContext, "marketIcon.spr");
 
 		cropObj.SetObject(cropSpr, 0, 0, 400, 280, 0, 0);
 		cropObj.dead = true; // 농작물은 죽어있는 상태다. false로 바꿔줘야만 메인에서 그려준다.
@@ -216,7 +212,7 @@ public class GameMain extends Activity {
 					Button.get(3).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x, Current.y + 45, 3);
 					
 					for(int j=0; j<4; j++)
-						Button.get(i).show = true;
+						Button.get(j).show = true;
 					
 				}
 			}
