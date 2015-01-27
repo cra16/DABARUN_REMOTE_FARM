@@ -61,22 +61,13 @@ public class MainActivity extends Activity {
 				Toast.makeText(MainActivity.this, "cabbage", Toast.LENGTH_SHORT)
 						.show();
 				modNum = Integer.toString(msg.arg1);
-				//Log.d("test", "mainActivity msg.arg1:  " + msg.arg1);
-				//Log.d("test", "mainActivity modNum:  " + modNum);
-
-				//Log.d("test", "case2");
 				new CropInfo(msg.what).execute();
 			}
 				break;
 			case 3:
-				
 				Toast.makeText(MainActivity.this, "strawberry", Toast.LENGTH_SHORT)
 						.show();
 				modNum = Integer.toString(msg.arg1);
-				//Log.d("test", "mainActivity msg.arg1:  " + msg.arg1);
-				//Log.d("test", "mainActivity modNum:  " + modNum);
-
-				//Log.d("test", "case2");
 				new CropInfo(msg.what).execute();
 				break;
 			default:
@@ -101,9 +92,7 @@ public class MainActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
-		gInfo = new GameInfo(800, 480); // ���� ����̴�. ���� ��带 �ϰ� ������ 800,
-										// 480���� �����ϸ� �ȴ�. ���ػ󵵷� ��ȯ�ص�
-										// �����ϴ�.
+		gInfo = new GameInfo(800, 480); 
 		gInfo.ScreenXsize = getResources().getDisplayMetrics().widthPixels;
 		gInfo.ScreenYsize = getResources().getDisplayMetrics().heightPixels;
 		gInfo.SetScale();
@@ -137,7 +126,7 @@ public class MainActivity extends Activity {
 			// retrieve user info from shared preference
 			SharedPreferences spf = getSharedPreferences(
 					GlobalVariable.SPF_LOGIN, 0);
-			// session key value,암호화,나중에
+			// session key value
 
 			// 프리퍼런스 가져오기(자동로그인 사용)
 			String id = spf.getString(GlobalVariable.SPF_ID, "");
@@ -223,7 +212,6 @@ public class MainActivity extends Activity {
 		@Override
 		protected void onPostExecute(JSONObject json) {
 			try {
-				// Log.d("test", "Post in");
 
 				/* 통신이 정상적이지 않으면 */
 				if (json == null) {
@@ -240,8 +228,6 @@ public class MainActivity extends Activity {
 					int i_crop_type;
 					int i_crop_mod;
 					int i_crop_level;
-					
-
 					
 					gMain.update_flag = true;
 
@@ -261,8 +247,6 @@ public class MainActivity extends Activity {
 							gMain.crop_level[i_crop_mod] = i_crop_level;
 							gMain.crop_type[i_crop_mod] = i_crop_type;
 						}
-						// Toast.makeText( MainActivity.this, "타입은" + crop_type,
-						// Toast.LENGTH_SHORT ).show();
 					}
 				}
 			} catch (JSONException e) {

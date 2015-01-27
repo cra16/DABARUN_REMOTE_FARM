@@ -37,7 +37,7 @@ public class GameMain extends Activity {
 	public boolean update_flag = false;
 	
 	//modNum 설정
-	public int modNum=-1; //초기화화 뭐로 할까
+	public int modNum=-1; 
 	
 	public int[] crop_type = new int[8];
 	public int[] crop_level = new int[8];
@@ -52,24 +52,22 @@ public class GameMain extends Activity {
 	public Font font = new Font(); // 글 쓸때 필요한 듯,버튼에 
 	public Handler mHandler;
 	
-	public int count =0; //object 생성 갯수 확인용 
-
 	// sprite variable
 	private Sprite ButtonSpr = new Sprite(); // 심기 버튼 스프라이트
-	private Sprite ProgressSpr = new Sprite(); // 파란색 프로그레스바 스프라이트
-	private Sprite ProgBackSpr = new Sprite(); // 검은색 프르고레스바 배경 스프라이트
 	public Sprite cropSpr = new Sprite(); // 점점 변경되는 농작물 스프라이트
 	public Sprite backSpr = new Sprite();// background sprite
 	public Sprite emptySpr = new Sprite(); // 빈땅 스프라이트
+	public Sprite strawberrySpr = new Sprite(); //딸기
+	public Sprite cabbageSpr = new Sprite(); //배추
 
 	// object
 	public ButtonObject SuperBtn = new ButtonObject();
-	private ButtonObject ProgBtn = new ButtonObject(); // 프로그레스바 오브젝트
-	private ButtonObject ProgBack = new ButtonObject(); // 프로그레스배경 오브젝트
 	public UITool MainUI = new UITool();
 	private ButtonObject temp = new ButtonObject(); // 밭 누르면 나오는 버튼들에 대한 버튼 오브젝트
 	public GameObject Current = null; // 터치한 오브젝트를 가리키기 위한 빈칸.. 포인터 대용
 	public GameObject cropObj = new GameObject(); // 농작물 오브젝트! 가장 중요한 것!
+	public GameObject strawberryObj = new GameObject(); // 딸기 
+	public GameObject cabbageObj = new GameObject(); // 배추
 	public GameObject EmptyObj = new GameObject(); // 빈땅입니다
 	public GameObject PointerObj = null;
 
@@ -77,14 +75,16 @@ public class GameMain extends Activity {
 	private Sprite Pattern[] = new Sprite[5];
 
 	// object arrayList
+	//public ArrayList<GameObject> StrawberryList = new ArrayList<GameObject>(); //딸기
+	//public ArrayList<GameObject> CabbageList = new ArrayList<GameObject>(); //배추
+	
 	// 농작물들을 담은 어레이
 	public ArrayList<GameObject> CropList = new ArrayList<GameObject>();
 	// 빈칸 어레이
 	public ArrayList<GameObject> EmptyList = new ArrayList<GameObject>();
-	public ArrayList<GameObject> ProgList = new ArrayList<GameObject>();
-	public ArrayList<GameObject> ProgBackList = new ArrayList<GameObject>();
 	// 밭 누르면 나오는 버튼들
 	public ArrayList<ButtonObject> Button = new ArrayList<ButtonObject>();
+	
 	// 화면 아래에 나오는 버튼들을 저장할 리스트
 	public ArrayList<ButtonObject> belowButton = new ArrayList<ButtonObject>();
 
@@ -106,17 +106,22 @@ public class GameMain extends Activity {
 		cropSpr.LoadSprite(mGL, MainContext, "crop/seed_v1.spr");
 		emptySpr.LoadSprite(mGL, MainContext, "crop/empty.spr");
 		ButtonSpr.LoadSprite(mGL, MainContext, "button/button.spr");
-
+		strawberrySpr.LoadSprite(mGL, MainContext, "s.spr");  //딸기
+		cabbageSpr.LoadSprite(mGL, MainContext, "obj_cabbage.spr");  //배추
+		
 		Pattern[0].LoadSprite(mGL, MainContext, "experienceButton.spr");
 		Pattern[1].LoadSprite(mGL, MainContext, "itemButton.spr");
 		Pattern[2].LoadSprite(mGL, MainContext, "storageButton.spr");
 		Pattern[3].LoadSprite(mGL, MainContext, "marketIcon.spr");
 
-		ProgressSpr.LoadSprite(mGL, MainContext, "button/progress.spr");
-		ProgBackSpr.LoadSprite(mGL, MainContext, "button/progBack.spr");
-
 		cropObj.SetObject(cropSpr, 0, 0, 400, 280, 0, 0);
 		cropObj.dead = true; // 농작물은 죽어있는 상태다. false로 바꿔줘야만 메인에서 그려준다.
+		
+		//strawberryObj.SetObject(strawberrySpr, 0, 0, 400, 280, 0, 0);
+		//strawberryObj.dead = true; // 딸기는 죽어있는 상태다. false로 바꿔줘야만 메인에서 그려준다.
+		
+		//cabbageObj.SetObject(cabbageSpr, 0, 0, 400, 280, 0, 0);
+		//cabbageObj.dead = true; // 배추는 죽어있는 상태다. false로 바꿔줘야만 메인에서 그려준다.
 
 		// ui 적용
 		MainUI.LoadUI(mGL, MainContext, "UI/UIPack.ui"); // UI 파일을 로드한다.
@@ -224,8 +229,6 @@ public class GameMain extends Activity {
 			backSpr.PutAni(gInfo, 400, 240, 0, 0); // 백그라운드
 
 			
-			//Log.d("test", "CropList.size: " + CropList.size());
-			
 			/* 팝업 UI 터치를 체크함 */
 			for (int i = 0; i < MainUI.UIList.size(); i++) {
 
@@ -245,13 +248,12 @@ public class GameMain extends Activity {
 					
 					//배추 버튼을 누르면  object 보임
 					CropList.get(modNum).dead = false;
+					crop_type[modNum] = 1;
 					
-					//Log.d("test", "in message");
+					Log.d("test", "cabbage click");
 					Message msg = mHandler.obtainMessage();
 					msg.what = 2;  //cabbage, case
 					msg.arg1 = modNum; //modNum
-					//Log.d("test", "gamaMain i modeNum:  " + modeNum);
-					//Log.d("test", "main msg.arg1:  " + msg.arg1);
 					
 					((MainActivity) MainContext).m_handler.sendMessage(msg);
 					
@@ -264,12 +266,11 @@ public class GameMain extends Activity {
 						&& (MainUI.UIList.get(i).click == ButtonType.STATE_CLK_BUTTON)){
 					//딸기 버튼을 누르면  object 보임
 					CropList.get(modNum).dead = false;
+					crop_type[modNum] = 2;
 					
 					Message msg = mHandler.obtainMessage();
-					msg.what = 3;  //cabbage, case
+					msg.what = 3;  //strawberry, case
 					msg.arg1 = modNum; //modNum
-					//Log.d("test", "gamaMain i modeNum:  " + modeNum);
-					//Log.d("test", "main msg.arg2:  " + msg.arg1);
 					
 					((MainActivity) MainContext).m_handler.sendMessage(msg);
 					
@@ -278,34 +279,29 @@ public class GameMain extends Activity {
 				}
 			}
 			
-			//Log.d("test", "crop_type.length: " + crop_type.length);
-			
-			
-			
-			
-			if(update_flag == true)
-			{
-				for(int i=0; i < crop_type.length; i++)
-				{ 
+			if (update_flag == true) {
+				for (int i = 0; i < crop_type.length; i++) {
 					// 농작물 생성 후 어레이에 넣기
 					GameObject defaultCrop = new GameObject(); // GameObject 변수 선언
-					defaultCrop.SetObject(cropSpr, 0, 0, EmptyList.get(i).x, EmptyList.get(i).y, 0, 0);
+					
+					Log.d("test", "cabbage click");
+					if (crop_type[i] == 1) {	//배추
+						defaultCrop.SetObject(cabbageSpr, 0, 0, EmptyList.get(i).x, EmptyList.get(i).y, 0, 0);
+					} else if (crop_type[i] == 2) {	//딸기
+						defaultCrop.SetObject(strawberrySpr, 0, 0, EmptyList.get(i).x, EmptyList.get(i).y, 0, 0);
+					}else{
+						defaultCrop.SetObject(cropSpr, 0, 0, EmptyList.get(i).x, EmptyList.get(i).y, 0, 0);
+					}
 					defaultCrop.dead = true;
-					
-					//Log.d("test", "in update falg: 1");
-					
-					//level이 0이 아닌 놈들만 즉 생성되어있는 놈들만 살려서 그려질 수 있게 한다.
-					if(crop_level[i] > 0)
+					// level이 0이 아닌 놈들만 즉 생성되어있는 놈들만 살려서 그려질 수 있게 한다.
+					if (crop_level[i] > 0)
 						defaultCrop.dead = false;
-					
-					//Log.d("test", "in update falg: 2");
-					
-					CropList.add(defaultCrop); // 어레이 리스트에 추가
-					Log.d("test", "cropList.add:  " + count++);
+					CropList.add(defaultCrop);
+					crop_type[i] = -1;
 				}
 				update_flag = false;
 			}
-
+			
 			// 빈밭 일단 다 그려줌.
 			for (int i = 0; i < EmptyList.size(); i++) {
 				EmptyList.get(i).DrawSprite(gInfo);
@@ -329,45 +325,32 @@ public class GameMain extends Activity {
 				Button.get(i).DrawSprite(mGL, 0, gInfo, font); // 버튼들 그려주기
 			}
 			
-			/* 심기 버튼에 대한 로직 */
-			if (Button.get(0).type == ButtonType.TYPE_ONE_CLICK) //심기 버튼 타입이 클릭 모드일 때 
-			{
-				if (Button.get(0).click == ButtonType.STATE_CLK_BUTTON) //만약 클릭 되었으면
-				{
-					for (int i = 0; i < EmptyList.size(); i++) /* 모든 빈땅 어레이리스트를 체크한다 */
-					{
-						if (EmptyList.get(i).CheckPos((int) TouchX, (int) TouchY))
-						{
-							//Log.d("test", "checkpos");
-							Current = EmptyList.get(i); /* currnt : 터치된 오브젝트 */
-		
-							// 농작물 생성 후 어레이에 넣기
-							GameObject defaultCrop = new GameObject(); // GameObject 변수 선언
-
-							defaultCrop.SetObject(cropSpr, 0, 0, Current.x, Current.y, 0, 0);
-							defaultCrop.dead = false;
-							
-							CropList.add(defaultCrop); // 어레이 리스트에 생성&추가,  이 때 조건이 필요한 듯
-							
-							//Log.d("test", "in for 심기 버튼에 대한 로직");
-							CropList.get(i).SetObject(cropSpr, 0, 0, EmptyList.get(i).x, EmptyList.get(i).y, 0, 0);
-							CropList.get(i).DrawSprite(gInfo);
-						}
-					}
-				}
-			}
-			
 			//로딩된 농작물 모두 뿌려주기.
 			for (int i = 0; i < CropList.size(); i++) {
 				//Log.d("test", "in for");
 				if (CropList.get(i).dead == false) {
-
 					String str = Integer.toString(i);
 					//Log.d("test", "print:" + str);
-					CropList.get(i).SetObject(cropSpr, 0, 0, EmptyList.get(i).x, EmptyList.get(i).y, 0, 0);
+					if(crop_type[i] == 1){
+						//배추 이미지 넣기
+						CropList.get(i).SetObject(cabbageSpr, 0, 0, EmptyList.get(i).x, EmptyList.get(i).y, 0, 0);
+					}
+					else if(crop_type[i] == 2)
+					{
+						//딸기 이미지 넣기
+						CropList.get(i).SetObject(strawberrySpr, 0, 0, EmptyList.get(i).x, EmptyList.get(i).y, 0, 0);
+					}
+					CropList.get(i).motion = crop_level[i];
 					CropList.get(i).DrawSprite(gInfo);
 				}
 			}
+			
+			/*팝업 그려주기 */
+			if (popup_flag == true)
+				MainUI.Draw(mGL, gInfo, font);
+
+			font.EndFont(gInfo);
+			
 			/*팝업 그려주기 */
 			if (popup_flag == true)
 				MainUI.Draw(mGL, gInfo, font);
