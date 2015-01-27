@@ -37,7 +37,7 @@ public class GameMain extends Activity {
 	public boolean update_flag = false;
 	
 	//modNum 설정
-	public int modeNum=10; //초기화화 뭐로 할까
+	public int modNum=-1; //초기화화 뭐로 할까
 	
 	public int[] crop_type = new int[8];
 	public int[] crop_level = new int[8];
@@ -51,6 +51,8 @@ public class GameMain extends Activity {
 	public float TouchX, TouchY; // 터치 좌표
 	public Font font = new Font(); // 글 쓸때 필요한 듯,버튼에 
 	public Handler mHandler;
+	
+	public int count =0; //object 생성 갯수 확인용 
 
 	// sprite variable
 	private Sprite ButtonSpr = new Sprite(); // 심기 버튼 스프라이트
@@ -182,7 +184,7 @@ public class GameMain extends Activity {
 				{
 					Current = EmptyList.get(i); /* currnt : 터치된 오브젝트 */
 					
-					modeNum =i;
+					modNum =i;
 					
 					Button.get(0).SetButton(ButtonSpr,
 							ButtonType.TYPE_ONE_CLICK, 0, Current.x + 80,
@@ -221,6 +223,9 @@ public class GameMain extends Activity {
 			font.BeginFont(gInfo);
 			backSpr.PutAni(gInfo, 400, 240, 0, 0); // 백그라운드
 
+			
+			//Log.d("test", "CropList.size: " + CropList.size());
+			
 			/* 팝업 UI 터치를 체크함 */
 			for (int i = 0; i < MainUI.UIList.size(); i++) {
 
@@ -239,12 +244,12 @@ public class GameMain extends Activity {
 						&& (MainUI.UIList.get(i).click == ButtonType.STATE_CLK_BUTTON)){
 					
 					//배추 버튼을 누르면  object 보임
-					CropList.get(modeNum).dead = false;
+					CropList.get(modNum).dead = false;
 					
 					//Log.d("test", "in message");
 					Message msg = mHandler.obtainMessage();
 					msg.what = 2;  //cabbage, case
-					msg.arg1 = modeNum; //modNum
+					msg.arg1 = modNum; //modNum
 					//Log.d("test", "gamaMain i modeNum:  " + modeNum);
 					//Log.d("test", "main msg.arg1:  " + msg.arg1);
 					
@@ -258,11 +263,11 @@ public class GameMain extends Activity {
 				}else if((MainUI.UIList.get(i).index == Select.Group0.ONE_CLICK_003)
 						&& (MainUI.UIList.get(i).click == ButtonType.STATE_CLK_BUTTON)){
 					//딸기 버튼을 누르면  object 보임
-					CropList.get(modeNum).dead = false;
+					CropList.get(modNum).dead = false;
 					
 					Message msg = mHandler.obtainMessage();
 					msg.what = 3;  //cabbage, case
-					msg.arg1 = modeNum; //modNum
+					msg.arg1 = modNum; //modNum
 					//Log.d("test", "gamaMain i modeNum:  " + modeNum);
 					//Log.d("test", "main msg.arg2:  " + msg.arg1);
 					
@@ -273,6 +278,11 @@ public class GameMain extends Activity {
 				}
 			}
 			
+			//Log.d("test", "crop_type.length: " + crop_type.length);
+			
+			
+			
+			
 			if(update_flag == true)
 			{
 				for(int i=0; i < crop_type.length; i++)
@@ -282,11 +292,16 @@ public class GameMain extends Activity {
 					defaultCrop.SetObject(cropSpr, 0, 0, EmptyList.get(i).x, EmptyList.get(i).y, 0, 0);
 					defaultCrop.dead = true;
 					
+					//Log.d("test", "in update falg: 1");
+					
 					//level이 0이 아닌 놈들만 즉 생성되어있는 놈들만 살려서 그려질 수 있게 한다.
 					if(crop_level[i] > 0)
 						defaultCrop.dead = false;
 					
+					//Log.d("test", "in update falg: 2");
+					
 					CropList.add(defaultCrop); // 어레이 리스트에 추가
+					Log.d("test", "cropList.add:  " + count++);
 				}
 				update_flag = false;
 			}
@@ -334,7 +349,7 @@ public class GameMain extends Activity {
 							
 							CropList.add(defaultCrop); // 어레이 리스트에 생성&추가,  이 때 조건이 필요한 듯
 							
-							//Log.d("test", "in for");
+							//Log.d("test", "in for 심기 버튼에 대한 로직");
 							CropList.get(i).SetObject(cropSpr, 0, 0, EmptyList.get(i).x, EmptyList.get(i).y, 0, 0);
 							CropList.get(i).DrawSprite(gInfo);
 						}

@@ -38,6 +38,7 @@ public class MainActivity extends Activity {
 	private static final String TAG_TYPE = "type";
 	private static final String TAG_MODULE = "modNum";
 	private static final String TAG_LEVEL = "level";
+	
 
 	public String modNum;
 
@@ -163,8 +164,7 @@ public class MainActivity extends Activity {
 						// 배추
 						idValuePair.add(new BasicNameValuePair("id", id));
 						idValuePair.add(new BasicNameValuePair("type", "1"));
-						idValuePair
-								.add(new BasicNameValuePair("modNum", modNum));
+						idValuePair.add(new BasicNameValuePair("modNum", modNum));
 						idValuePair.add(new BasicNameValuePair("point", "500"));
 						httpPost1 = new HttpPost(GlobalVariable.insertCrop);
 						break;
@@ -172,10 +172,8 @@ public class MainActivity extends Activity {
 						// 딸기
 						idValuePair.add(new BasicNameValuePair("id", id));
 						idValuePair.add(new BasicNameValuePair("type", "2"));
-						idValuePair
-								.add(new BasicNameValuePair("modNum", modNum));
-						idValuePair
-								.add(new BasicNameValuePair("point", "1000"));
+						idValuePair.add(new BasicNameValuePair("modNum", modNum));
+						idValuePair.add(new BasicNameValuePair("point", "1000"));
 						httpPost1 = new HttpPost(GlobalVariable.insertCrop);
 						break;
 					default:
@@ -196,11 +194,11 @@ public class MainActivity extends Activity {
 					// 위에서 세팅한 정보를 기반으로 서버로 쏜다.
 					String result2 = client.execute(httpPost1, handler1);
 
-					Log.d("test", "after execute : " + result2);
+					//Log.d("test", "after execute : " + result2);
 					result2 = result2.trim().toString();
 					// Toast.makeText( MainActivity.this, result2,
 					// Toast.LENGTH_SHORT ).show();
-					Log.d("test", "result : " + result2);
+					//Log.d("test", "result : " + result2);
 
 					JSONObject jsonObj = new JSONObject(result2);
 					return jsonObj;
@@ -242,7 +240,9 @@ public class MainActivity extends Activity {
 					int i_crop_type;
 					int i_crop_mod;
 					int i_crop_level;
+					
 
+					
 					gMain.update_flag = true;
 
 					for (int i = 0; i < JsonArr.length(); i++) {
