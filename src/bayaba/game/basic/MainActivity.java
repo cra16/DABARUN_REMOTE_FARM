@@ -34,12 +34,15 @@ public class MainActivity extends Activity {
 	public GameInfo gInfo;
 
 	JSONArray JsonArr = null;
-	private static final String TAG_RESULT = "result";
-	private static final String TAG_TYPE = "type";
-	private static final String TAG_MODULE = "modNum";
-	private static final String TAG_LEVEL = "level";
+	private static final String RESULT = "result";
+	private static final String TYPE = "type";
+	private static final String MODULE = "modNum";
+	private static final String LEVEL = "level";
 	
-
+	private static final int LOADING = 0;
+	private static final int CABB = 2;
+	private static final int STRAW = 3;
+	
 	public String modNum;
 
 	public Handler m_handler = new Handler() {
@@ -51,25 +54,27 @@ public class MainActivity extends Activity {
 			super.handleMessage(msg);
 			/* 버튼 처리 */
 			switch (msg.what) {
-			case 0:
+			
+			case LOADING:
 				new CropInfo(msg.what).execute();
 				break;
+			
 			case 1:
 				break;
-			case 2: {
-				// 배추
-				Toast.makeText(MainActivity.this, "cabbage", Toast.LENGTH_SHORT)
-						.show();
+			
+			case CABB: 
+				
 				modNum = Integer.toString(msg.arg1);
 				new CropInfo(msg.what).execute();
-			}
+			
 				break;
-			case 3:
-				Toast.makeText(MainActivity.this, "strawberry", Toast.LENGTH_SHORT)
-						.show();
+			
+			case STRAW:
+				
 				modNum = Integer.toString(msg.arg1);
 				new CropInfo(msg.what).execute();
 				break;
+				
 			default:
 				break;
 			}
@@ -87,8 +92,7 @@ public class MainActivity extends Activity {
 
 		Log.d("debug", "GAME MAIN ONCREATE");
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
@@ -216,11 +220,10 @@ public class MainActivity extends Activity {
 				/* 통신이 정상적이지 않으면 */
 				if (json == null) {
 					if (fromWhere == 3)
-						Toast.makeText(MainActivity.this, "정보 삽입 성공",
-								Toast.LENGTH_SHORT).show();
+						Toast.makeText(MainActivity.this, "정보 삽입 성공", Toast.LENGTH_SHORT).show();
 				} else {
 					/* 통신이 정상적이면 파싱하여 정보를 빼낸다 */
-					JsonArr = json.getJSONArray(TAG_RESULT);
+					JsonArr = json.getJSONArray(RESULT);
 
 					String crop_type;
 					String crop_mod;
@@ -235,9 +238,9 @@ public class MainActivity extends Activity {
 						JSONObject c = JsonArr.getJSONObject(i);
 						// Storing JSON item in a Variable
 
-						crop_type = c.getString(TAG_TYPE);
-						crop_mod = c.getString(TAG_MODULE);
-						crop_level = c.getString(TAG_LEVEL);
+						crop_type = c.getString(TYPE);
+						crop_mod = c.getString(MODULE);
+						crop_level = c.getString(LEVEL);
 
 						i_crop_type = Integer.parseInt(crop_type);
 						i_crop_mod = Integer.parseInt(crop_mod);
