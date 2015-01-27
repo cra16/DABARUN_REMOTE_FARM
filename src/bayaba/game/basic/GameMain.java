@@ -106,8 +106,8 @@ public class GameMain extends Activity {
 		cropSpr.LoadSprite(mGL, MainContext, "crop/seed_v1.spr");
 		emptySpr.LoadSprite(mGL, MainContext, "crop/empty.spr");
 		ButtonSpr.LoadSprite(mGL, MainContext, "button/button.spr");
-		strawberrySpr.LoadSprite(mGL, MainContext, "s.spr");  //딸기
-		cabbageSpr.LoadSprite(mGL, MainContext, "obj_cabbage.spr");  //배추
+		strawberrySpr.LoadSprite(mGL, MainContext, "crop/obj_strawberry.spr");  
+		cabbageSpr.LoadSprite(mGL, MainContext, "crop/obj_cabbage.spr");  
 		
 		Pattern[0].LoadSprite(mGL, MainContext, "experienceButton.spr");
 		Pattern[1].LoadSprite(mGL, MainContext, "itemButton.spr");

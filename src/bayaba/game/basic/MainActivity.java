@@ -219,7 +219,7 @@ public class MainActivity extends Activity {
 
 				/* 통신이 정상적이지 않으면 */
 				if (json == null) {
-					if (fromWhere == 3)
+					if (fromWhere == CABB || fromWhere == STRAW )
 						Toast.makeText(MainActivity.this, "정보 삽입 성공", Toast.LENGTH_SHORT).show();
 				} else {
 					/* 통신이 정상적이면 파싱하여 정보를 빼낸다 */
@@ -232,7 +232,6 @@ public class MainActivity extends Activity {
 					int i_crop_mod;
 					int i_crop_level;
 					
-					gMain.update_flag = true;
 
 					for (int i = 0; i < JsonArr.length(); i++) {
 						JSONObject c = JsonArr.getJSONObject(i);
@@ -251,6 +250,10 @@ public class MainActivity extends Activity {
 							gMain.crop_type[i_crop_mod] = i_crop_type;
 						}
 					}
+					
+					gMain.update_flag = true;
+
+					
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
