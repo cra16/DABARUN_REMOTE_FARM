@@ -33,6 +33,19 @@ public class GameMain extends Activity {
 		}
 	}
 
+	private static final int CROP_X = 150;
+	private static final int CROP_Y = 280;
+	private static final int CROP_XGAP = 150;
+	private static final int CROP_YGAP = 80;
+	
+	private static final int MENU_X = 400;
+	private static final int MENU_Y = 430;
+	private static final int MENU_XGAP = 110;
+	
+	
+	
+	
+	
 	public boolean popup_flag = false; /* 팝업을 띄울지 말지 판단하는 불린*/
 	public boolean update_flag = false;
 	
@@ -59,7 +72,12 @@ public class GameMain extends Activity {
 	public Sprite emptySpr = new Sprite(); // 빈땅 스프라이트
 	public Sprite strawberrySpr = new Sprite(); //딸기
 	public Sprite cabbageSpr = new Sprite(); //배추
-
+	public Sprite menuSpr = new Sprite(); //한개짜리.QQQQQQQQ
+	public Sprite cirBtnSpr = new Sprite();
+	
+	
+	
+	
 	// object
 	public ButtonObject SuperBtn = new ButtonObject();
 	public UITool MainUI = new UITool();
@@ -72,7 +90,7 @@ public class GameMain extends Activity {
 	public GameObject PointerObj = null;
 
 	// 스프라이트 저장을 위한 배열, 화면 하단의 버튼들
-	private Sprite Pattern[] = new Sprite[5];
+	private Sprite MenuSpr[] = new Sprite[5];
 
 	// object arrayList
 	//public ArrayList<GameObject> StrawberryList = new ArrayList<GameObject>(); //딸기
@@ -95,8 +113,8 @@ public class GameMain extends Activity {
 		gInfo = info; // 메인 액티비티에서 생성된 클래스를 가져온다.
 		mHandler = p_Handler; // 메인 액티비티에서 생성된 핸들러를 가져온다.
 
-		for (int i = 0; i < Pattern.length; i++)
-			Pattern[i] = new Sprite(); // 스프라이트용 배열 초기화
+		for (int i = 0; i < MenuSpr.length; i++)
+			MenuSpr[i] = new Sprite(); // 스프라이트용 배열 초기화
 	}
 
 	public void LoadGameData() // SurfaceClass에서 OpenGL이 초기화되면 최초로 호출되는 함수
@@ -106,13 +124,19 @@ public class GameMain extends Activity {
 		cropSpr.LoadSprite(mGL, MainContext, "crop/seed_v1.spr");
 		emptySpr.LoadSprite(mGL, MainContext, "crop/empty.spr");
 		ButtonSpr.LoadSprite(mGL, MainContext, "button/button.spr");
+		
 		strawberrySpr.LoadSprite(mGL, MainContext, "crop/obj_strawberry.spr");  
 		cabbageSpr.LoadSprite(mGL, MainContext, "crop/obj_cabbage.spr");  
 		
-		Pattern[0].LoadSprite(mGL, MainContext, "experienceButton.spr");
-		Pattern[1].LoadSprite(mGL, MainContext, "itemButton.spr");
-		Pattern[2].LoadSprite(mGL, MainContext, "storageButton.spr");
-		Pattern[3].LoadSprite(mGL, MainContext, "marketIcon.spr");
+		
+		menuSpr.LoadSprite(mGL, MainContext, "button/menuBtn.spr");
+		cirBtnSpr.LoadSprite(mGL, MainContext, "button/circleBtn.spr");
+		
+		
+		MenuSpr[0].LoadSprite(mGL, MainContext, "experienceButton.spr");
+		MenuSpr[1].LoadSprite(mGL, MainContext, "itemButton.spr");
+		MenuSpr[2].LoadSprite(mGL, MainContext, "storageButton.spr");
+		MenuSpr[3].LoadSprite(mGL, MainContext, "marketIcon.spr");
 
 		cropObj.SetObject(cropSpr, 0, 0, 400, 280, 0, 0);
 		cropObj.dead = true; // 농작물은 죽어있는 상태다. false로 바꿔줘야만 메인에서 그려준다.
@@ -131,27 +155,22 @@ public class GameMain extends Activity {
 		for (int i = 0; i < 8; i++) {
 			
 			GameObject emptyTemp = new GameObject(); // GameObject 변수 선언
-			emptyTemp.SetObject(emptySpr, 0, 0, 50 + ((i % 4) * 200),
-					300 + ((i / 4) * 80), 0, 0);
+			emptyTemp.SetObject(emptySpr, 0, 0, CROP_X + ((i % 4) * CROP_XGAP), CROP_Y + ((i / 4) * CROP_YGAP), 0, 0);
 			EmptyList.add(emptyTemp); // 어레이 리스트에 추가
 		}
 
 		/* 십자모양 4개 생성 */
-		for (int i = 0; i < 4; i++) {
+		for (int motion = 0; motion < 4; motion++) {
 			temp = new ButtonObject();
-			temp.SetButton(ButtonSpr, ButtonType.TYPE_POPUP, 0, 400, 330, 3);
+			temp.SetButton(cirBtnSpr, ButtonType.TYPE_POPUP, 0, 400, 330, motion);
 			temp.show = false;
 			Button.add(temp);
 		}
 
-		/* 밑에 4개 버튼 생성 */
-		String buttonName[] = { "농장체험", "장식", "창고", "마켓" };
-
-		for (int i = 0; i < 4; i++) {
+		/* 밑에 메뉴버튼 생성 */
+		for (int motion = 0; motion < 4; motion++) {
 			temp = new ButtonObject();
-			temp.SetButton(Pattern[i], ButtonType.TYPE_ONE_CLICK, 0,
-					100 + 200 * i, 450, 0); // 농장체험
-			temp.SetText(0, 20, 8, 1, 1, 1, 20f, buttonName[i]);
+			temp.SetButton(menuSpr, ButtonType.TYPE_ONE_CLICK, 0, MENU_X + (motion * MENU_XGAP), MENU_Y, motion); 
 			belowButton.add(temp);
 		}
 		Message msg = mHandler.obtainMessage();
@@ -191,29 +210,13 @@ public class GameMain extends Activity {
 					
 					modNum =i;
 					
-					Button.get(0).SetButton(ButtonSpr,
-							ButtonType.TYPE_ONE_CLICK, 0, Current.x + 80,
-							Current.y, 3);
-					Button.get(0).SetText(0, 20, 8, 1, 1, 1, 20f, "심기");
-					Button.get(0).show = true;
-
-					Button.get(1).SetButton(ButtonSpr,
-							ButtonType.TYPE_ONE_CLICK, 0, Current.x,
-							Current.y - 45, 3);
-					Button.get(1).SetText(0, 20, 8, 1, 1, 1, 20f, "거름주기");
-					Button.get(1).show = true;
-
-					Button.get(2).SetButton(ButtonSpr,
-							ButtonType.TYPE_ONE_CLICK, 0, Current.x - 80,
-							Current.y, 3);
-					Button.get(2).SetText(0, 20, 8, 1, 1, 1, 20f, "잡초제거");
-					Button.get(2).show = true;
-
-					Button.get(3).SetButton(ButtonSpr,
-							ButtonType.TYPE_ONE_CLICK, 0, Current.x,
-							Current.y + 45, 3);
-					Button.get(3).SetText(0, 20, 8, 1, 1, 1, 20f, "물주기");
-					Button.get(3).show = true;
+					Button.get(0).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x + 80, Current.y, 0);
+					Button.get(1).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x, Current.y - 45, 1);
+					Button.get(2).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x - 80, Current.y, 2);
+					Button.get(3).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x, Current.y + 45, 3);
+					
+					for(int j=0; j<4; j++)
+						Button.get(i).show = true;
 					
 				}
 			}
@@ -232,17 +235,18 @@ public class GameMain extends Activity {
 			/* 팝업 UI 터치를 체크함 */
 			for (int i = 0; i < MainUI.UIList.size(); i++) {
 
+				
+				//취소버튼
 				if ((MainUI.UIList.get(i).index == Select.Group0.ONE_CLICK_001)
 						&& (MainUI.UIList.get(i).click == ButtonType.STATE_CLK_BUTTON)) {
-					//MainActivity에  메시지를 보냄 버튼이 눌렸다고, 취소 버튼
-					//((MainActivity) MainContext).m_handler.sendEmptyMessage(0);
+					
 
-					popup_flag = false;
+					//popup_flag = false;
 					
 					MainUI.UIList.get(i).ResetButton();
 					MainUI.DeleteLastGroup(gInfo);
 
-				//배추 버튼이 눌렸을때	
+				//배추 버튼	
 				}else if((MainUI.UIList.get(i).index == Select.Group0.ONE_CLICK_002)
 						&& (MainUI.UIList.get(i).click == ButtonType.STATE_CLK_BUTTON)){
 					
@@ -251,24 +255,24 @@ public class GameMain extends Activity {
 					crop_type[modNum] = 1;
 					
 					Log.d("test", "cabbage click");
-					Message msg = mHandler.obtainMessage();
+					Message msg = ((MainActivity) MainContext).m_handler.obtainMessage();
 					msg.what = 2;  //cabbage, case
 					msg.arg1 = modNum; //modNum
 					
 					((MainActivity) MainContext).m_handler.sendMessage(msg);
 					
-					//배추 버튼
+					
 					MainUI.UIList.get(i).ResetButton();
 					MainUI.DeleteLastGroup(gInfo);
 					
-				//딸기 버튼이 눌렸을 때	
+				//딸기 버튼	
 				}else if((MainUI.UIList.get(i).index == Select.Group0.ONE_CLICK_003)
 						&& (MainUI.UIList.get(i).click == ButtonType.STATE_CLK_BUTTON)){
 					//딸기 버튼을 누르면  object 보임
 					CropList.get(modNum).dead = false;
 					crop_type[modNum] = 2;
 					
-					Message msg = mHandler.obtainMessage();
+					Message msg = ((MainActivity) MainContext).m_handler.obtainMessage();
 					msg.what = 3;  //strawberry, case
 					msg.arg1 = modNum; //modNum
 					
@@ -302,28 +306,11 @@ public class GameMain extends Activity {
 				update_flag = false;
 			}
 			
-			// 빈밭 일단 다 그려줌.
+			// 빈밭
 			for (int i = 0; i < EmptyList.size(); i++) {
 				EmptyList.get(i).DrawSprite(gInfo);
 			}
 
-			// 화면이 뜨자마자 버튼들이 나타나야함
-			// 버튼 오브젝트들을 그려줌
-			belowButton.get(0).DrawSprite(mGL, 0, gInfo, font); // 장식 버튼
-			belowButton.get(1).DrawSprite(mGL, 0, gInfo, font); // 마켓 버튼
-			belowButton.get(2).DrawSprite(mGL, 0, gInfo, font); // 농장 체험 버튼
-			belowButton.get(3).DrawSprite(mGL, 0, gInfo, font); // 창고 버튼
-
-			Button.get(0).DrawSprite(mGL, 0, gInfo, font); // 심기 버튼
-			Button.get(1).DrawSprite(mGL, 0, gInfo, font); // 거름 주기
-			Button.get(2).DrawSprite(mGL, 0, gInfo, font); // 잡초 제거
-			Button.get(3).DrawSprite(mGL, 0, gInfo, font); // 물주기
-
-			// 버튼들 그려주기
-			for (int i = 0; i < 4; i++) {
-				belowButton.get(i).DrawSprite(mGL, 0, gInfo, font);
-				Button.get(i).DrawSprite(mGL, 0, gInfo, font); // 버튼들 그려주기
-			}
 			
 			//로딩된 농작물 모두 뿌려주기.
 			for (int i = 0; i < CropList.size(); i++) {
@@ -345,17 +332,19 @@ public class GameMain extends Activity {
 				}
 			}
 			
-			/*팝업 그려주기 */
-			if (popup_flag == true)
-				MainUI.Draw(mGL, gInfo, font);
-
-			font.EndFont(gInfo);
+			// 버튼들 그려주기
+			for (int i = 0; i < 4; i++) {
+				belowButton.get(i).DrawSprite(mGL, 0, gInfo, font);
+				Button.get(i).DrawSprite(mGL, 0, gInfo, font); // 버튼들 그려주기
+			}
 			
 			/*팝업 그려주기 */
 			if (popup_flag == true)
 				MainUI.Draw(mGL, gInfo, font);
 
 			font.EndFont(gInfo);
+
+			
 		}
 	}
 }

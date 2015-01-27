@@ -53,6 +53,7 @@ public class MainActivity extends Activity {
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
 			/* 버튼 처리 */
+			//QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ아무것도 아닌 값이 들어왔을 때 처리.. 해줘야함.
 			switch (msg.what) {
 			
 			case LOADING:
@@ -148,12 +149,12 @@ public class MainActivity extends Activity {
 					switch (fromWhere) {
 					/* QQQQQQ song 대신에 아이디가 들어가야 한다 */
 					/* getCropList 최초 로딩시 불러진다 */
-					case 0:
+					case LOADING:
 						idValuePair.add(new BasicNameValuePair("id", id));
-
 						httpPost1 = new HttpPost(GlobalVariable.getCropList);
 						break;
-					case 2:
+						
+					case CABB:
 						// 배추
 						idValuePair.add(new BasicNameValuePair("id", id));
 						idValuePair.add(new BasicNameValuePair("type", "1"));
@@ -161,7 +162,7 @@ public class MainActivity extends Activity {
 						idValuePair.add(new BasicNameValuePair("point", "500"));
 						httpPost1 = new HttpPost(GlobalVariable.insertCrop);
 						break;
-					case 3:
+					case STRAW:
 						// 딸기
 						idValuePair.add(new BasicNameValuePair("id", id));
 						idValuePair.add(new BasicNameValuePair("type", "2"));
@@ -175,8 +176,7 @@ public class MainActivity extends Activity {
 					}
 
 					/* httpPost 변수에 idValue를 추가한다 */
-					UrlEncodedFormEntity entityRequest1 = new UrlEncodedFormEntity(
-							idValuePair, "UTF-8");
+					UrlEncodedFormEntity entityRequest1 = new UrlEncodedFormEntity(idValuePair, "UTF-8");
 					httpPost1.setEntity(entityRequest1);
 
 					ResponseHandler<String> handler1 = new BasicResponseHandler();
