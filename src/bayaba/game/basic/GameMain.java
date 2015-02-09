@@ -42,10 +42,6 @@ public class GameMain extends Activity {
 	private static final int MENU_Y = 430;
 	private static final int MENU_XGAP = 110;
 	
-	
-	
-	
-	
 	public boolean popup_flag = false; /* 팝업을 띄울지 말지 판단하는 불린*/
 	public boolean update_flag = false;
 	
@@ -74,9 +70,7 @@ public class GameMain extends Activity {
 	public Sprite cabbageSpr = new Sprite(); //배추
 	public Sprite menuSpr = new Sprite(); //한개짜리.QQQQQQQQ
 	public Sprite cirBtnSpr = new Sprite();
-	
-	
-	
+	public Sprite chatBtnSpr = new Sprite(); // 채팅과 쪽지함
 	
 	// object
 	public ButtonObject SuperBtn = new ButtonObject();
@@ -91,21 +85,22 @@ public class GameMain extends Activity {
 
 	// 스프라이트 저장을 위한 배열, 화면 하단의 버튼들
 	private Sprite MenuSpr[] = new Sprite[5];
-
-	// object arrayList
-	//public ArrayList<GameObject> StrawberryList = new ArrayList<GameObject>(); //딸기
-	//public ArrayList<GameObject> CabbageList = new ArrayList<GameObject>(); //배추
+	private Sprite ChatSpr[] = new Sprite[2];  //화면 상단 채팅과 쪽지함
 	
 	// 농작물들을 담은 어레이
 	public ArrayList<GameObject> CropList = new ArrayList<GameObject>();
 	// 빈칸 어레이
 	public ArrayList<GameObject> EmptyList = new ArrayList<GameObject>();
+	
 	// 밭 누르면 나오는 버튼들
 	public ArrayList<ButtonObject> Button = new ArrayList<ButtonObject>();
 	
 	// 화면 아래에 나오는 버튼들을 저장할 리스트
 	public ArrayList<ButtonObject> belowButton = new ArrayList<ButtonObject>();
 
+	//화면 상단의 채팅과 쪽지함
+	public ArrayList<ButtonObject> chatButton = new ArrayList<ButtonObject>();
+	
 	//클래스 생성자 (메인 엑티비티에서 호출)
 	public GameMain(Context context, GameInfo info, Handler p_Handler) 
 	{
@@ -115,6 +110,9 @@ public class GameMain extends Activity {
 
 		for (int i = 0; i < MenuSpr.length; i++)
 			MenuSpr[i] = new Sprite(); // 스프라이트용 배열 초기화
+		
+		for (int i = 0; i < ChatSpr.length; i++) //채팅과 쪽지함
+			ChatSpr[i] = new Sprite(); // 스프라이트용 배열 초기화
 	}
 
 	public void LoadGameData() // SurfaceClass에서 OpenGL이 초기화되면 최초로 호출되는 함수
@@ -128,21 +126,13 @@ public class GameMain extends Activity {
 		strawberrySpr.LoadSprite(mGL, MainContext, "crop/obj_strawberry.spr");  
 		cabbageSpr.LoadSprite(mGL, MainContext, "crop/obj_cabbage.spr");  
 		
-		
 		menuSpr.LoadSprite(mGL, MainContext, "button/menuBtn.spr");
 		cirBtnSpr.LoadSprite(mGL, MainContext, "button/circleBtn.spr");
-		
-		
+		chatBtnSpr.LoadSprite(mGL, MainContext,"button/chat2.spr");
 
 		cropObj.SetObject(cropSpr, 0, 0, 400, 280, 0, 0);
 		cropObj.dead = true; // 농작물은 죽어있는 상태다. false로 바꿔줘야만 메인에서 그려준다.
 		
-		//strawberryObj.SetObject(strawberrySpr, 0, 0, 400, 280, 0, 0);
-		//strawberryObj.dead = true; // 딸기는 죽어있는 상태다. false로 바꿔줘야만 메인에서 그려준다.
-		
-		//cabbageObj.SetObject(cabbageSpr, 0, 0, 400, 280, 0, 0);
-		//cabbageObj.dead = true; // 배추는 죽어있는 상태다. false로 바꿔줘야만 메인에서 그려준다.
-
 		// ui 적용
 		MainUI.LoadUI(mGL, MainContext, "UI/UIPack.ui"); // UI 파일을 로드한다.
 		MainUI.AddGroup(0, 1); /* 이걸 해주지 않으면 쓰레기값이 열리게 되더라.. */
@@ -169,6 +159,14 @@ public class GameMain extends Activity {
 			temp.SetButton(menuSpr, ButtonType.TYPE_ONE_CLICK, 0, MENU_X + (motion * MENU_XGAP), MENU_Y, motion); 
 			belowButton.add(temp);
 		}
+		
+		//화면 상단의 쪽지함과 채팅
+		for (int motion = 0; motion < 2; motion++) {
+			temp = new ButtonObject();
+			temp.SetButton(chatBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, MENU_X + (motion * (MENU_XGAP-30)) + 180, MENU_Y-390, motion); 
+			chatButton.add(temp);
+		}
+		
 		Message msg = mHandler.obtainMessage();
 		msg.what = 0;
 		((MainActivity) MainContext).m_handler.sendMessage(msg);
@@ -331,6 +329,12 @@ public class GameMain extends Activity {
 			// 버튼들 그려주기
 			for (int i = 0; i < 4; i++) {
 				belowButton.get(i).DrawSprite(mGL, 0, gInfo, font);
+				Button.get(i).DrawSprite(mGL, 0, gInfo, font); // 버튼들 그려주기
+			}
+			
+			// 버튼들(쪽지함 채팅) 그려주기
+			for (int i = 0; i < 2; i++) {
+				chatButton.get(i).DrawSprite(mGL, 0, gInfo, font);
 				Button.get(i).DrawSprite(mGL, 0, gInfo, font); // 버튼들 그려주기
 			}
 			
