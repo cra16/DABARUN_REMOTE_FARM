@@ -14,7 +14,7 @@ public class GlobalVariable {
 	public final static String insertCrop = url + "insertCrop.php";
 	public final static String getPoint = url + "getPoint.php";
 	public final static String setPoint = url + "setPoint.php";
-	public final static String insertResquest = url + "inesertRequest.php";
+	public final static String insertRequest = url + "insertRequest.php";
 	
 	public final static String SPF_LOGIN = "LOGIN";
 	public final static String SPF_ID = "ID";

@@ -185,9 +185,38 @@ public class GameMain extends Activity {
 			if (Button.get(i).click == ButtonType.STATE_CLK_BUTTON) {
 				
 				//Button.get(i).dead = false;
-				MainUI.AddGroup(0, 1);
-				popup_flag = true;
-				Button.get(i).ResetButton();
+//				MainUI.AddGroup(0, 1);
+//				popup_flag = true;
+//				Button.get(i).ResetButton();
+				
+				if(i == 0){ //심기
+					MainUI.AddGroup(0, 1);
+					popup_flag = true;
+					Button.get(i).ResetButton();
+				}else if( i == 1){ //거름
+					Message msg = ((MainActivity) MainContext).m_handler.obtainMessage();
+					msg.what = 4;  //fertilizer, case
+					msg.arg1 = modNum; 
+					((MainActivity) MainContext).m_handler.sendMessage(msg);
+					Button.get(i).ResetButton();
+				
+				}else if( i == 2){ //물 
+					Message msg = ((MainActivity) MainContext).m_handler.obtainMessage();
+					msg.what = 5;  //water, case
+					msg.arg1 = modNum; 
+					((MainActivity) MainContext).m_handler.sendMessage(msg);
+					Button.get(i).ResetButton();
+					
+				}else if( i == 3){ //잡초
+					Message msg = ((MainActivity) MainContext).m_handler.obtainMessage();
+					msg.what = 6;  //weed, case
+					msg.arg1 = modNum; 
+					((MainActivity) MainContext).m_handler.sendMessage(msg);
+				
+					Button.get(i).ResetButton();
+				}
+				//Button.get(i).ResetButton();
+				
 			}
 		}
 
@@ -205,9 +234,9 @@ public class GameMain extends Activity {
 					modNum =i;
 					
 					Button.get(0).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x + 80, Current.y, 0);//심기
-					Button.get(1).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x, Current.y - 45, 1);//잡초
+					Button.get(1).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x, Current.y - 45, 1);//거름
 					Button.get(2).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x - 80, Current.y, 2);//물
-					Button.get(3).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x, Current.y + 45, 3);//거름
+					Button.get(3).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x, Current.y + 45, 3);//잡초
 					
 					for(int j=0; j<4; j++)
 						Button.get(j).show = true;

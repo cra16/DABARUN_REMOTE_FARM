@@ -38,11 +38,14 @@ public class MainActivity extends Activity {
 	private static final String TYPE = "type";
 	private static final String MODULE = "modNum";
 	private static final String LEVEL = "level";
-	
+
 	private static final int LOADING = 0;
 	private static final int CABB = 2;
 	private static final int STRAW = 3;
-	
+	private static final int FERTLIZER = 4;
+	private static final int WATER = 5;
+	private static final int WEED = 6;
+
 	public String modNum;
 
 	public Handler m_handler = new Handler() {
@@ -53,29 +56,47 @@ public class MainActivity extends Activity {
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
 			/* 버튼 처리 */
-			//QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ아무것도 아닌 값이 들어왔을 때 처리.. 해줘야함.
+			// QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ아무것도 아닌 값이 들어왔을 때 처리.. 해줘야함.
 			switch (msg.what) {
-			
+
 			case LOADING:
 				new CropInfo(msg.what).execute();
 				break;
-			
+
 			case 1:
 				break;
-			
-			case CABB: 
-				
+
+			case CABB:
+
 				modNum = Integer.toString(msg.arg1);
 				new CropInfo(msg.what).execute();
-			
+
 				break;
-			
+
 			case STRAW:
-				
+
 				modNum = Integer.toString(msg.arg1);
 				new CropInfo(msg.what).execute();
 				break;
 				
+			case FERTLIZER:
+
+				modNum = Integer.toString(msg.arg1);
+				new CropInfo(msg.what).execute();
+				break;
+				
+			case WATER:
+
+				modNum = Integer.toString(msg.arg1);
+				new CropInfo(msg.what).execute();
+				break;
+				
+			case WEED:
+
+				modNum = Integer.toString(msg.arg1);
+				new CropInfo(msg.what).execute();
+				break;
+
 			default:
 				break;
 			}
@@ -93,11 +114,12 @@ public class MainActivity extends Activity {
 
 		Log.d("debug", "GAME MAIN ONCREATE");
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
-		gInfo = new GameInfo(800, 480); 
+		gInfo = new GameInfo(800, 480);
 		gInfo.ScreenXsize = getResources().getDisplayMetrics().widthPixels;
 		gInfo.ScreenYsize = getResources().getDisplayMetrics().heightPixels;
 		gInfo.SetScale();
@@ -113,7 +135,7 @@ public class MainActivity extends Activity {
 	private class CropInfo extends AsyncTask<String, String, JSONObject> {
 		public int fromWhere;
 
-		private CropInfo(int fromWhere) {  //fromwhere is crop type
+		private CropInfo(int fromWhere) { 
 			this.fromWhere = fromWhere;
 		}
 
@@ -151,12 +173,13 @@ public class MainActivity extends Activity {
 						idValuePair.add(new BasicNameValuePair("id", id));
 						httpPost1 = new HttpPost(GlobalVariable.getCropList);
 						break;
-						
+
 					case CABB:
 						// 배추
 						idValuePair.add(new BasicNameValuePair("id", id));
 						idValuePair.add(new BasicNameValuePair("type", "1"));
-						idValuePair.add(new BasicNameValuePair("modNum", modNum));
+						idValuePair
+								.add(new BasicNameValuePair("modNum", modNum));
 						idValuePair.add(new BasicNameValuePair("point", "500"));
 						httpPost1 = new HttpPost(GlobalVariable.insertCrop);
 						break;
@@ -164,9 +187,32 @@ public class MainActivity extends Activity {
 						// 딸기
 						idValuePair.add(new BasicNameValuePair("id", id));
 						idValuePair.add(new BasicNameValuePair("type", "2"));
-						idValuePair.add(new BasicNameValuePair("modNum", modNum));
-						idValuePair.add(new BasicNameValuePair("point", "1000"));
+						idValuePair
+								.add(new BasicNameValuePair("modNum", modNum));
+						idValuePair
+								.add(new BasicNameValuePair("point", "1000"));
 						httpPost1 = new HttpPost(GlobalVariable.insertCrop);
+						break;
+					case FERTLIZER:
+						idValuePair.add(new BasicNameValuePair("id", id));
+						idValuePair.add(new BasicNameValuePair("modNum", modNum));
+						idValuePair.add(new BasicNameValuePair("request", "2"));
+						httpPost1 = new HttpPost(GlobalVariable.insertRequest);
+						Log.d("test","fertilizer");
+						break;
+					case WATER:
+						idValuePair.add(new BasicNameValuePair("id", id));
+						idValuePair.add(new BasicNameValuePair("modNum", modNum));
+						idValuePair.add(new BasicNameValuePair("request", "1"));
+						httpPost1 = new HttpPost(GlobalVariable.insertRequest);
+						Log.d("test","water");
+						break;
+					case WEED:
+						idValuePair.add(new BasicNameValuePair("id", id));
+						idValuePair.add(new BasicNameValuePair("modNum", modNum));
+						idValuePair.add(new BasicNameValuePair("request", "3"));
+						httpPost1 = new HttpPost(GlobalVariable.insertRequest);
+						Log.d("test","weed");
 						break;
 					default:
 						httpPost1 = new HttpPost(GlobalVariable.getCropList);
@@ -174,7 +220,8 @@ public class MainActivity extends Activity {
 					}
 
 					/* httpPost 변수에 idValue를 추가한다 */
-					UrlEncodedFormEntity entityRequest1 = new UrlEncodedFormEntity(idValuePair, "UTF-8");
+					UrlEncodedFormEntity entityRequest1 = new UrlEncodedFormEntity(
+							idValuePair, "UTF-8");
 					httpPost1.setEntity(entityRequest1);
 
 					ResponseHandler<String> handler1 = new BasicResponseHandler();
@@ -185,11 +232,11 @@ public class MainActivity extends Activity {
 					// 위에서 세팅한 정보를 기반으로 서버로 쏜다.
 					String result2 = client.execute(httpPost1, handler1);
 
-					//Log.d("test", "after execute : " + result2);
+					// Log.d("test", "after execute : " + result2);
 					result2 = result2.trim().toString();
 					// Toast.makeText( MainActivity.this, result2,
 					// Toast.LENGTH_SHORT ).show();
-					//Log.d("test", "result : " + result2);
+					// Log.d("test", "result : " + result2);
 
 					JSONObject jsonObj = new JSONObject(result2);
 					return jsonObj;
@@ -209,8 +256,18 @@ public class MainActivity extends Activity {
 
 				/* 통신이 정상적이지 않으면 */
 				if (json == null) {
-					if (fromWhere == CABB || fromWhere == STRAW )
-						Toast.makeText(MainActivity.this, "정보 삽입 성공", Toast.LENGTH_SHORT).show();
+					//if (fromWhere == CABB || fromWhere == STRAW)
+					//	Toast.makeText(MainActivity.this, "정보 삽입 성공",
+					//			Toast.LENGTH_SHORT).show();
+				   if (fromWhere == WATER)
+						Toast.makeText(MainActivity.this, "water",
+								Toast.LENGTH_SHORT).show();
+				   else if (fromWhere == FERTLIZER)
+						Toast.makeText(MainActivity.this, "fertilizer",
+								Toast.LENGTH_SHORT).show();
+				   else if (fromWhere == WEED)
+						Toast.makeText(MainActivity.this, "weed",
+								Toast.LENGTH_SHORT).show();
 				} else {
 					/* 통신이 정상적이면 파싱하여 정보를 빼낸다 */
 					JsonArr = json.getJSONArray(RESULT);
@@ -221,7 +278,6 @@ public class MainActivity extends Activity {
 					int i_crop_type;
 					int i_crop_mod;
 					int i_crop_level;
-					
 
 					for (int i = 0; i < JsonArr.length(); i++) {
 						JSONObject c = JsonArr.getJSONObject(i);
@@ -240,7 +296,7 @@ public class MainActivity extends Activity {
 							gMain.crop_type[i_crop_mod] = i_crop_type;
 						}
 					}
-					
+
 					gMain.update_flag = true;
 				}
 			} catch (JSONException e) {
