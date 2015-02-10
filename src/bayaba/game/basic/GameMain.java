@@ -191,6 +191,8 @@ public class GameMain extends Activity {
 		for (int i = 0; i < Button.size(); i++) {
 			Button.get(i).CheckButton(gInfo, push, TouchX, TouchY);
 			belowButton.get(i).CheckButton(gInfo, push, TouchX, TouchY);
+			if(i < 2)
+				chatButton.get(i).CheckButton(gInfo, push, TouchX, TouchY);
 			
 			if(belowButton.get(i).click == ButtonType.STATE_CLK_BUTTON){
 				if(i == 0){ //창고
@@ -211,6 +213,7 @@ public class GameMain extends Activity {
 //				MainUI.AddGroup(0, 1);
 //				popup_flag = true;
 //				Button.get(i).ResetButton();
+				Log.d("test", "Baat in"+ i);
 				
 				if(i == 0){ //심기
 					MainUI.AddGroup(0, 1);
@@ -235,12 +238,24 @@ public class GameMain extends Activity {
 					msg.what = 6;  //weed, case
 					msg.arg1 = modNum; 
 					((MainActivity) MainContext).m_handler.sendMessage(msg);
-				
 					Button.get(i).ResetButton();
 				}
-				//Button.get(i).ResetButton();
-				
+				//Button.get(i).ResetButton();				
 			}
+			if(i < 2)
+			{
+				if(chatButton.get(i).click == ButtonType.STATE_CLK_BUTTON){
+					if(i == 1) {
+						Log.d("test", "Chat in"+ i);
+						Message msg = ((MainActivity) MainContext).m_handler.obtainMessage();
+						msg.what = 99;  //message, case
+						msg.arg1 = modNum; 
+						((MainActivity) MainContext).m_handler.sendMessage(msg);
+						Button.get(i).ResetButton();
+					}
+				}
+			}
+			
 		}
 
 		if (push) {

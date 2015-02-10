@@ -1,6 +1,8 @@
 package bayaba.game.basic;
 
+
 import java.util.ArrayList;
+
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -16,6 +18,7 @@ import org.json.JSONObject;
 
 import Variable.GlobalVariable;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.AsyncTask;
@@ -45,6 +48,7 @@ public class MainActivity extends Activity {
 	private static final int FERTLIZER = 4;
 	private static final int WATER = 5;
 	private static final int WEED = 6;
+	private static final int MESSAGE = 99;
 
 	public String modNum;
 
@@ -93,6 +97,11 @@ public class MainActivity extends Activity {
 				
 			case WEED:
 
+				modNum = Integer.toString(msg.arg1);
+				new CropInfo(msg.what).execute();
+				break;
+				
+			case MESSAGE:
 				modNum = Integer.toString(msg.arg1);
 				new CropInfo(msg.what).execute();
 				break;
@@ -215,6 +224,11 @@ public class MainActivity extends Activity {
 						httpPost1 = new HttpPost(GlobalVariable.insertRequest);
 						Log.d("test","weed");
 						break;
+					case MESSAGE:
+						idValuePair.add(new BasicNameValuePair("id", id));
+						httpPost1 = new HttpPost(GlobalVariable.chatLogin);
+						Log.d("test","message1");
+						break;
 					default:
 						httpPost1 = new HttpPost(GlobalVariable.getCropList);
 						break;
@@ -257,6 +271,7 @@ public class MainActivity extends Activity {
 
 				/* 통신이 정상적이지 않으면 */
 				if (json == null) {
+					Log.d("test", "JASON NULL");
 					//if (fromWhere == CABB || fromWhere == STRAW)
 					//	Toast.makeText(MainActivity.this, "정보 삽입 성공",
 					//			Toast.LENGTH_SHORT).show();
@@ -269,6 +284,30 @@ public class MainActivity extends Activity {
 				   else if (fromWhere == WEED)
 						Toast.makeText(MainActivity.this, "weed",
 								Toast.LENGTH_SHORT).show();
+				   else if (fromWhere == MESSAGE) {
+					   Toast.makeText(MainActivity.this, "message",
+								Toast.LENGTH_LONG).show();
+					   
+					   Bundle args = new Bundle();
+					   Log.d("test", "mobno");
+	                   args.putString("mobno", "farmer");
+	                   Log.d("test", "mobno1");
+	                   Intent chat = new Intent(MainActivity.this, ChatActivity.class);
+	                   Log.d("test", "mobno2");
+	                   chat.putExtra("INFO", args);
+	                   Log.d("test", "mobno3");
+	                   startActivity(chat);
+	                   
+					   
+/*	                   Intent intent = new Intent(MainActivity.this, ChatActivity.class);
+	                   Log.d("test", "mobno");
+						intent.putExtra("mobno", "farmer");
+						Log.d("test", "mobno1");
+						startActivity(intent);
+						Log.d("test", "mobno2");
+*/						
+				   }
+					   
 				} else {
 					/* 통신이 정상적이면 파싱하여 정보를 빼낸다 */
 					JsonArr = json.getJSONArray(RESULT);

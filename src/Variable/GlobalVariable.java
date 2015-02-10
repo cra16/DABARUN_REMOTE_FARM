@@ -22,5 +22,8 @@ public class GlobalVariable {
 	public final static String SPF_SCORE = "SCORE";
 	public final static String SPF_SVALUE = "SVALUE"; 
 	public final static String NOTICE_READ = "noticeRead";
+	
+	public final static String url1 = "http://211.39.253.201/Dabarun/chat/";
+	public final static String chatLogin = url1 + "chatLogin.php"; 
 }
 
