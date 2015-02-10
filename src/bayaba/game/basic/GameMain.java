@@ -52,6 +52,8 @@ public class GameMain extends Activity {
 	public int[] crop_level = new int[8];
 	public int[] crop_mod = new int[8];
 	
+	public String id =  null; //login id
+	
 	// general variable
 	public GL10 mGL = null; // OpenGL 객체
 	public Context MainContext;
@@ -71,11 +73,13 @@ public class GameMain extends Activity {
 	public Sprite menuSpr = new Sprite(); //한개짜리.QQQQQQQQ
 	public Sprite cirBtnSpr = new Sprite();
 	public Sprite chatBtnSpr = new Sprite(); // 채팅과 쪽지함
+	public Sprite signSpr = new Sprite(); //sign
 	
 	// object
 	public ButtonObject SuperBtn = new ButtonObject();
 	public UITool MainUI = new UITool();
 	private ButtonObject temp = new ButtonObject(); // 밭 누르면 나오는 버튼들에 대한 버튼 오브젝트
+	public ButtonObject signBtn = new ButtonObject(); //sign
 	public GameObject Current = null; // 터치한 오브젝트를 가리키기 위한 빈칸.. 포인터 대용
 	public GameObject cropObj = new GameObject(); // 농작물 오브젝트! 가장 중요한 것!
 	public GameObject strawberryObj = new GameObject(); // 딸기 
@@ -129,6 +133,8 @@ public class GameMain extends Activity {
 		menuSpr.LoadSprite(mGL, MainContext, "button/menuBtn.spr");
 		cirBtnSpr.LoadSprite(mGL, MainContext, "button/circleBtn.spr");
 		chatBtnSpr.LoadSprite(mGL, MainContext,"button/chat2.spr");
+		
+		signSpr.LoadSprite(mGL, MainContext,"sign/sign.spr");
 
 		cropObj.SetObject(cropSpr, 0, 0, 400, 280, 0, 0);
 		cropObj.dead = true; // 농작물은 죽어있는 상태다. false로 바꿔줘야만 메인에서 그려준다.
@@ -152,6 +158,9 @@ public class GameMain extends Activity {
 			temp.show = false;
 			Button.add(temp);
 		}
+		
+		
+		signBtn.show = false;
 
 		/* 밑에 메뉴버튼 생성 */
 		for (int motion = 0; motion < 4; motion++) {
@@ -181,8 +190,22 @@ public class GameMain extends Activity {
 		/* 십자 버튼 체크 */
 		for (int i = 0; i < Button.size(); i++) {
 			Button.get(i).CheckButton(gInfo, push, TouchX, TouchY);
+			belowButton.get(i).CheckButton(gInfo, push, TouchX, TouchY);
 			
-			if (Button.get(i).click == ButtonType.STATE_CLK_BUTTON) {
+			if(belowButton.get(i).click == ButtonType.STATE_CLK_BUTTON){
+				if(i == 0){ //창고
+					
+				}else if(i == 1){ //농장 체험
+					
+				}else if(i == 2){ //장식
+					signBtn.SetButton(signSpr, ButtonType.TYPE_ONE_CLICK, 0, 400, 170, 0);
+					signBtn.SetText(0, 30, 15, 0, 0, 0, 30f, id);
+					signBtn.show = true;
+				}else if( i== 3){ //마켓
+					
+				}
+				
+			}else if (Button.get(i).click == ButtonType.STATE_CLK_BUTTON) {
 				
 				//Button.get(i).dead = false;
 //				MainUI.AddGroup(0, 1);
@@ -364,9 +387,14 @@ public class GameMain extends Activity {
 				Button.get(i).DrawSprite(mGL, 0, gInfo, font); // 버튼들 그려주기
 			}
 			
+			//팻말
+			signBtn.DrawSprite(mGL, 0, gInfo, font); 
+			
 			/*팝업 그려주기 */
 			if (popup_flag == true)
 				MainUI.Draw(mGL, gInfo, font);
+			
+			
 
 			font.EndFont(gInfo);
 		}

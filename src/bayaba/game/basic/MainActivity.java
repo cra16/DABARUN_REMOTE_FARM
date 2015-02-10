@@ -155,6 +155,7 @@ public class MainActivity extends Activity {
 
 			// 프리퍼런스 가져오기(자동로그인 사용)
 			String id = spf.getString(GlobalVariable.SPF_ID, "");
+			gMain.id = id;
 			// Log.d("test", "id mainActivity "+ id);
 
 			try {
