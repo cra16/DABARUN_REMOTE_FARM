@@ -72,12 +72,13 @@ public class HttpMainActivity extends Activity {
       		id = spf.getString(GlobalVariable.SPF_ID,"");
       		pw = spf.getString(GlobalVariable.SPF_PW,"");
       		
-      		//Log.d("test", "check if id exist: "+ id);
+      		//Log.d("test", "check if id exist: "+ id+"what");
 			//Log.d("test", "check if pw exist: "+ pw);
       		
       		//sharedpreference 사용해서 기존에 입력된 값이 있다면
-      		if(id != null)
+      		if(id != null && id.trim() != "")
       		{
+      			Log.d("test", "auto login in");
       			//Execute activity below
       			Intent intent = new Intent(HttpMainActivity.this, MainActivity.class);                                                                                                                                             
 				startActivity(intent);	

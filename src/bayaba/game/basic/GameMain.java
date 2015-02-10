@@ -192,7 +192,7 @@ public class GameMain extends Activity {
 		}
 
 		if (push) {
-			/* 버튼 없어지게 */
+			/*빈 땅 이외의 곳을 클릭시 버튼 없어지게 */
 			for (int i = 0; i < 4; i++)
 				Button.get(i).show = false;
 
@@ -200,14 +200,14 @@ public class GameMain extends Activity {
 			{
 				if (EmptyList.get(i).CheckPos((int) TouchX, (int) TouchY))
 				{
-					Current = EmptyList.get(i); /* currnt : 터치된 오브젝트 */
+					Current = EmptyList.get(i); /* current : 터치된 오브젝트 */
 					
 					modNum =i;
 					
-					Button.get(0).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x + 80, Current.y, 0);
-					Button.get(1).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x, Current.y - 45, 1);
-					Button.get(2).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x - 80, Current.y, 2);
-					Button.get(3).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x, Current.y + 45, 3);
+					Button.get(0).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x + 80, Current.y, 0);//심기
+					Button.get(1).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x, Current.y - 45, 1);//잡초
+					Button.get(2).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x - 80, Current.y, 2);//물
+					Button.get(3).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x, Current.y + 45, 3);//거름
 					
 					for(int j=0; j<4; j++)
 						Button.get(j).show = true;
@@ -228,13 +228,10 @@ public class GameMain extends Activity {
 			
 			/* 팝업 UI 터치를 체크함 */
 			for (int i = 0; i < MainUI.UIList.size(); i++) {
-
 				
 				//취소버튼
 				if ((MainUI.UIList.get(i).index == Select.Group0.ONE_CLICK_001)
 						&& (MainUI.UIList.get(i).click == ButtonType.STATE_CLK_BUTTON)) {
-					
-
 					//popup_flag = false;
 					
 					MainUI.UIList.get(i).ResetButton();
@@ -343,8 +340,6 @@ public class GameMain extends Activity {
 				MainUI.Draw(mGL, gInfo, font);
 
 			font.EndFont(gInfo);
-
-			
 		}
 	}
 }

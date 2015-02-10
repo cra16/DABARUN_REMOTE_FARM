@@ -113,10 +113,8 @@ public class MainActivity extends Activity {
 	private class CropInfo extends AsyncTask<String, String, JSONObject> {
 		public int fromWhere;
 
-		private CropInfo(int fromWhere) {
-
+		private CropInfo(int fromWhere) {  //fromwhere is crop type
 			this.fromWhere = fromWhere;
-
 		}
 
 		protected void onPreExecute() {
@@ -196,14 +194,6 @@ public class MainActivity extends Activity {
 					JSONObject jsonObj = new JSONObject(result2);
 					return jsonObj;
 
-					/* php에서 not exist 처리를 안한것은 아닐까 제대로 값을 받아오기는하나 */
-					// when login is successful
-
-					/*
-					 * if(!result2.equals("not_exist")){ JSONObject jsonObj =
-					 * new JSONObject(result2); return jsonObj; }
-					 */
-
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -252,8 +242,6 @@ public class MainActivity extends Activity {
 					}
 					
 					gMain.update_flag = true;
-
-					
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
