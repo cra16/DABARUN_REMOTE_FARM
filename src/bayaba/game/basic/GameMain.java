@@ -287,6 +287,10 @@ public class GameMain extends Activity {
 				}
 				//Button.get(i).ResetButton();				
 			}
+			
+			
+			
+			//a메세지 클릭 QQQQQQQQQQQQQQQQQQQQQQQQQ 고쳐야됨
 			if(i < 2)
 			{
 				if(chatButton.get(i).click == ButtonType.STATE_CLK_BUTTON){
@@ -295,11 +299,10 @@ public class GameMain extends Activity {
 						msg.what = 99;  //message, case
 						msg.arg1 = modNum; 
 						((MainActivity) MainContext).m_handler.sendMessage(msg);
-						Button.get(i).ResetButton();
 					}
+					chatButton.get(i).ResetButton();
 				}
 			}
-			
 		}
 
 		if (push) {

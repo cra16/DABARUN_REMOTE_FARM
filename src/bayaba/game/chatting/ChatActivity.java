@@ -106,8 +106,6 @@ public class ChatActivity extends Activity {
  
         selectData();
         
-        Log.d("test", "bundle name : "+bundle.getString("name").trim());
-        Log.d("test", "spf id : "+prefs.getString(GlobalVariable.SPF_ID, ""));
         /* 상대방이 한말 표시 */
         if(!"farmer".equalsIgnoreCase(bundle.getString("name").trim())&&
         		!prefs.getString(GlobalVariable.SPF_ID, "").equalsIgnoreCase(bundle.getString("name").trim())){
@@ -248,7 +246,6 @@ public class ChatActivity extends Activity {
                 if (gcm == null) {
                     gcm = GoogleCloudMessaging.getInstance(context);
                     regid = gcm.register(SENDER_ID);
-                    Log.e("test","regid : "+regid);
 
                     SharedPreferences.Editor edit = prefs.edit();
                     edit.putString("REG_ID", regid);
