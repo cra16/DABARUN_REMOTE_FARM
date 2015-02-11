@@ -3,9 +3,11 @@ package bayaba.game.basic;
 
 //import android.R;
 
+
 import bayaba.game.chatting.ChatActivity;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+
 
 import Variable.GlobalVariable;
 import android.app.IntentService;

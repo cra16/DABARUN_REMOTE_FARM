@@ -74,7 +74,7 @@
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="bayaba.game.chatting.ChatActivity"
+            android:name="dabarun.game.chatting.ChatActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask" />
     </application>
