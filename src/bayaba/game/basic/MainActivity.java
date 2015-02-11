@@ -16,6 +16,7 @@ import org.json.JSONObject;
 
 import Variable.GlobalVariable;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.AsyncTask;
@@ -45,6 +46,8 @@ public class MainActivity extends Activity {
 	private static final int FERTLIZER = 4;
 	private static final int WATER = 5;
 	private static final int WEED = 6;
+	private static final int MARKET = 7;
+	private static final int FARM = 8;
 
 	public String modNum;
 
@@ -96,7 +99,19 @@ public class MainActivity extends Activity {
 				modNum = Integer.toString(msg.arg1);
 				new CropInfo(msg.what).execute();
 				break;
-
+				
+			case MARKET:
+				//Execute activity below
+      			Intent intent = new Intent(MainActivity.this, MarketWeb.class);                                                                                                                                             
+					startActivity(intent);
+				Log.d("test","market webview");
+				break;
+			case FARM:
+				//Execute activity below
+      			Intent intent2 = new Intent(MainActivity.this, FarmWeb.class);                                                                                                                                             
+					startActivity(intent2);
+				Log.d("test","farm webview");
+				break;
 			default:
 				break;
 			}
@@ -112,7 +127,7 @@ public class MainActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		Log.d("debug", "GAME MAIN ONCREATE");
+		//Log.d("debug", "GAME MAIN ONCREATE");
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -146,7 +161,7 @@ public class MainActivity extends Activity {
 
 		@Override
 		protected JSONObject doInBackground(String... params) {
-			Log.d("test", "doInBackground");
+			//Log.d("test", "doInBackground");
 
 			// retrieve user info from shared preference
 			SharedPreferences spf = getSharedPreferences(
@@ -199,21 +214,18 @@ public class MainActivity extends Activity {
 						idValuePair.add(new BasicNameValuePair("modNum", modNum));
 						idValuePair.add(new BasicNameValuePair("request", "2"));
 						httpPost1 = new HttpPost(GlobalVariable.insertRequest);
-						Log.d("test","fertilizer");
 						break;
 					case WATER:
 						idValuePair.add(new BasicNameValuePair("id", id));
 						idValuePair.add(new BasicNameValuePair("modNum", modNum));
 						idValuePair.add(new BasicNameValuePair("request", "1"));
 						httpPost1 = new HttpPost(GlobalVariable.insertRequest);
-						Log.d("test","water");
 						break;
 					case WEED:
 						idValuePair.add(new BasicNameValuePair("id", id));
 						idValuePair.add(new BasicNameValuePair("modNum", modNum));
 						idValuePair.add(new BasicNameValuePair("request", "3"));
 						httpPost1 = new HttpPost(GlobalVariable.insertRequest);
-						Log.d("test","weed");
 						break;
 					default:
 						httpPost1 = new HttpPost(GlobalVariable.getCropList);
@@ -226,7 +238,7 @@ public class MainActivity extends Activity {
 					httpPost1.setEntity(entityRequest1);
 
 					ResponseHandler<String> handler1 = new BasicResponseHandler();
-					Log.d("test", "before execute");
+					//Log.d("test", "before execute");
 
 					// Log.d("test", "url : "+ GlobalVariable.getCropList);
 

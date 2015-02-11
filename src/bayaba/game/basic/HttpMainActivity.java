@@ -53,11 +53,11 @@ public class HttpMainActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	
-    	Log.d("debug", "onCreate1");
+    	//Log.d("debug", "onCreate1");
     	super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_http_main);
        
-        Log.d("debug", "onCreate2");
+        //Log.d("debug", "onCreate2");
         
         b = (Button)findViewById(R.id.Button01);  
         id_Edt = (EditText)findViewById(R.id.id_Edt);
@@ -78,7 +78,7 @@ public class HttpMainActivity extends Activity {
       		//sharedpreference 사용해서 기존에 입력된 값이 있다면
       		if(id != null && id.trim() != "")
       		{
-      			Log.d("test", "auto login in");
+      			//Log.d("test", "auto login in");
       			//Execute activity below
       			Intent intent = new Intent(HttpMainActivity.this, MainActivity.class);                                                                                                                                             
 				startActivity(intent);	

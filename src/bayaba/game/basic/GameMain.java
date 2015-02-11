@@ -196,13 +196,24 @@ public class GameMain extends Activity {
 				if(i == 0){ //창고
 					
 				}else if(i == 1){ //농장 체험
+					Message msg = ((MainActivity) MainContext).m_handler.obtainMessage();
+					msg.what = 8;  //farm, case
+					((MainActivity) MainContext).m_handler.sendMessage(msg);
+					Log.d("test","farm click");
+					belowButton.get(i).ResetButton();
 					
 				}else if(i == 2){ //장식
 					signBtn.SetButton(signSpr, ButtonType.TYPE_ONE_CLICK, 0, 400, 170, 0);
 					signBtn.SetText(0, 30, 15, 0, 0, 0, 30f, id);
 					signBtn.show = true;
-				}else if( i== 3){ //마켓
+					belowButton.get(i).ResetButton();
 					
+				}else if( i== 3){ //마켓
+					Message msg = ((MainActivity) MainContext).m_handler.obtainMessage();
+					msg.what = 7;  //market, case
+					((MainActivity) MainContext).m_handler.sendMessage(msg);
+					Log.d("test","market click");
+					belowButton.get(i).ResetButton();
 				}
 				
 			}else if (Button.get(i).click == ButtonType.STATE_CLK_BUTTON) {
@@ -331,7 +342,6 @@ public class GameMain extends Activity {
 					// 농작물 생성 후 어레이에 넣기
 					GameObject defaultCrop = new GameObject(); // GameObject 변수 선언
 					
-					Log.d("test", "cabbage click");
 					if (crop_type[i] == 1) {	//배추
 						defaultCrop.SetObject(cabbageSpr, 0, 0, EmptyList.get(i).x, EmptyList.get(i).y, 0, 0);
 					} else if (crop_type[i] == 2) {	//딸기
