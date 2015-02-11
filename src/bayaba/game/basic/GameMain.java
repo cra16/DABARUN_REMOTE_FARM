@@ -46,7 +46,6 @@ public class GameMain extends Activity {
 
 	}
 
-
 	private static final int CROP_X = 150;
 	private static final int CROP_Y = 280;
 	private static final int CROP_XGAP = 150;
@@ -62,6 +61,10 @@ public class GameMain extends Activity {
 	
 	//modNum 설정
 	public int modNum=-1; 
+	//public int cabHarvest = 0;
+	//public int strawHarvest = 0;
+	public String cabHarvest = null;
+	public String strawHarvest = null;
 	
 	public int[] crop_type = new int[8];
 	public int[] crop_level = new int[8];
@@ -76,6 +79,8 @@ public class GameMain extends Activity {
 	public GameInfo gInfo; // 게임 환경 설정용 클래스 : MainActivity에 선언된 것을 전달 받는다.
 	public float TouchX, TouchY; // 터치 좌표
 	public Font font = new Font(); // 글 쓸때 필요한 듯,버튼에 
+	public Font cabFont = new Font(); //cab
+	public Font strawFont = new Font(); //straw
 	public Handler mHandler;
 	
 	// sprite variable
@@ -219,6 +224,10 @@ public class GameMain extends Activity {
 					StorageUI.AddGroup(0, 1);
 					storage_flag = true;
 					belowButton.get(i).ResetButton();
+					//Message msg = ((MainActivity) MainContext).m_handler.obtainMessage();
+					//msg.what = 9;  //storage, case
+					//((MainActivity) MainContext).m_handler.sendMessage(msg);
+					
 					Log.d("test","storage click");
 				
 				}else if(i == 1){ //농장 체험
@@ -325,6 +334,9 @@ public class GameMain extends Activity {
 	{
 		synchronized (mGL) {
 			font.BeginFont(gInfo);
+			cabFont.BeginFont(gInfo);
+			strawFont.BeginFont(gInfo);
+			
 			backSpr.PutAni(gInfo, 400, 240, 0, 0); // 백그라운드
 
 			
@@ -450,16 +462,20 @@ public class GameMain extends Activity {
 			signBtn.DrawSprite(mGL, 0, gInfo, font); 
 			
 			//창고 팝업 그려주기
-			if (storage_flag == true)
+			if (storage_flag == true){
 				StorageUI.Draw(mGL, gInfo, font);
+				cabFont.DrawColorFont(mGL,gInfo,340,220,0,0,0,50f,cabHarvest);
+				strawFont.DrawColorFont(mGL,gInfo,480,220,0,0,0,50f,strawHarvest);
+			}
+				
 			
 			/*팝업 그려주기 */
 			if (popup_flag == true)
 				MainUI.Draw(mGL, gInfo, font);
 			
 			
-			
-
+			strawFont.EndFont(gInfo);
+			cabFont.EndFont(gInfo);
 			font.EndFont(gInfo);
 		}
 	}
