@@ -73,7 +73,6 @@ public class MainActivity extends Activity {
 
 				modNum = Integer.toString(msg.arg1);
 				new CropInfo(msg.what).execute();
-
 				break;
 
 			case STRAW:
@@ -304,7 +303,7 @@ public class MainActivity extends Activity {
 						i_crop_mod = Integer.parseInt(crop_mod);
 						i_crop_level = Integer.parseInt(crop_level);
 
-						if (i_crop_level > 0) {
+						if (i_crop_level > 0 && i_crop_level < 6) {
 							gMain.crop_level[i_crop_mod] = i_crop_level;
 							gMain.crop_type[i_crop_mod] = i_crop_type;
 						}

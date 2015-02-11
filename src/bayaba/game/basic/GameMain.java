@@ -32,6 +32,20 @@ public class GameMain extends Activity {
 			static final int ONE_CLICK_003 = 3;
 		}
 	}
+	
+	//창고 팝업 창
+	static class storageUI
+	{
+		static class Group0
+		{
+			static final int	POPUP_000		=	0;
+			static final int	POPUP_001		=	1;
+			static final int	POPUP_002		=	2;
+			static final int	ONE_CLICK_003		=	3;
+		}
+
+	}
+
 
 	private static final int CROP_X = 150;
 	private static final int CROP_Y = 280;
@@ -43,6 +57,7 @@ public class GameMain extends Activity {
 	private static final int MENU_XGAP = 110;
 	
 	public boolean popup_flag = false; /* 팝업을 띄울지 말지 판단하는 불린*/
+	public boolean storage_flag = false; //창고 팝업에 대한 불린
 	public boolean update_flag = false;
 	
 	//modNum 설정
@@ -78,6 +93,7 @@ public class GameMain extends Activity {
 	// object
 	public ButtonObject SuperBtn = new ButtonObject();
 	public UITool MainUI = new UITool();
+	public UITool StorageUI = new UITool();  //창고 ui
 	private ButtonObject temp = new ButtonObject(); // 밭 누르면 나오는 버튼들에 대한 버튼 오브젝트
 	public ButtonObject signBtn = new ButtonObject(); //sign
 	public GameObject Current = null; // 터치한 오브젝트를 가리키기 위한 빈칸.. 포인터 대용
@@ -142,10 +158,13 @@ public class GameMain extends Activity {
 		// ui 적용
 		MainUI.LoadUI(mGL, MainContext, "UI/UIPack.ui"); // UI 파일을 로드한다.
 		MainUI.AddGroup(0, 1); /* 이걸 해주지 않으면 쓰레기값이 열리게 되더라.. */
+		
+		// ui 적용
+		StorageUI.LoadUI(mGL, MainContext, "storageUI/storage.ui"); // UI 파일을 로드한다.
+		StorageUI.AddGroup(0, 1); /* 이걸 해주지 않으면 쓰레기값이 열리게 되더라.. */
 
 		// 빈칸 생성해서 어레이에 넣어주기
 		for (int i = 0; i < 8; i++) {
-			
 			GameObject emptyTemp = new GameObject(); // GameObject 변수 선언
 			emptyTemp.SetObject(emptySpr, 0, 0, CROP_X + ((i % 4) * CROP_XGAP), CROP_Y + ((i / 4) * CROP_YGAP), 0, 0);
 			EmptyList.add(emptyTemp); // 어레이 리스트에 추가
@@ -186,6 +205,7 @@ public class GameMain extends Activity {
 	{
 		//UI용 터치 처리 전용 함수
 		MainUI.Touch(gInfo, (int) TouchX, (int) TouchY, push);
+		StorageUI.Touch(gInfo, (int) TouchX, (int) TouchY, push);
 		
 		/* 십자 버튼 체크 */
 		for (int i = 0; i < Button.size(); i++) {
@@ -194,7 +214,11 @@ public class GameMain extends Activity {
 			
 			if(belowButton.get(i).click == ButtonType.STATE_CLK_BUTTON){
 				if(i == 0){ //창고
-					
+					StorageUI.AddGroup(0, 1);
+					storage_flag = true;
+					belowButton.get(i).ResetButton();
+					Log.d("test","storage click");
+				
 				}else if(i == 1){ //농장 체험
 					Message msg = ((MainActivity) MainContext).m_handler.obtainMessage();
 					msg.what = 8;  //farm, case
@@ -227,6 +251,7 @@ public class GameMain extends Activity {
 					MainUI.AddGroup(0, 1);
 					popup_flag = true;
 					Button.get(i).ResetButton();
+					
 				}else if( i == 1){ //거름
 					Message msg = ((MainActivity) MainContext).m_handler.obtainMessage();
 					msg.what = 4;  //fertilizer, case
@@ -246,7 +271,6 @@ public class GameMain extends Activity {
 					msg.what = 6;  //weed, case
 					msg.arg1 = modNum; 
 					((MainActivity) MainContext).m_handler.sendMessage(msg);
-				
 					Button.get(i).ResetButton();
 				}
 				//Button.get(i).ResetButton();
@@ -337,6 +361,17 @@ public class GameMain extends Activity {
 				}
 			}
 			
+			/* 창고 팝업 UI 터치를 체크함 */
+			for (int i = 0; i < StorageUI.UIList.size(); i++) {
+				
+				//취소버튼
+				if ((StorageUI.UIList.get(i).index == Select.Group0.ONE_CLICK_003)
+						&& (StorageUI.UIList.get(i).click == ButtonType.STATE_CLK_BUTTON)) {
+					StorageUI.UIList.get(i).ResetButton();
+					StorageUI.DeleteLastGroup(gInfo);
+				}
+			}
+			
 			if (update_flag == true) {
 				for (int i = 0; i < crop_type.length; i++) {
 					// 농작물 생성 후 어레이에 넣기
@@ -351,7 +386,7 @@ public class GameMain extends Activity {
 					}
 					defaultCrop.dead = true;
 					// level이 0이 아닌 놈들만 즉 생성되어있는 놈들만 살려서 그려질 수 있게 한다.
-					if (crop_level[i] > 0)
+					if (crop_level[i] > 0 && crop_level[i] < 6)
 						defaultCrop.dead = false;
 					CropList.add(defaultCrop);
 					crop_type[i] = -1;
@@ -400,9 +435,14 @@ public class GameMain extends Activity {
 			//팻말
 			signBtn.DrawSprite(mGL, 0, gInfo, font); 
 			
+			//창고 팝업 그려주기
+			if (storage_flag == true)
+				StorageUI.Draw(mGL, gInfo, font);
+			
 			/*팝업 그려주기 */
 			if (popup_flag == true)
 				MainUI.Draw(mGL, gInfo, font);
+			
 			
 			
 
