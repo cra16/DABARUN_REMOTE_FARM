@@ -1,4 +1,4 @@
-package bayaba.game.basic;
+package bayaba.game.chatting;
 
 
 import java.io.IOException;
@@ -10,7 +10,13 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import bayaba.game.basic.JSONParser;
+import bayaba.game.basic.R;
+import bayaba.game.basic.R.id;
+import bayaba.game.basic.R.layout;
+
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.android.gms.internal.gm;
 
 import Variable.GlobalVariable;
 import android.app.Activity;
@@ -31,6 +37,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -43,10 +50,16 @@ public class ChatActivity extends Activity {
     EditText chat_msg;
     Button send_btn;
     Bundle bundle;
-    TableLayout tab;
     
-    ArrayList<String> arrlist = null;
-    ArrayList<String> arr_id_list = null;
+    public static final boolean FROMOTHER = true;
+    public static final boolean FROMMYSELF = false;
+
+    public static final int INT_OTHER = 1;
+    public static final int INT_SELF = 0;
+    
+ // bubble code
+ 	private DiscussArrayAdapter ADAPTER;
+ 	private ListView LV;
     
     Intent intent;
     String mobno;
@@ -56,11 +69,12 @@ public class ChatActivity extends Activity {
     GoogleCloudMessaging gcm;
     Context context;
     String regid;
+    String id;
     
     ProgressDialog pDialog;
     
     SQLiteDatabase db;
-    String newQuery = "create table dialogue (id integer primary key , name text, msg text);";
+    String newQuery = "create table msgbox (id integer primary key , name text, msg text, isother integer);";
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,138 +84,102 @@ public class ChatActivity extends Activity {
         prefs = getSharedPreferences(GlobalVariable.DABARUNUSER, 0);
         bundle = getIntent().getBundleExtra("INFO");
         
-              
         setContentView(R.layout.activity_chat);
-        tab = (TableLayout)findViewById(R.id.tab);
 
-        Log.d("test", "bundle mobno : "+bundle.getString("mobno"));
+        //bubble code
+        LV = (ListView) findViewById(R.id.list_view_messages);
+        ADAPTER = new DiscussArrayAdapter(getApplicationContext(), R.layout.listitem_discuss);
+
+		LV.setAdapter(ADAPTER);
+		
         SharedPreferences.Editor edit = prefs.edit();
         edit.putString("CURRENT_ACTIVE", bundle.getString("mobno"));
         edit.commit();
         LocalBroadcastManager.getInstance(this).registerReceiver(onNotice, new IntentFilter("Msg"));
         
         db =  openOrCreateDatabase("dbname", MODE_WORLD_WRITEABLE, null);
-        Log.d("test", "db : "+ db);	
         try{
             db.execSQL(newQuery);
-            Log.d("test", "DB Created");
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        //insertData("tests");
-        
-        arrlist = new ArrayList<String>();
-        arr_id_list = new ArrayList<String>();
  
         selectData();
         
-        /* ������ �Ѹ� ǥ�� */
-        if(bundle.getString("name") != null){
-            TableRow tr2 = new TableRow(getApplicationContext());
-            tr2.setLayoutParams(new TableRow.LayoutParams( TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
-            TextView textview = new TextView(getApplicationContext());
-            textview.setTextSize(20);
-            textview.setTextColor(Color.parseColor("#CCCCCC"));
-            textview.setText(Html.fromHtml("<b>"+bundle.getString("name")+" : </b>"+bundle.getString("msg")));
-            Log.d("test","<b>"+bundle.getString("name")+" : </b>"+bundle.getString("msg"));
-            Log.d("test","Oncreate text : "+textview.getText());
-            tr2.addView(textview);
-            tab.addView(tr2);
+        Log.d("test", "bundle name : "+bundle.getString("name").trim());
+        Log.d("test", "spf id : "+prefs.getString(GlobalVariable.SPF_ID, ""));
+        /* 상대방이 한말 표시 */
+        if(!"farmer".equalsIgnoreCase(bundle.getString("name").trim())&&
+        		!prefs.getString(GlobalVariable.SPF_ID, "").equalsIgnoreCase(bundle.getString("name").trim())){
+        	Log.e("test", "IN");
+        	ADAPTER.add(new OneComment(FROMOTHER, bundle.getString("msg")));
         }
 
-        //���� �Ѹ� ǥ��
-        //���� �Է��ϴ� ĭ:chat_msg
+        //내가 한말 표시
+        //내가 입력하는 칸:chat_msg
         chat_msg = (EditText)findViewById(R.id.chat_msg);
         send_btn = (Button)findViewById(R.id.sendbtn);
 
         send_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TableRow tr2 = new TableRow(getApplicationContext());
-                tr2.setLayoutParams(new TableRow.LayoutParams( TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
-                TextView textview = new TextView(getApplicationContext());
-                textview.setTextSize(20);
-                textview.setTextColor(Color.parseColor("#A901DB"));
-                textview.setText(Html.fromHtml("<b>You : </b>" + chat_msg.getText().toString()));
-                Log.d("test", "Onclick : "+ textview.getText());
-                
-                //
-                insertData("You",chat_msg.getText().toString());
+            	insertData("You",chat_msg.getText().toString(), INT_SELF);
                 Log.d("test", "you: " + chat_msg.getText().toString());
-                tr2.addView(textview);
-                tab.addView(tr2);
+                 
+     			ADAPTER.add(new OneComment(FROMMYSELF, chat_msg.getText().toString()));
+ 				
                 new Send().execute();
             }
         });
         
-        Log.d("test", "before Register in ChatActivity");
         new Register().execute();
-        Log.d("test", "after Register in ChatActivity");
     }
     
     @Override
     protected void onPause( ){
     	super.onPause();
-    	Toast.makeText( getApplicationContext(), "onPause", Toast.LENGTH_SHORT).show();
     	SharedPreferences.Editor edit = prefs.edit();
         edit.putString("CURRENT_ACTIVE", "");
         edit.commit();
     }
-    @Override
-    protected void onStop( ){
-    	super.onStop();
-    	Toast.makeText( getApplicationContext(), "onStop", Toast.LENGTH_SHORT).show();
-    	/*SharedPreferences.Editor edit = prefs.edit();
-        edit.putString("CURRENT_ACTIVE", bundle.getString("mobno"));
-        edit.commit();*/
-    }
-    @Override
-    protected void onDestroy( ){
-    	super.onDestroy();
-    	Toast.makeText( getApplicationContext(), "onDestroy", Toast.LENGTH_SHORT).show();
-    	/*SharedPreferences.Editor edit = prefs.edit();
-        edit.putString("CURRENT_ACTIVE", bundle.getString("mobno"));
-        edit.commit();*/
-    }
-
     
-    private void insertData(String name,String msg){
+    private void insertData(String name,String msg, int isother){
+    	db.beginTransaction();
     	 
-        db.beginTransaction();
- 
         try{
-            String sql = "insert into dialogue (name,msg) values ('"+ name +"','"+ msg +"');";
+            String sql = "insert into msgbox (name,msg,isother) values ('"+ name +"','"+ msg +"','"+ isother +"');";
             db.execSQL(sql);
             db.setTransactionSuccessful();
         }catch(Exception e){
             e.printStackTrace();
         }finally{
             db.endTransaction();
-        }
- 
+        } 
     }
     
     public void selectData(){
-    	Log.d("test", "selectData in");
-        String sql = "select * from dialogue";
+    	boolean selfOrNot = true;
+        String sql = "select * from msgbox";
         
         Cursor result = db.rawQuery(sql, null);
         result.moveToFirst();
         while(!result.isAfterLast()){
-        	TableRow tr2 = new TableRow(getApplicationContext());
-        	tr2.setLayoutParams(new TableRow.LayoutParams( TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
-            TextView textview = new TextView(getApplicationContext());
-            textview.setTextSize(20);
-            textview.setTextColor(Color.parseColor("#CCCCCC"));
-            Log.d("test", "SelectData : "+textview.getText());
-            tr2.addView(textview);
-            tab.addView(tr2);
+        	
+        	
+        	//table에 누가 보냈는지 값도 있어야 함....
+        	
+        	if( result.getInt(3) == 1)
+        	{selfOrNot = FROMOTHER;}
+        	
+        	else if(result.getInt(3) == 0)
+        	{selfOrNot = FROMMYSELF;}
+        	
+        	
+        	result.getString(3);
+        	ADAPTER.add(new OneComment(selfOrNot, result.getString(2)));
             
             result.moveToNext();
         }
-        Log.d("test", "Data Get Success");
-       
         result.close();
     }
     
@@ -209,21 +187,15 @@ public class ChatActivity extends Activity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            String str = intent.getStringExtra("msg");
+            String p_msg = intent.getStringExtra("msg");
             String str1 = intent.getStringExtra("fromname");
             String str2 = intent.getStringExtra("fromu");
             
             if(str2.equals(bundle.getString("mobno"))){
-                TableRow tr1 = new TableRow(getApplicationContext());
-                tr1.setLayoutParams(new TableRow.LayoutParams( TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
-                TextView textview = new TextView(getApplicationContext());
-                textview.setTextSize(20);
-                textview.setTextColor(Color.parseColor("#CCCCCC"));
-                textview.setText(Html.fromHtml("<b>"+str1+" : </b>"+str));
-                insertData(str1, str);
+            	insertData(str1, p_msg, INT_OTHER);
+                Log.d("test", "2  name: " + str1 + " msg: " + p_msg); 
                 
-                tr1.addView(textview);
-                tab.addView(tr1);
+    			ADAPTER.add(new OneComment(FROMOTHER, p_msg));
             }
         }
     };
@@ -263,7 +235,6 @@ public class ChatActivity extends Activity {
     	@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			Log.d("test", "onPreExecute()");
 			pDialog = new ProgressDialog(ChatActivity.this);
 			pDialog.setMessage("Getting Data ...");
 			pDialog.setIndeterminate(false);

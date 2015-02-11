@@ -37,6 +37,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 import bayaba.engine.lib.GameInfo;
+import bayaba.game.chatting.ChatActivity;
 
 public class MainActivity extends Activity {
 	private GLView play;
@@ -265,7 +266,6 @@ public class MainActivity extends Activity {
 					case MESSAGE:
 						idValuePair.add(new BasicNameValuePair("id", id));
 						httpPost1 = new HttpPost(GlobalVariable.chatLogin);
-						Log.d("test","message1");
 						break;
 					default:
 						httpPost1 = new HttpPost(GlobalVariable.getCropList);
@@ -310,7 +310,6 @@ public class MainActivity extends Activity {
 
 				/* 통신이 정상적이지 않으면 */
 				if (json == null) {
-					Log.d("test", "JASON NULL");
 					//if (fromWhere == CABB || fromWhere == STRAW)
 					//	Toast.makeText(MainActivity.this, "정보 삽입 성공",
 					//			Toast.LENGTH_SHORT).show();

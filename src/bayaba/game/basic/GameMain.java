@@ -281,8 +281,7 @@ public class GameMain extends Activity {
 			if(i < 2)
 			{
 				if(chatButton.get(i).click == ButtonType.STATE_CLK_BUTTON){
-					if(i == 1) {
-						Log.d("test", "Chat in"+ i);
+					if(i == 0) {
 						Message msg = ((MainActivity) MainContext).m_handler.obtainMessage();
 						msg.what = 99;  //message, case
 						msg.arg1 = modNum; 

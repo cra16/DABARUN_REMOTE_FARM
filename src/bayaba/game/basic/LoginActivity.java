@@ -34,7 +34,7 @@ import android.widget.TextView;
 /*import com.google.android.gcm.GCMRegistrar;*/
 
 //�α��� ��Ƽ��Ƽ�Դϴ�.
-public class HttpMainActivity extends Activity {
+public class LoginActivity extends Activity {
 
 	Button b;
     EditText id_Edt,pw_Edt;
@@ -80,7 +80,7 @@ public class HttpMainActivity extends Activity {
       		{
       			//Log.d("test", "auto login in");
       			//Execute activity below
-      			Intent intent = new Intent(HttpMainActivity.this, MainActivity.class);                                                                                                                                             
+      			Intent intent = new Intent(LoginActivity.this, MainActivity.class);                                                                                                                                             
 				startActivity(intent);	
       		}
 
@@ -97,9 +97,9 @@ public class HttpMainActivity extends Activity {
     
     public void showAlert(){
     	// Log.d("debug", "alert");
-        HttpMainActivity.this.runOnUiThread(new Runnable() {
+        LoginActivity.this.runOnUiThread(new Runnable() {
             public void run() {
-                AlertDialog.Builder builder = new AlertDialog.Builder(HttpMainActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
                 builder.setTitle("Login Error.");
                 builder.setMessage("User not Found.")  
                        .setCancelable(false)
@@ -160,11 +160,10 @@ public class HttpMainActivity extends Activity {
   							pw = pw_Edt.getText().toString();
   		        			spfEdit.putString(GlobalVariable.SPF_ID, id); //사용자에게 입력 받은 id 저장
   							spfEdit.commit();	//commit
-  							Log.d("test", "put id: "+ id);
 
   							//Execute activity below
-  		        			Intent intent = new Intent(HttpMainActivity.this, MainActivity.class);                                                                                                                                             
-  							startActivity(intent);		        			 
+  		        			Intent intent = new Intent(LoginActivity.this, MainActivity.class);                                                                                                                                             
+  							startActivity(intent);
   		        		}	        		
   		        		
   	    			}catch(Exception e){
