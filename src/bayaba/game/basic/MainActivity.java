@@ -55,6 +55,7 @@ public class MainActivity extends Activity {
 	private static final int FERTLIZER = 4;
 	private static final int WATER = 5;
 	private static final int WEED = 6;
+<<<<<<< Updated upstream
 	private static final int MARKET = 7;
 	private static final int FARM = 8;
 	private static final int MESSAGE = 99;
@@ -63,6 +64,17 @@ public class MainActivity extends Activity {
 	
 	private long backKeyPressedTime = 0;
     Toast toast;
+=======
+	private static final int MARKETWEB = 7;
+	private static final int FARMWEB = 8;
+	private static final int STORAGE = 9;
+
+	public String modNum;
+	public int cabHarvestCount = 0;
+	public int strawHarvestCount = 0;
+	
+	public boolean storage_flag = false;
+>>>>>>> Stashed changes
 
 	public Handler m_handler = new Handler() {
 
@@ -112,22 +124,28 @@ public class MainActivity extends Activity {
 				new CropInfo(msg.what).execute();
 				break;
 				
+<<<<<<< Updated upstream
 			case MESSAGE:
 				modNum = Integer.toString(msg.arg1);
 				new CropInfo(msg.what).execute();
 				break;
 
 			case MARKET:
+=======
+			case MARKETWEB:
+>>>>>>> Stashed changes
 				//Execute activity below
       			Intent intent = new Intent(MainActivity.this, MarketWeb.class);                                                                                                                                             
 					startActivity(intent);
-				Log.d("test","market webview");
 				break;
-			case FARM:
+			case FARMWEB:
 				//Execute activity below
       			Intent intent2 = new Intent(MainActivity.this, FarmWeb.class);                                                                                                                                             
 					startActivity(intent2);
-				Log.d("test","farm webview");
+				break;
+			case STORAGE:
+				new CropInfo(msg.what).execute();
+				Log.d("test","storage");
 				break;
 			default:
 				break;
@@ -262,11 +280,21 @@ public class MainActivity extends Activity {
 						idValuePair.add(new BasicNameValuePair("request", "3"));
 						httpPost1 = new HttpPost(GlobalVariable.insertRequest);
 						break;
+<<<<<<< Updated upstream
 					case MESSAGE:
 						idValuePair.add(new BasicNameValuePair("id", id));
 						httpPost1 = new HttpPost(GlobalVariable.chatLogin);
 						Log.d("test","message1");
 						break;
+=======
+						
+					case STORAGE:
+						idValuePair.add(new BasicNameValuePair("id", id));
+						httpPost1 = new HttpPost(GlobalVariable.getCropList);
+						storage_flag = true;
+						break;
+						
+>>>>>>> Stashed changes
 					default:
 						httpPost1 = new HttpPost(GlobalVariable.getCropList);
 						break;
@@ -310,10 +338,13 @@ public class MainActivity extends Activity {
 
 				/* 통신이 정상적이지 않으면 */
 				if (json == null) {
+<<<<<<< Updated upstream
 					Log.d("test", "JASON NULL");
 					//if (fromWhere == CABB || fromWhere == STRAW)
 					//	Toast.makeText(MainActivity.this, "정보 삽입 성공",
 					//			Toast.LENGTH_SHORT).show();
+=======
+>>>>>>> Stashed changes
 				   if (fromWhere == WATER)
 						Toast.makeText(MainActivity.this, "water",
 								Toast.LENGTH_SHORT).show();
@@ -333,6 +364,18 @@ public class MainActivity extends Activity {
 				   }
 					   
 				} else {
+					
+//					if(storage_flag == true){
+//						JsonArr = json.getJSONArray(RESULT);
+//						String getPoint;
+//						int point;
+//						
+//						for(int i=0; i < JsonArr.length(); i++){
+//							JSONObject c = JsonArr.getJSONObject(i);
+//							getPoint = c.getString(POINT);
+//						}
+//					}
+					
 					/* 통신이 정상적이면 파싱하여 정보를 빼낸다 */
 					JsonArr = json.getJSONArray(RESULT);
 
@@ -358,9 +401,16 @@ public class MainActivity extends Activity {
 						if (i_crop_level > 0 && i_crop_level < 6) {
 							gMain.crop_level[i_crop_mod] = i_crop_level;
 							gMain.crop_type[i_crop_mod] = i_crop_type;
+						}else if (i_crop_level == 6 && i_crop_type == 1){ //cabbage
+							cabHarvestCount++;
+							gMain.cabHarvest = Integer.toString(cabHarvestCount);
+							Log.d("test","cab harvest: " + gMain.cabHarvest);
+						}else if(i_crop_level == 6 && i_crop_type == 2){ //strawberry
+							strawHarvestCount++;
+							gMain.strawHarvest = Integer.toString(strawHarvestCount);
+							Log.d("test","straw harvest: " + gMain.strawHarvest);
 						}
 					}
-
 					gMain.update_flag = true;
 				}
 			} catch (JSONException e) {
