@@ -312,7 +312,6 @@ public class GameMain extends Activity {
 					CropList.get(modNum).dead = false;
 					crop_type[modNum] = 1;
 					
-					Log.d("test", "cabbage click");
 					Message msg = ((MainActivity) MainContext).m_handler.obtainMessage();
 					msg.what = 2;  //cabbage, case
 					msg.arg1 = modNum; //modNum
@@ -346,7 +345,6 @@ public class GameMain extends Activity {
 					// 농작물 생성 후 어레이에 넣기
 					GameObject defaultCrop = new GameObject(); // GameObject 변수 선언
 					
-					Log.d("test", "cabbage click");
 					if (crop_type[i] == 1) {	//배추
 						defaultCrop.SetObject(cabbageSpr, 0, 0, EmptyList.get(i).x, EmptyList.get(i).y, 0, 0);
 					} else if (crop_type[i] == 2) {	//딸기

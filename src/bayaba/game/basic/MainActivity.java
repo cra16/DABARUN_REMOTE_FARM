@@ -1,7 +1,9 @@
 package bayaba.game.basic;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 import org.apache.http.NameValuePair;
@@ -16,8 +18,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+
 import Variable.GlobalVariable;
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
@@ -35,7 +42,7 @@ public class MainActivity extends Activity {
 	private GLView play;
 	private GameMain gMain;
 	public GameInfo gInfo;
-
+	
 	JSONArray JsonArr = null;
 	private static final String RESULT = "result";
 	private static final String TYPE = "type";
@@ -51,10 +58,13 @@ public class MainActivity extends Activity {
 	private static final int MESSAGE = 99;
 
 	public String modNum;
+	
+	private long backKeyPressedTime = 0;
+    Toast toast;
 
 	public Handler m_handler = new Handler() {
 
-		public int someVal;
+	public int someVal;
 
 		@Override
 		public void handleMessage(Message msg) {
@@ -139,6 +149,25 @@ public class MainActivity extends Activity {
 
 		setContentView(play);
 	}
+	
+	  @Override
+	    public void onBackPressed() {
+		        if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
+		            backKeyPressedTime = System.currentTimeMillis();
+		            showToast();
+		            return;
+		        }
+	    	        if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
+	    	        	toast.cancel();
+	    	            this.finish();
+	    	            
+	    	        }
+	    }
+	    public void showToast() {
+	        toast = Toast.makeText(this,
+	                "\'뒤로\'버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT);
+	        toast.show();
+	    }
 
 	// AsyncTask
 	private class CropInfo extends AsyncTask<String, String, JSONObject> {
@@ -158,8 +187,7 @@ public class MainActivity extends Activity {
 			Log.d("test", "doInBackground");
 
 			// retrieve user info from shared preference
-			SharedPreferences spf = getSharedPreferences(
-					GlobalVariable.SPF_LOGIN, 0);
+			SharedPreferences spf = getSharedPreferences(GlobalVariable.DABARUNUSER, 0);
 			// session key value
 
 			// 프리퍼런스 가져오기(자동로그인 사용)
@@ -252,6 +280,7 @@ public class MainActivity extends Activity {
 					// Toast.makeText( MainActivity.this, result2,
 					// Toast.LENGTH_SHORT ).show();
 					// Log.d("test", "result : " + result2);
+					
 
 					JSONObject jsonObj = new JSONObject(result2);
 					return jsonObj;
@@ -285,27 +314,12 @@ public class MainActivity extends Activity {
 						Toast.makeText(MainActivity.this, "weed",
 								Toast.LENGTH_SHORT).show();
 				   else if (fromWhere == MESSAGE) {
-					   Toast.makeText(MainActivity.this, "message",
-								Toast.LENGTH_LONG).show();
-					   
 					   Bundle args = new Bundle();
-					   Log.d("test", "mobno");
-	                   args.putString("mobno", "farmer");
-	                   Log.d("test", "mobno1");
+	                   args.putString("mobno", "farmer"); 
+	                   args.putString("name", gMain.id); 
 	                   Intent chat = new Intent(MainActivity.this, ChatActivity.class);
-	                   Log.d("test", "mobno2");
 	                   chat.putExtra("INFO", args);
-	                   Log.d("test", "mobno3");
 	                   startActivity(chat);
-	                   
-					   
-/*	                   Intent intent = new Intent(MainActivity.this, ChatActivity.class);
-	                   Log.d("test", "mobno");
-						intent.putExtra("mobno", "farmer");
-						Log.d("test", "mobno1");
-						startActivity(intent);
-						Log.d("test", "mobno2");
-*/						
 				   }
 					   
 				} else {

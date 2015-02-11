@@ -16,7 +16,7 @@ public class GlobalVariable {
 	public final static String setPoint = url + "setPoint.php";
 	public final static String insertRequest = url + "insertRequest.php";
 	
-	public final static String SPF_LOGIN = "LOGIN";
+	public final static String DABARUNUSER = "DABARUNUSER";
 	public final static String SPF_ID = "ID";
 	public final static String SPF_PW = "PW";
 	public final static String SPF_SCORE = "SCORE";

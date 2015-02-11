@@ -65,7 +65,7 @@ public class HttpMainActivity extends Activity {
         tv = (TextView)findViewById(R.id.tv);
          
         	//ID, PW 정보를 사용하기 위한 SPF를 GET한다
-      		SharedPreferences spf = getSharedPreferences(GlobalVariable.SPF_LOGIN, 0);
+      		SharedPreferences spf = getSharedPreferences(GlobalVariable.DABARUNUSER, 0);
       		//session key value
       
       		//프리퍼런스 가져오기(자동로그인 사용)
@@ -127,7 +127,7 @@ public class HttpMainActivity extends Activity {
   			//if(checkAllEditTextsFull()){
   				try{
   					HttpClient client = new DefaultHttpClient();
-  					Log.d("test","ing");				
+  					Log.d("test","login ing");				
   	    			try{
   	    				//id = id_Edt.getText().toString();
   	    				// 14.4.4 �߰�
@@ -144,14 +144,14 @@ public class HttpMainActivity extends Activity {
   	    				String result1 = client.execute(httpPost1, handler1);
   						result1 = result1.trim().toString();
 //  						result1 = "�α���";
-  						//Log.d("test", "result1:"+result1);
+  						Log.d("test", "result1:"+result1);
   		        		//Log.d("test","check3");
   		        		
   		        		//when login is successful
   		        		if(!result1.equals("not_exist")){
   		        			/*registerGCM(id_Edt.getText().toString());*/
   		        			//프리퍼런스 설정
-  		        			SharedPreferences spf = getSharedPreferences(GlobalVariable.SPF_LOGIN, 0);
+  		        			SharedPreferences spf = getSharedPreferences(GlobalVariable.DABARUNUSER, 0);
   							//prefnam이름을 prefname으로
   		        			SharedPreferences.Editor spfEdit = spf.edit();
   		        			
