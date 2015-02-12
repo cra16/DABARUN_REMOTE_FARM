@@ -5,12 +5,9 @@ package bayaba.game.basic;
 
 import android.os.Handler; //handler
 import android.os.Message;
-
 import java.util.ArrayList;
 import java.util.Random;
-
 import javax.microedition.khronos.opengles.GL10;
-
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
@@ -398,6 +395,7 @@ public class GameMain extends Activity {
 						&& (StorageUI.UIList.get(i).click == ButtonType.STATE_CLK_BUTTON)) {
 					StorageUI.UIList.get(i).ResetButton();
 					StorageUI.DeleteLastGroup(gInfo);
+					storage_flag = false;
 				}
 			}
 			
@@ -467,8 +465,12 @@ public class GameMain extends Activity {
 			//창고 팝업 그려주기
 			if (storage_flag == true){
 				StorageUI.Draw(mGL, gInfo, font);
-				cabFont.DrawColorFont(mGL,gInfo,340,220,0,0,0,50f,cabHarvest);
-				strawFont.DrawColorFont(mGL,gInfo,480,220,0,0,0,50f,strawHarvest);
+				
+				//StorageUI.UIList.get(1)
+				//font.DrawFontOnButton(mGL, gInfo, StorageUI.UIList.get(1), 0, 0, 5, 5, 5, 20f, "test", 0);
+				font.DrawFontOnButton(mGL, gInfo, StorageUI.UIList.get(1), 70, 10, 2, 2, 2, 40f, cabHarvest, 0);
+				font.DrawFontOnButton(mGL, gInfo, StorageUI.UIList.get(2), 70, 10, 2, 2, 2, 40f, strawHarvest, 0);
+				//strawFont.DrawColorFont(mGL,gInfo,480,220,0,0,0,50f,strawHarvest);
 			}
 				
 			
@@ -477,8 +479,8 @@ public class GameMain extends Activity {
 				MainUI.Draw(mGL, gInfo, font);
 			
 			
-			strawFont.EndFont(gInfo);
-			cabFont.EndFont(gInfo);
+			//strawFont.EndFont(gInfo);
+			//cabFont.EndFont(gInfo);
 			font.EndFont(gInfo);
 		}
 	}
