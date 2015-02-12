@@ -49,7 +49,8 @@ public class MainActivity extends Activity {
 	private static final String TYPE = "type";
 	private static final String MODULE = "modNum";
 	private static final String LEVEL = "level";
-
+	private static final String POINT = "point";
+	
 	private static final int LOADING = 0;
 	private static final int CABB = 2;
 	private static final int STRAW = 3;
@@ -62,7 +63,8 @@ public class MainActivity extends Activity {
 	private static final int FARMWEB = 8;
 	private static final int STORAGE = 9;
 	private static final int MESSAGE = 99;
-
+	private static final int POINTCHECK = 10;
+	
 	public String modNum;
 	public int cabHarvestCount = 0;
 	public int strawHarvestCount = 0;
@@ -137,6 +139,10 @@ public class MainActivity extends Activity {
 				
 			case MESSAGE:
 				modNum = Integer.toString(msg.arg1);
+				new CropInfo(msg.what).execute();
+				break;
+				
+			case POINTCHECK:
 				new CropInfo(msg.what).execute();
 				break;
 				
@@ -282,6 +288,14 @@ public class MainActivity extends Activity {
 						idValuePair.add(new BasicNameValuePair("id", id));
 						httpPost1 = new HttpPost(GlobalVariable.chatLogin);
 						break;
+						
+					case POINTCHECK:
+						idValuePair.add(new BasicNameValuePair("id", id));
+						httpPost1 = new HttpPost(GlobalVariable.getPoint);
+						Log.d("test", "point switch");
+						break;
+						
+						
 					default:
 						httpPost1 = new HttpPost(GlobalVariable.getCropList);
 						break;
@@ -345,6 +359,28 @@ public class MainActivity extends Activity {
 					   
 				} else {
 					
+					Log.d("test", "else");
+
+					if(fromWhere == POINTCHECK)
+					{
+						Log.d("test", "in if");
+
+						JsonArr = json.getJSONArray(RESULT);
+						
+						
+
+						for(int i=0; i < JsonArr.length(); i++){
+							JSONObject c = JsonArr.getJSONObject(i);
+							gMain.userPoint = c.getString(POINT);
+						}
+						
+						
+						return;
+					}
+					
+					
+					
+					
 //					if(storage_flag == true){
 //						JsonArr = json.getJSONArray(RESULT);
 //						String getPoint;
@@ -398,4 +434,9 @@ public class MainActivity extends Activity {
 			}
 		}
 	}
+	
+	
+	
+	
+	
 }

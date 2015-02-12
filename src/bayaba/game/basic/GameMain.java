@@ -62,6 +62,8 @@ public class GameMain extends Activity {
 	//public int strawHarvest = 0;
 	public String cabHarvest = null;
 	public String strawHarvest = null;
+	public String userPoint = null;
+	
 	
 	public int[] crop_type = new int[8];
 	public int[] crop_level = new int[8];
@@ -197,10 +199,24 @@ public class GameMain extends Activity {
 			chatButton.add(temp);
 		}
 		
+		
+		//로딩 
 		Message msg = mHandler.obtainMessage();
 		msg.what = 0;
 		((MainActivity) MainContext).m_handler.sendMessage(msg);
-		//((MainActivity) MainContext).m_handler.sendEmptyMessage();
+		
+		
+		
+		//점수 가져오는 통신
+		
+		Message msg2 = mHandler.obtainMessage();
+		msg2.what = 10;
+		((MainActivity) MainContext).m_handler.sendMessage(msg2);
+		
+	
+	
+	
+	
 	}
 
 	public void PushButton(boolean push) // OpenGL 화면에 터치가 발생하면 GLView에서 호출된다.
@@ -340,6 +356,7 @@ public class GameMain extends Activity {
 			backSpr.PutAni(gInfo, 400, 240, 0, 0); // 백그라운드
 
 			
+			
 			/* 팝업 UI 터치를 체크함 */
 			for (int i = 0; i < MainUI.UIList.size(); i++) {
 				
@@ -362,8 +379,15 @@ public class GameMain extends Activity {
 					Message msg = ((MainActivity) MainContext).m_handler.obtainMessage();
 					msg.what = 2;  //cabbage, case
 					msg.arg1 = modNum; //modNum
-					
 					((MainActivity) MainContext).m_handler.sendMessage(msg);
+					
+					
+					
+					//새로 반영된 점수 가져옴
+					Message msg2 = ((MainActivity) MainContext).m_handler.obtainMessage();
+					msg2.what = 10;
+					((MainActivity) MainContext).m_handler.sendMessage(msg2);
+					
 					
 					
 					MainUI.UIList.get(i).ResetButton();
@@ -379,8 +403,15 @@ public class GameMain extends Activity {
 					Message msg = ((MainActivity) MainContext).m_handler.obtainMessage();
 					msg.what = 3;  //strawberry, case
 					msg.arg1 = modNum; //modNum
-					
 					((MainActivity) MainContext).m_handler.sendMessage(msg);
+					
+					//새로 반영된 점수 가져옴
+					Message msg2 = ((MainActivity) MainContext).m_handler.obtainMessage();
+					msg2.what = 10;
+					((MainActivity) MainContext).m_handler.sendMessage(msg2);
+					
+					
+					
 					
 					MainUI.UIList.get(i).ResetButton();
 					MainUI.DeleteLastGroup(gInfo);
@@ -461,6 +492,11 @@ public class GameMain extends Activity {
 			
 			//팻말
 			signBtn.DrawSprite(mGL, 0, gInfo, font); 
+			
+			
+			//점수를 뿌려준다.
+			font.DrawColorFont(mGL, 50, 430, 1, 1, 1, 40f, userPoint);
+
 			
 			//창고 팝업 그려주기
 			if (storage_flag == true){
