@@ -129,8 +129,6 @@ public class ChatActivity extends Activity {
                 new Send().execute();
             }
         });
-        
-        new Register().execute();
     }
     
     @Override
@@ -226,63 +224,6 @@ public class ChatActivity extends Activity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }
-    }
-    
-    private class Register extends AsyncTask<String, String, JSONObject> {
-    	@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			pDialog = new ProgressDialog(ChatActivity.this);
-			pDialog.setMessage("Getting Data ...");
-			pDialog.setIndeterminate(false);
-			pDialog.setCancelable(true);
-			pDialog.show();
-		}
-        @Override
-        protected JSONObject doInBackground(String... args) {
-   //     	JSONObject jObj = null;
-            try {
-                if (gcm == null) {
-                    gcm = GoogleCloudMessaging.getInstance(context);
-                    regid = gcm.register(SENDER_ID);
-
-                    SharedPreferences.Editor edit = prefs.edit();
-                    edit.putString("REG_ID", regid);
-                    edit.commit();
-                }
-
-            } catch (IOException ex) {
-                Log.e("Error", ex.getMessage());
-            }
-            JSONParser json = new JSONParser();
-            params = new ArrayList<NameValuePair>();
-            params.add(new BasicNameValuePair("name", prefs.getString(GlobalVariable.SPF_ID, "")));
-            params.add(new BasicNameValuePair("mobno", prefs.getString(GlobalVariable.SPF_ID, "")));
-            params.add((new BasicNameValuePair("reg_id",prefs.getString("REG_ID",""))));
-
-            JSONObject jObj = json.getJSONFromUrl("http://54.65.196.112:8000/login",params);
-            return  jObj;
-        }
-        @Override
-        protected void onPostExecute(JSONObject json) {
-        	pDialog.dismiss();
-             try {
-            	 if(json != null){
-	                 String res = json.getString("response");
-	                 if(res.equals("Sucessfully Registered")) {
-	                	 Toast.makeText(ChatActivity.this,"Registered",Toast.LENGTH_SHORT).show();
-	                 }else{
-	                     Toast.makeText(ChatActivity.this,res,Toast.LENGTH_SHORT).show();
-	                 }
-                 	 SharedPreferences.Editor edit = prefs.edit();
-                      edit.putString("REG_FROM", prefs.getString(GlobalVariable.SPF_ID, ""));	// ������ ���Ⱑ mobno
-                      edit.putString("FROM_NAME", prefs.getString(GlobalVariable.SPF_ID, ""));
-                      edit.commit();
-                 }
-            	 else
-            		 Toast.makeText(ChatActivity.this,"JSON NULL in ChatActivity, Register ",Toast.LENGTH_SHORT).show();
-             }catch (Exception e) {}
         }
     }
 }

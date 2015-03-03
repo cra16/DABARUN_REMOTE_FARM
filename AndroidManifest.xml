@@ -40,7 +40,7 @@
             android:value="@integer/google_play_services_version" />
 
         <receiver
-            android:name=".MSGReceiver"
+            android:name="bayaba.game.chatting.MSGReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
@@ -48,7 +48,7 @@
                 <category android:name="com.example.gcm" />
             </intent-filter>
         </receiver>
-        <service android:name=".MSGService" />
+        <service android:name="bayaba.game.chatting.MSGService" />
         
         <activity
             android:name=".LoginActivity"
@@ -72,6 +72,11 @@
         <activity
             android:name=".FarmWeb"
             android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".NoteActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTask" >
         </activity>
         <activity
             android:name="bayaba.game.chatting.ChatActivity"

@@ -24,6 +24,7 @@ import Variable.GlobalVariable;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -44,6 +45,13 @@ public class MainActivity extends Activity {
 	private GameMain gMain;
 	public GameInfo gInfo;
 	
+	GoogleCloudMessaging gcm;
+	List<NameValuePair> params;
+	Context context;
+	SharedPreferences prefs;
+	String regid;
+	String SENDER_ID = "130953040990";
+	
 	JSONArray JsonArr = null;
 	private static final String RESULT = "result";
 	private static final String TYPE = "type";
@@ -62,6 +70,7 @@ public class MainActivity extends Activity {
 	private static final int MARKETWEB = 7;
 	private static final int FARMWEB = 8;
 	private static final int STORAGE = 9;
+	private static final int NOTE = 98;
 	private static final int MESSAGE = 99;
 	private static final int POINTCHECK = 10;
 	
@@ -78,88 +87,95 @@ public class MainActivity extends Activity {
 
 	public int someVal;
 
-		@Override
-		public void handleMessage(Message msg) {
-			super.handleMessage(msg);
-			/* 버튼 처리 */
-			// QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ아무것도 아닌 값이 들어왔을 때 처리.. 해줘야함.
-			switch (msg.what) {
+	@Override
+	public void handleMessage(Message msg) {
+		super.handleMessage(msg);
+		/* 버튼 처리 */
+		// QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ아무것도 아닌 값이 들어왔을 때 처리.. 해줘야함.
+		switch (msg.what) {
 
-			case LOADING:
-				new CropInfo(msg.what).execute();
-				break;
+		case LOADING:
+			new CropInfo(msg.what).execute();
+			break;
 
-			case 1:
-				break;
+		case 1:
+			break;
 
-			case CABB:
+		case CABB:
 
-				modNum = Integer.toString(msg.arg1);
-				new CropInfo(msg.what).execute();
-				break;
+			modNum = Integer.toString(msg.arg1);
+			new CropInfo(msg.what).execute();
+			break;
 
-			case STRAW:
+		case STRAW:
 
-				modNum = Integer.toString(msg.arg1);
-				new CropInfo(msg.what).execute();
-				break;
-				
-			case FERTLIZER:
+			modNum = Integer.toString(msg.arg1);
+			new CropInfo(msg.what).execute();
+			break;
+			
+		case FERTLIZER:
 
-				modNum = Integer.toString(msg.arg1);
-				new CropInfo(msg.what).execute();
-				break;
-				
-			case WATER:
+			modNum = Integer.toString(msg.arg1);
+			new CropInfo(msg.what).execute();
+			break;
+			
+		case WATER:
 
-				modNum = Integer.toString(msg.arg1);
-				new CropInfo(msg.what).execute();
-				break;
-				
-			case WEED:
+			modNum = Integer.toString(msg.arg1);
+			new CropInfo(msg.what).execute();
+			break;
+			
+		case WEED:
 
-				modNum = Integer.toString(msg.arg1);
-				new CropInfo(msg.what).execute();
-				break;
+			modNum = Integer.toString(msg.arg1);
+			new CropInfo(msg.what).execute();
+			break;
 
-			case MARKETWEB:
-				//Execute activity below
-      			Intent intent = new Intent(MainActivity.this, MarketWeb.class);                                                                                                                                             
-					startActivity(intent);
-				break;
-			case FARMWEB:
-				//Execute activity below
-      			Intent intent2 = new Intent(MainActivity.this, FarmWeb.class);                                                                                                                                             
-					startActivity(intent2);
-				break;
-			case STORAGE:
-				new CropInfo(msg.what).execute();
-				Log.d("test","storage");
-				break;
-				
-			case MESSAGE:
-				modNum = Integer.toString(msg.arg1);
-				new CropInfo(msg.what).execute();
-				break;
-				
-			case POINTCHECK:
-				new CropInfo(msg.what).execute();
-				break;
-				
-			default:
-				break;
-			}
+		case MARKETWEB:
+			//Execute activity below
+  			Intent intent = new Intent(MainActivity.this, MarketWeb.class);                                                                                                                                             
+				startActivity(intent);
+			break;
+		case FARMWEB:
+			//Execute activity below
+  			Intent intent2 = new Intent(MainActivity.this, FarmWeb.class);                                                                                                                                             
+				startActivity(intent2);
+			break;
+		case STORAGE:
+			new CropInfo(msg.what).execute();
+			Log.d("test","storage");
+			break;
+		case NOTE:
+			modNum = Integer.toString(msg.arg1);
+			new CropInfo(msg.what).execute();
+			break;
+			
+		case MESSAGE:
+			modNum = Integer.toString(msg.arg1);
+			new CropInfo(msg.what).execute();
+			break;
+			
+		case POINTCHECK:
+			new CropInfo(msg.what).execute();
+			break;
+			
+		default:
+			break;
 		}
+	}
 
-		public int getValue() {
-			someVal = 2;
-			return this.someVal;
-		}
+	public int getValue() {
+		someVal = 2;
+		return this.someVal;
+	}
 	};
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		context = getApplicationContext();
+		prefs = getSharedPreferences(GlobalVariable.DABARUNUSER, 0);
 
 		//Log.d("debug", "GAME MAIN ONCREATE");
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -176,8 +192,12 @@ public class MainActivity extends Activity {
 		gMain = new GameMain(this, gInfo, m_handler);
 		play = new GLView(this, gMain);
 		play.setRenderer(new SurfaceClass(gMain));
+		
+		new Register().execute();
 
 		setContentView(play);
+		
+		
 	}
 	
 	  @Override
@@ -348,6 +368,14 @@ public class MainActivity extends Activity {
 				   else if (fromWhere == WEED)
 						Toast.makeText(MainActivity.this, "weed",
 								Toast.LENGTH_SHORT).show();
+				   else if (fromWhere == NOTE) {
+					   Bundle args = new Bundle();
+	                   args.putString("mobno", "farmer"); 
+	                   args.putString("name", gMain.id); 
+	                   Intent chat = new Intent(MainActivity.this, NoteActivity.class);
+	                   chat.putExtra("INFO", args);
+	                   startActivity(chat);
+				   }
 				   else if (fromWhere == MESSAGE) {
 					   Bundle args = new Bundle();
 	                   args.putString("mobno", "farmer"); 
@@ -435,7 +463,56 @@ public class MainActivity extends Activity {
 		}
 	}
 	
-	
+	private class Register extends AsyncTask<String, String, JSONObject> {
+    	@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+		}
+        @Override
+        protected JSONObject doInBackground(String... args) {
+   //     	JSONObject jObj = null;
+            try {
+                if (gcm == null) {
+                    gcm = GoogleCloudMessaging.getInstance(context);
+                    regid = gcm.register(SENDER_ID);
+
+                    SharedPreferences.Editor edit = prefs.edit();
+                    edit.putString("REG_ID", regid);
+                    edit.commit();
+                }
+
+            } catch (IOException ex) {
+                Log.e("Error", ex.getMessage());
+            }
+            JSONParser json = new JSONParser();
+            params = new ArrayList<NameValuePair>();
+            params.add(new BasicNameValuePair("name", prefs.getString(GlobalVariable.SPF_ID, "")));
+            params.add(new BasicNameValuePair("mobno", prefs.getString(GlobalVariable.SPF_ID, "")));
+            params.add((new BasicNameValuePair("reg_id",prefs.getString("REG_ID",""))));
+
+            JSONObject jObj = json.getJSONFromUrl("http://54.65.196.112:8000/login",params);
+            return  jObj;
+        }
+        @Override
+        protected void onPostExecute(JSONObject json) {
+             try {
+            	 if(json != null){
+	                 String res = json.getString("response");
+	                 if(res.equals("Sucessfully Registered")) {
+	                	 Toast.makeText(MainActivity.this,"Registered",Toast.LENGTH_SHORT).show();
+	                 }else{
+	                     Toast.makeText(MainActivity.this,res,Toast.LENGTH_SHORT).show();
+	                 }
+                 	 SharedPreferences.Editor edit = prefs.edit();
+                     edit.putString("REG_FROM", prefs.getString(GlobalVariable.SPF_ID, ""));	// ������ ���Ⱑ mobno
+                     edit.putString("FROM_NAME", prefs.getString(GlobalVariable.SPF_ID, ""));
+                     edit.commit();
+                 }
+            	 else
+            		 Toast.makeText(MainActivity.this,"JSON NULL in ChatActivity, Register ",Toast.LENGTH_SHORT).show();
+             }catch (Exception e) {}
+        }
+    }
 	
 	
 	

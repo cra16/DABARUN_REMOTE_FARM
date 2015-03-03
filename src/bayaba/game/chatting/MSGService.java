@@ -1,10 +1,11 @@
-package bayaba.game.basic;
+package bayaba.game.chatting;
 
 
 //import android.R;
 
 
-import bayaba.game.chatting.ChatActivity;
+import bayaba.game.basic.R;
+import bayaba.game.basic.R.drawable;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 

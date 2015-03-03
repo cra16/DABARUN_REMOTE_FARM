@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/dabarun.remotefarm_admin"
+    android:id="@+id/TableLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    <TextView
+        android:id="@+id/note_modnum"
+        android:layout_width="20dip"
+        android:layout_height="40dip"
+        android:layout_alignParentLeft="true"
+        android:gravity="center"
+        android:text="밭"
+        android:textSize="8pt"
+        />
+    <TextView
+        android:id="@+id/note_type"
+        android:layout_width="50dip"
+        android:layout_height="40dip"
+        android:layout_toRightOf="@+id/note_modnum"
+        android:gravity="center"
+        android:text="작물"
+        android:textSize="8pt"
+        />
+
+    <TextView
+        android:id="@+id/note_request"
+        android:layout_width="150dip"
+        android:layout_height="40dip"
+        android:layout_toRightOf="@+id/note_type"
+        android:gravity="center"
+        android:text="요청"
+        android:textSize="8pt"
+        />
+
+    <TextView
+        android:id="@+id/note_date"
+        android:layout_width="130dip"
+        android:layout_height="40dip"
+        android:layout_toRightOf="@+id/note_request"
+        android:gravity="center"
+        android:text="날짜"
+        android:textSize="8pt"
+        />
+	    <ListView
+	        android:id="@+id/listview_user_log"
+	        android:layout_width="match_parent"
+	        android:layout_height="400dp"
+	        android:layout_below="@+id/note_request"
+	        android:textColor="#000000" >
+	   	</ListView>
+</RelativeLayout>

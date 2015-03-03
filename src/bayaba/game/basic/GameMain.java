@@ -313,6 +313,12 @@ public class GameMain extends Activity {
 						msg.arg1 = modNum; 
 						((MainActivity) MainContext).m_handler.sendMessage(msg);
 					}
+					else if(i == 1) {
+						Message msg = ((MainActivity) MainContext).m_handler.obtainMessage();
+						msg.what = 98;  //message, case
+						msg.arg1 = modNum; 
+						((MainActivity) MainContext).m_handler.sendMessage(msg);
+					}
 					chatButton.get(i).ResetButton();
 				}
 			}

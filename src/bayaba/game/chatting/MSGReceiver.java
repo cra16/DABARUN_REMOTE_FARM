@@ -1,4 +1,4 @@
-package bayaba.game.basic;
+package bayaba.game.chatting;
 
 import android.app.Activity;
 import android.content.ComponentName;
