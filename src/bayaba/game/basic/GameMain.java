@@ -205,6 +205,10 @@ public class GameMain extends Activity {
 		msg.what = 0;
 		((MainActivity) MainContext).m_handler.sendMessage(msg);
 		
+		//effect
+		Message msg1 = mHandler.obtainMessage();
+		msg1.what = 1;
+		((MainActivity) MainContext).m_handler.sendMessage(msg1);
 		
 		
 		//점수 가져오는 통신

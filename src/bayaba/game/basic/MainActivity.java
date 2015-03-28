@@ -1,7 +1,7 @@
 package bayaba.game.basic;
 
 
-import java.io.IOException;
+ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,8 +58,13 @@ public class MainActivity extends Activity {
 	private static final String MODULE = "modNum";
 	private static final String LEVEL = "level";
 	private static final String POINT = "point";
+	private static final String CROPSEQ = "cropSeq";
+	private static final String REQUEST = "request";
+	private static final String ISFINN = "isFinn";
+	
 	
 	private static final int LOADING = 0;
+	private static final int EFFECT = 1;
 	private static final int CABB = 2;
 	private static final int STRAW = 3;
 	private static final int FERTLIZER = 4;
@@ -98,7 +103,8 @@ public class MainActivity extends Activity {
 			new CropInfo(msg.what).execute();
 			break;
 
-		case 1:
+		case EFFECT:
+			new CropInfo(msg.what).execute();
 			break;
 
 		case CABB:
@@ -261,7 +267,12 @@ public class MainActivity extends Activity {
 						idValuePair.add(new BasicNameValuePair("id", id));
 						httpPost1 = new HttpPost(GlobalVariable.getCropList);
 						break;
-
+						
+					case EFFECT: 
+						idValuePair.add(new BasicNameValuePair("id", id));
+						httpPost1 = new HttpPost(GlobalVariable.requestEffect);
+						break;
+						
 					case CABB:
 						// 배추
 						idValuePair.add(new BasicNameValuePair("id", id));
@@ -327,18 +338,18 @@ public class MainActivity extends Activity {
 					httpPost1.setEntity(entityRequest1);
 
 					ResponseHandler<String> handler1 = new BasicResponseHandler();
-					//Log.d("test", "before execute");
+					Log.d("test", "before execute");
 
-					// Log.d("test", "url : "+ GlobalVariable.getCropList);
+					//Log.d("test", "url : "+ GlobalVariable.requestEffect);
 
 					// 위에서 세팅한 정보를 기반으로 서버로 쏜다.
 					String result2 = client.execute(httpPost1, handler1);
 
-					// Log.d("test", "after execute : " + result2);
-					result2 = result2.trim().toString();
-					// Toast.makeText( MainActivity.this, result2,
-					// Toast.LENGTH_SHORT ).show();
-					// Log.d("test", "result : " + result2);
+					 Log.d("test", "after execute : " + result2);
+					 result2 = result2.trim().toString();
+					 Toast.makeText( MainActivity.this, result2,
+					 Toast.LENGTH_SHORT ).show();
+					 Log.d("test", "result : " + result2);
 					
 
 					JSONObject jsonObj = new JSONObject(result2);
@@ -385,7 +396,7 @@ public class MainActivity extends Activity {
 	                   startActivity(chat);
 				   }
 					   
-				} else {
+				} else {	
 					
 					Log.d("test", "else");
 
@@ -406,54 +417,69 @@ public class MainActivity extends Activity {
 						return;
 					}
 					
-					
-					
-					
-//					if(storage_flag == true){
-//						JsonArr = json.getJSONArray(RESULT);
-//						String getPoint;
-//						int point;
-//						
-//						for(int i=0; i < JsonArr.length(); i++){
-//							JSONObject c = JsonArr.getJSONObject(i);
-//							getPoint = c.getString(POINT);
-//						}
-//					}
-					
 					/* 통신이 정상적이면 파싱하여 정보를 빼낸다 */
-					JsonArr = json.getJSONArray(RESULT);
+					if(fromWhere == LOADING){
+						JsonArr = json.getJSONArray(RESULT);
 
-					String crop_type;
-					String crop_mod;
-					String crop_level;
-					int i_crop_type;
-					int i_crop_mod;
-					int i_crop_level;
+						String crop_type;
+						String crop_mod;
+						String crop_level;
+						int i_crop_type;
+						int i_crop_mod;
+						int i_crop_level;
 
-					for (int i = 0; i < JsonArr.length(); i++) {
-						JSONObject c = JsonArr.getJSONObject(i);
-						// Storing JSON item in a Variable
+						for (int i = 0; i < JsonArr.length(); i++) {
+							JSONObject c = JsonArr.getJSONObject(i);
+							// Storing JSON item in a Variable
 
-						crop_type = c.getString(TYPE);
-						crop_mod = c.getString(MODULE);
-						crop_level = c.getString(LEVEL);
+							crop_type = c.getString(TYPE);
+							crop_mod = c.getString(MODULE);
+							crop_level = c.getString(LEVEL);
 
-						i_crop_type = Integer.parseInt(crop_type);
-						i_crop_mod = Integer.parseInt(crop_mod);
-						i_crop_level = Integer.parseInt(crop_level);
+							i_crop_type = Integer.parseInt(crop_type);
+							i_crop_mod = Integer.parseInt(crop_mod);
+							i_crop_level = Integer.parseInt(crop_level);
 
-						if (i_crop_level > 0 && i_crop_level < 6) {
-							gMain.crop_level[i_crop_mod] = i_crop_level;
-							gMain.crop_type[i_crop_mod] = i_crop_type;
-						}else if (i_crop_level == 6 && i_crop_type == 1){ //cabbage
-							cabHarvestCount++;
-							gMain.cabHarvest = Integer.toString(cabHarvestCount);
-							Log.d("test","cab harvest: " + gMain.cabHarvest);
-						}else if(i_crop_level == 6 && i_crop_type == 2){ //strawberry
-							strawHarvestCount++;
-							gMain.strawHarvest = Integer.toString(strawHarvestCount);
-							Log.d("test","straw harvest: " + gMain.strawHarvest);
+							if (i_crop_level > 0 && i_crop_level < 6) {
+								gMain.crop_level[i_crop_mod] = i_crop_level;
+								gMain.crop_type[i_crop_mod] = i_crop_type;
+							}else if (i_crop_level == 6 && i_crop_type == 1){ //cabbage
+								cabHarvestCount++;
+								gMain.cabHarvest = Integer.toString(cabHarvestCount);
+								Log.d("test","cab harvest: " + gMain.cabHarvest);
+							}else if(i_crop_level == 6 && i_crop_type == 2){ //strawberry
+								strawHarvestCount++;
+								gMain.strawHarvest = Integer.toString(strawHarvestCount);
+								Log.d("test","straw harvest: " + gMain.strawHarvest);
+							}
 						}
+					}
+					
+					
+					//effect
+					if(fromWhere == EFFECT){
+						Log.d("test", "effect");
+						String cropSeq;
+						String request;
+						String isFinn;
+						//int i_cropSeq;
+						//int i_request;
+						//int i_isFinn;
+
+						for (int i = 0; i < JsonArr.length(); i++) {
+							JSONObject c = JsonArr.getJSONObject(i);
+							// Storing JSON item in a Variable
+
+							cropSeq = c.getString(CROPSEQ);
+							request = c.getString(REQUEST);
+							isFinn = c.getString(ISFINN);
+
+							//int i_cropSeq = Integer.parseInt(cropSeq);
+							//int i_request = Integer.parseInt(request);
+							//int i_isFinn = Integer.parseInt(isFinn);
+						}
+						//return;
+						
 					}
 					gMain.update_flag = true;
 				}

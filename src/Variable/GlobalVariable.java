@@ -10,6 +10,9 @@ public class GlobalVariable {
 	
 	public final static String push = url + "push_all.php";
 	
+	//effect
+	public final static String requestEffect = url + "requestEffect.php";
+	
 	public final static String getCropList= url + "getCropList.php";
 	public final static String insertCrop = url + "insertCrop.php";
 	public final static String getPoint = url + "getPoint.php";
