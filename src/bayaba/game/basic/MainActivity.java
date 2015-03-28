@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
@@ -18,13 +17,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-
 import Variable.GlobalVariable;
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -39,6 +33,8 @@ import android.view.WindowManager;
 import android.widget.Toast;
 import bayaba.engine.lib.GameInfo;
 import bayaba.game.chatting.ChatActivity;
+
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 public class MainActivity extends Activity {
 	private GLView play;
@@ -70,6 +66,7 @@ public class MainActivity extends Activity {
 	private static final int MARKETWEB = 7;
 	private static final int FARMWEB = 8;
 	private static final int STORAGE = 9;
+	private static final int PIC = 97;
 	private static final int NOTE = 98;
 	private static final int MESSAGE = 99;
 	private static final int POINTCHECK = 10;
@@ -136,19 +133,35 @@ public class MainActivity extends Activity {
   			Intent intent = new Intent(MainActivity.this, MarketWeb.class);                                                                                                                                             
 				startActivity(intent);
 			break;
+			
 		case FARMWEB:
 			//Execute activity below
   			Intent intent2 = new Intent(MainActivity.this, FarmWeb.class);                                                                                                                                             
 				startActivity(intent2);
 			break;
+			
 		case STORAGE:
 			new CropInfo(msg.what).execute();
 			Log.d("test","storage");
 			break;
+			
 		case NOTE:
 			modNum = Integer.toString(msg.arg1);
 			new CropInfo(msg.what).execute();
 			break;
+			
+			
+			
+		case PIC:
+			
+			//Toast.makeText(MainActivity.this, "hello", Toast.LENGTH_SHORT).show();
+			//new CropInfo(msg.what).execute();
+		
+			Intent intent3 = new Intent(MainActivity.this, PictureActivity.class);                                                                                                                                             
+			startActivity(intent3);
+			
+			break;
+			
 			
 		case MESSAGE:
 			modNum = Integer.toString(msg.arg1);
@@ -372,10 +385,11 @@ public class MainActivity extends Activity {
 					   Bundle args = new Bundle();
 	                   args.putString("mobno", "farmer"); 
 	                   args.putString("name", gMain.id); 
-	                   Intent chat = new Intent(MainActivity.this, NoteActivity.class);
-	                   chat.putExtra("INFO", args);
-	                   startActivity(chat);
+	                   Intent note = new Intent(MainActivity.this, NoteActivity.class);
+	                   note.putExtra("INFO", args);
+	                   startActivity(note);
 				   }
+				   
 				   else if (fromWhere == MESSAGE) {
 					   Bundle args = new Bundle();
 	                   args.putString("mobno", "farmer"); 
@@ -384,6 +398,8 @@ public class MainActivity extends Activity {
 	                   chat.putExtra("INFO", args);
 	                   startActivity(chat);
 				   }
+
+				 
 					   
 				} else {
 					

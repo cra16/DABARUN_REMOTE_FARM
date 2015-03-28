@@ -200,6 +200,14 @@ public class GameMain extends Activity {
 		}
 		
 		
+		//PPPPPP버튼 보이기용 지워야함3/27
+		temp = new ButtonObject();
+		temp.SetButton(chatBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, MENU_X + (2 * (MENU_XGAP-30)) + 180, MENU_Y-390, 1); 
+		chatButton.add(temp);
+		
+		
+		
+		
 		//로딩 
 		Message msg = mHandler.obtainMessage();
 		msg.what = 0;
@@ -229,7 +237,9 @@ public class GameMain extends Activity {
 		for (int i = 0; i < Button.size(); i++) {
 			Button.get(i).CheckButton(gInfo, push, TouchX, TouchY);
 			belowButton.get(i).CheckButton(gInfo, push, TouchX, TouchY);
-			if(i < 2)
+			
+			
+			if(i < 3)
 				chatButton.get(i).CheckButton(gInfo, push, TouchX, TouchY);
 			
 			if(belowButton.get(i).click == ButtonType.STATE_CLK_BUTTON){
@@ -304,26 +314,36 @@ public class GameMain extends Activity {
 			
 			
 			//a메세지 클릭 QQQQQQQQQQQQQQQQQQQQQQQQQ 고쳐야됨
-			if(i < 2)
-			{
-				if(chatButton.get(i).click == ButtonType.STATE_CLK_BUTTON){
-					if(i == 0) {
-						Message msg = ((MainActivity) MainContext).m_handler.obtainMessage();
-						msg.what = 99;  //message, case
-						msg.arg1 = modNum; 
-						((MainActivity) MainContext).m_handler.sendMessage(msg);
-					}
-					else if(i == 1) {
-						Message msg = ((MainActivity) MainContext).m_handler.obtainMessage();
-						msg.what = 98;  //message, case
-						msg.arg1 = modNum; 
-						((MainActivity) MainContext).m_handler.sendMessage(msg);
-					}
-					chatButton.get(i).ResetButton();
-				}
-			}
+			
 		}
 
+		for(int i =0 ; i<3; i++){
+		
+			if(chatButton.get(i).click == ButtonType.STATE_CLK_BUTTON){
+				if(i == 0) {
+					Message msg = ((MainActivity) MainContext).m_handler.obtainMessage();
+					msg.what = 99;  //message, case
+					msg.arg1 = modNum; 
+					((MainActivity) MainContext).m_handler.sendMessage(msg);
+				}
+				else if(i == 1) {
+					Message msg = ((MainActivity) MainContext).m_handler.obtainMessage();
+					msg.what = 98;  //message, case
+					msg.arg1 = modNum; 
+					((MainActivity) MainContext).m_handler.sendMessage(msg);
+				}
+				
+				else if(i == 2) {
+					Message msg = ((MainActivity) MainContext).m_handler.obtainMessage();
+					msg.what = 97;  //message, case
+					 
+					((MainActivity) MainContext).m_handler.sendMessage(msg);
+				}
+				
+				chatButton.get(i).ResetButton();
+			}
+		}
+		
 		if (push) {
 			/*빈 땅 이외의 곳을 클릭시 버튼 없어지게 */
 			for (int i = 0; i < 4; i++)
@@ -348,6 +368,11 @@ public class GameMain extends Activity {
 				}
 			}
 		}
+		
+		
+		
+		
+		
 	}
 
 
@@ -495,6 +520,14 @@ public class GameMain extends Activity {
 				chatButton.get(i).DrawSprite(mGL, 0, gInfo, font);
 				Button.get(i).DrawSprite(mGL, 0, gInfo, font); // 버튼들 그려주기
 			}
+			
+			
+			//PPPPPPPPP임시 사진 보기 버튼임 지워야함 
+			chatButton.get(2).DrawSprite(mGL, 0, gInfo, font);
+			
+		
+			
+			
 			
 			//팻말
 			signBtn.DrawSprite(mGL, 0, gInfo, font); 
