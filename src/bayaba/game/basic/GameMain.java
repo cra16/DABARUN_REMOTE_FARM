@@ -168,7 +168,7 @@ public class GameMain extends Activity {
 		cirBtnSpr.LoadSprite(mGL, MainContext, "button/circleBtn.spr");
 		chatBtnSpr.LoadSprite(mGL, MainContext,"button/chat2.spr");
 		signSpr.LoadSprite(mGL, MainContext,"sign/sign.spr");
-		effectSpr.LoadSprite(mGL, MainContext, "effect/effect.spr");
+		effectSpr.LoadSprite(mGL, MainContext, "effect/effect1.spr");
 		
 	
 				// 화면을 서서히 밝아지도록 설정한다.
@@ -592,8 +592,8 @@ public class GameMain extends Activity {
 		for(int cropNum = 0; cropNum<8; cropNum++)
 		{
 
-			EffectObj.x = EmptyList.get(cropNum).x;
-			EffectObj.y = EmptyList.get(cropNum).y;
+			EffectObj.x = EmptyList.get(cropNum).x+50;
+			EffectObj.y = EmptyList.get(cropNum).y-80;
 			
 			if(crop_effect[cropNum] == 1)
 			{
