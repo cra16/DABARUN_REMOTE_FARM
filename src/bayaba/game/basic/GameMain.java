@@ -100,8 +100,6 @@ public class GameMain extends Activity {
 	public Sprite signSpr = new Sprite(); //sign
 	public Sprite effectSpr = new Sprite();//effect test임
 	
-
-	public Sprite webImgSpr = new Sprite();
 	
 	
 	
@@ -120,8 +118,7 @@ public class GameMain extends Activity {
 	public GameObject EmptyObj = new GameObject(); // 빈땅입니다
 	public GameObject PointerObj = null;
 	public GameObject EffectObj= new GameObject();
-	public GameObject webImgObj = new GameObject(); 
-
+	
 	
 	
 	// 스프라이트 저장을 위한 배열, 화면 하단의 버튼들
@@ -173,12 +170,7 @@ public class GameMain extends Activity {
 		signSpr.LoadSprite(mGL, MainContext,"sign/sign.spr");
 		effectSpr.LoadSprite(mGL, MainContext, "effect/effect.spr");
 		
-		// 해당 주소의 이미지를 불러와서 800x480 사이즈로 로딩한다.
-				webImgSpr.LoadSpriteURL(mGL, MainContext, "http://211.39.253.201/uploads/popup.jpeg", 800, 480, 0);
-				
-				// 웹에서 불러들인 이미지를 사용해 GameObject를 설정한다.
-				webImgObj.SetObject(webImgSpr, 0, 0, 400, 240, 0, 0);
-
+	
 				// 화면을 서서히 밝아지도록 설정한다.
 				gInfo.Fade = 0f;
 				gInfo.SetFade(FadeList.FADE_IN, 0.01f);
@@ -584,9 +576,6 @@ public class GameMain extends Activity {
 				drawEffect();
 				
 			}
-			
-			// 웹이미지로 만들어진 GameObject를 화면에 그려준다.
-						webImgObj.DrawSprite(gInfo);
 						
 			
 			
