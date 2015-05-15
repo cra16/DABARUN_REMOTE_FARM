@@ -4,25 +4,38 @@ import java.io.InputStream;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
 
 
-public class PictureActivity extends Activity {
+public class PictureActivity extends Activity implements OnClickListener {
 
     ImageView my_img;
     Bitmap mybitmap;
     ProgressDialog pd;
+    Button closeBtn;
+    
+    
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.picture_activity);
+        closeBtn = (Button)findViewById(R.id.closeButton);
+        closeBtn.setOnClickListener(this);
+        
+        
+        
         new DisplayImageFromURL((ImageView) findViewById(R.id.my_image))
-                .execute("http://211.39.253.201/Dabarun/farmer/uploads/beach.jpg");
+                .execute("http://211.39.253.201/dabarunIMG/popup.jpeg");
 
     }
     private class DisplayImageFromURL extends AsyncTask<String, Void, Bitmap> {
@@ -61,4 +74,18 @@ public class PictureActivity extends Activity {
             pd.dismiss();
         }
     }
+	@Override
+	public void onClick(View v) {
+		if (v.getId() == R.id.closeButton) { 
+			
+
+			Intent intent = new Intent(PictureActivity.this, MainActivity.class);                                                                                                                                             
+			startActivity(intent);
+		
+			
+		} 
+		
+		
+		
+	}
 }

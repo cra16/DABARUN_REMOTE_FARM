@@ -28,6 +28,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.google.android.gcm.GCMRegistrar;
 //import bayaba.game.main.MenuMainActivity;
 
 //we do not use gcm in this java code.
@@ -80,7 +82,7 @@ public class LoginActivity extends Activity {
       		{
       			//Log.d("test", "auto login in");
       			//Execute activity below
-      			Intent intent = new Intent(LoginActivity.this, MainActivity.class);                                                                                                                                             
+      			Intent intent = new Intent(LoginActivity.this, PictureActivity.class);                                                                                                                                             
 				startActivity(intent);	
       		}
 
@@ -162,7 +164,7 @@ public class LoginActivity extends Activity {
   							spfEdit.commit();	//commit
 
   							//Execute activity below
-  		        			Intent intent = new Intent(LoginActivity.this, MainActivity.class);                                                                                                                                             
+  		        			Intent intent = new Intent(LoginActivity.this, PictureActivity.class);                                                                                                                                             
   							startActivity(intent);
   		        		}	        		
   		        		
@@ -178,7 +180,9 @@ public class LoginActivity extends Activity {
   	}
   	/* we do not use gcm in this code*/
   	
-  	/*public void registerGCM(String id 14.05.10����(ȸ�������ص��ǰ�)){
+  	
+  	/*
+  	public void registerGCM(String id){
 		GCMRegistrar.checkDevice(this);		// ���� �ٱ� Ŭ������ �־�ߵ� ������ ���� �ȵ�.
 		GCMRegistrar.checkManifest(this);
 		final String regId = GCMRegistrar.getRegistrationId(this);
@@ -207,7 +211,7 @@ public class LoginActivity extends Activity {
 			Log.d("test", "phid reg : "+result1);
 			
 			}catch(Exception e){}
-	}*/
+	}
   	//register ��
-  	
+  	*/
 }

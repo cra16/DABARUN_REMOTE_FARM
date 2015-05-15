@@ -18,6 +18,7 @@ import bayaba.engine.lib.GameInfo;
 import bayaba.engine.lib.GameObject;
 import bayaba.engine.lib.Sprite;
 import bayaba.engine.lib.UITool;
+import bayaba.engine.lib.GameInfo.FadeList;
 
 public class GameMain extends Activity {
 	//팝업 창
@@ -55,6 +56,8 @@ public class GameMain extends Activity {
 	public boolean popup_flag = false; /* 팝업을 띄울지 말지 판단하는 불린*/
 	public boolean storage_flag = false; //창고 팝업에 대한 불린
 	public boolean update_flag = false;
+	public boolean effect_flag = false;
+	
 	
 	//modNum 설정
 	public int modNum=-1; 
@@ -68,6 +71,8 @@ public class GameMain extends Activity {
 	public int[] crop_type = new int[8];
 	public int[] crop_level = new int[8];
 	public int[] crop_mod = new int[8];
+	public int[] crop_effect = new int[8];
+	
 	
 	public String id =  null; //login id
 	
@@ -93,6 +98,14 @@ public class GameMain extends Activity {
 	public Sprite cirBtnSpr = new Sprite();
 	public Sprite chatBtnSpr = new Sprite(); // 채팅과 쪽지함
 	public Sprite signSpr = new Sprite(); //sign
+	public Sprite effectSpr = new Sprite();//effect test임
+	
+
+	public Sprite webImgSpr = new Sprite();
+	
+	
+	
+	
 	
 	// object
 	public ButtonObject SuperBtn = new ButtonObject();
@@ -106,7 +119,11 @@ public class GameMain extends Activity {
 	public GameObject cabbageObj = new GameObject(); // 배추
 	public GameObject EmptyObj = new GameObject(); // 빈땅입니다
 	public GameObject PointerObj = null;
+	public GameObject EffectObj= new GameObject();
+	public GameObject webImgObj = new GameObject(); 
 
+	
+	
 	// 스프라이트 저장을 위한 배열, 화면 하단의 버튼들
 	private Sprite MenuSpr[] = new Sprite[5];
 	private Sprite ChatSpr[] = new Sprite[2];  //화면 상단 채팅과 쪽지함
@@ -142,20 +159,33 @@ public class GameMain extends Activity {
 	public void LoadGameData() // SurfaceClass에서 OpenGL이 초기화되면 최초로 호출되는 함수
 	{
 		// 게임 데이터를 로드합니다.
-		backSpr.LoadSprite(mGL, MainContext, "background/farmBackground.spr");
 		
+		
+		//sprite loading
+		backSpr.LoadSprite(mGL, MainContext, "background/farmBackground.spr");
 		emptySpr.LoadSprite(mGL, MainContext, "crop/empty.spr");
 		ButtonSpr.LoadSprite(mGL, MainContext, "button/button.spr");
-		
 		strawberrySpr.LoadSprite(mGL, MainContext, "crop/obj_strawberry.spr");  
 		cabbageSpr.LoadSprite(mGL, MainContext, "crop/obj_cabbage.spr");  
-		
 		menuSpr.LoadSprite(mGL, MainContext, "button/menuBtn.spr");
 		cirBtnSpr.LoadSprite(mGL, MainContext, "button/circleBtn.spr");
 		chatBtnSpr.LoadSprite(mGL, MainContext,"button/chat2.spr");
-		
 		signSpr.LoadSprite(mGL, MainContext,"sign/sign.spr");
+		effectSpr.LoadSprite(mGL, MainContext, "effect/effect.spr");
+		
+		// 해당 주소의 이미지를 불러와서 800x480 사이즈로 로딩한다.
+				webImgSpr.LoadSpriteURL(mGL, MainContext, "http://211.39.253.201/uploads/popup.jpeg", 800, 480, 0);
+				
+				// 웹에서 불러들인 이미지를 사용해 GameObject를 설정한다.
+				webImgObj.SetObject(webImgSpr, 0, 0, 400, 240, 0, 0);
 
+				// 화면을 서서히 밝아지도록 설정한다.
+				gInfo.Fade = 0f;
+				gInfo.SetFade(FadeList.FADE_IN, 0.01f);
+				
+				
+		EffectObj.SetObject(effectSpr, 0, 0, 400, 280, 0, 0);
+		
 		cropObj.SetObject(cropSpr, 0, 0, 400, 280, 0, 0);
 		cropObj.dead = true; // 농작물은 죽어있는 상태다. false로 바꿔줘야만 메인에서 그려준다.
 		
@@ -206,25 +236,16 @@ public class GameMain extends Activity {
 		chatButton.add(temp);
 		
 		
-		
-		
 		//로딩 
 		Message msg = mHandler.obtainMessage();
 		msg.what = 0;
 		((MainActivity) MainContext).m_handler.sendMessage(msg);
 		
-		
-		
-		//점수 가져오는 통신
-		
+		//점수 가져오기
 		Message msg2 = mHandler.obtainMessage();
 		msg2.what = 10;
 		((MainActivity) MainContext).m_handler.sendMessage(msg2);
 		
-	
-	
-	
-	
 	}
 
 	public void PushButton(boolean push) // OpenGL 화면에 터치가 발생하면 GLView에서 호출된다.
@@ -380,6 +401,11 @@ public class GameMain extends Activity {
 	public void DoGame() // 1/60초에 한번씩 SurfaceClass에서 호출된다. 게임의 코어 부분을 넣는다.
 	{
 		synchronized (mGL) {
+			
+			
+			// 화면을 서서히 밝아지도록 한다.
+			gInfo.DoFade();
+			
 			font.BeginFont(gInfo);
 			cabFont.BeginFont(gInfo);
 			strawFont.BeginFont(gInfo);
@@ -554,9 +580,50 @@ public class GameMain extends Activity {
 				MainUI.Draw(mGL, gInfo, font);
 			
 			
+			if(effect_flag == true){
+				drawEffect();
+				
+			}
+			
+			// 웹이미지로 만들어진 GameObject를 화면에 그려준다.
+						webImgObj.DrawSprite(gInfo);
+						
+			
+			
 			//strawFont.EndFont(gInfo);
 			//cabFont.EndFont(gInfo);
 			font.EndFont(gInfo);
 		}
 	}
+	
+	
+	public void drawEffect(){
+		
+		
+		for(int cropNum = 0; cropNum<8; cropNum++)
+		{
+
+			EffectObj.x = EmptyList.get(cropNum).x;
+			EffectObj.y = EmptyList.get(cropNum).y;
+			
+			if(crop_effect[cropNum] == 1)
+			{
+				
+				
+				
+				EffectObj.DrawSprite(gInfo);
+				EffectObj.AddFrameLoop(0.1f);
+			}
+			
+		}
+		
+		
+		
+	}
+	
+	
+	
+	
+	
+	
 }

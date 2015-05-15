@@ -28,8 +28,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 import bayaba.engine.lib.GameInfo;
 import bayaba.game.chatting.ChatActivity;
@@ -37,6 +40,7 @@ import bayaba.game.chatting.ChatActivity;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 public class MainActivity extends Activity {
+	
 	private GLView play;
 	private GameMain gMain;
 	public GameInfo gInfo;
@@ -71,6 +75,8 @@ public class MainActivity extends Activity {
 	private static final int MESSAGE = 99;
 	private static final int POINTCHECK = 10;
 	
+	
+	
 	public String modNum;
 	public int cabHarvestCount = 0;
 	public int strawHarvestCount = 0;
@@ -92,6 +98,8 @@ public class MainActivity extends Activity {
 		switch (msg.what) {
 
 		case LOADING:
+			
+			gMain.effect_flag = true;
 			new CropInfo(msg.what).execute();
 			break;
 
@@ -208,10 +216,17 @@ public class MainActivity extends Activity {
 		
 		new Register().execute();
 
+		
 		setContentView(play);
+		initPopup();
 		
 		
 	}
+	
+	
+	
+	
+	
 	
 	  @Override
 	    public void onBackPressed() {
@@ -435,17 +450,21 @@ public class MainActivity extends Activity {
 //							getPoint = c.getString(POINT);
 //						}
 //					}
-					
+					/* QQQQQQQQQQQ 아래에 temp쓰면 저렇게 많은 변수 필요없는데 ㅋㅋㅋ*/
 					/* 통신이 정상적이면 파싱하여 정보를 빼낸다 */
 					JsonArr = json.getJSONArray(RESULT);
 
 					String crop_type;
 					String crop_mod;
 					String crop_level;
+					String crop_effect;
+					
 					int i_crop_type;
 					int i_crop_mod;
 					int i_crop_level;
-
+					int i_crop_effect;
+					
+					
 					for (int i = 0; i < JsonArr.length(); i++) {
 						JSONObject c = JsonArr.getJSONObject(i);
 						// Storing JSON item in a Variable
@@ -453,19 +472,25 @@ public class MainActivity extends Activity {
 						crop_type = c.getString(TYPE);
 						crop_mod = c.getString(MODULE);
 						crop_level = c.getString(LEVEL);
+						crop_effect = c.getString("effect");
+						
 
 						i_crop_type = Integer.parseInt(crop_type);
 						i_crop_mod = Integer.parseInt(crop_mod);
 						i_crop_level = Integer.parseInt(crop_level);
-
+						i_crop_effect = Integer.parseInt(crop_effect);
+						
+						
 						if (i_crop_level > 0 && i_crop_level < 6) {
 							gMain.crop_level[i_crop_mod] = i_crop_level;
 							gMain.crop_type[i_crop_mod] = i_crop_type;
-						}else if (i_crop_level == 6 && i_crop_type == 1){ //cabbage
+							gMain.crop_effect[i_crop_mod] = i_crop_effect;
+							
+						}else if (i_crop_level == 6 && i_crop_type == 1){ //cabbage 수확
 							cabHarvestCount++;
 							gMain.cabHarvest = Integer.toString(cabHarvestCount);
 							Log.d("test","cab harvest: " + gMain.cabHarvest);
-						}else if(i_crop_level == 6 && i_crop_type == 2){ //strawberry
+						}else if(i_crop_level == 6 && i_crop_type == 2){ //strawberry 수확
 							strawHarvestCount++;
 							gMain.strawHarvest = Integer.toString(strawHarvestCount);
 							Log.d("test","straw harvest: " + gMain.strawHarvest);
@@ -530,6 +555,14 @@ public class MainActivity extends Activity {
         }
     }
 	
+	public void initPopup(){
+		
+		PopupWindow popup;
+		LinearLayout layoutOfPopup = new LinearLayout(this); 
+		popup = new PopupWindow(layoutOfPopup, LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT); 
+		popup.setContentView(layoutOfPopup); 
+		
+	}
 	
 	
 }
