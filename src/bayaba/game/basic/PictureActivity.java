@@ -35,7 +35,7 @@ public class PictureActivity extends Activity implements OnClickListener {
         
         
         new DisplayImageFromURL((ImageView) findViewById(R.id.my_image))
-                .execute("http://211.39.253.201/dabarunIMG/popup.jpeg");
+                .execute("http://211.39.253.201/vekelab/dabarunIMG/popup.jpeg");
 
     }
     private class DisplayImageFromURL extends AsyncTask<String, Void, Bitmap> {
