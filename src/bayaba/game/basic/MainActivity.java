@@ -480,7 +480,7 @@ public class MainActivity extends Activity {
 						i_crop_level = Integer.parseInt(crop_level);
 						i_crop_effect = Integer.parseInt(crop_effect);
 						
-						
+						//제대로된 농작물 튜플이면
 						if (i_crop_level > 0 && i_crop_level < 6) {
 							gMain.crop_level[i_crop_mod] = i_crop_level;
 							gMain.crop_type[i_crop_mod] = i_crop_type;
@@ -538,16 +538,23 @@ public class MainActivity extends Activity {
         protected void onPostExecute(JSONObject json) {
              try {
             	 if(json != null){
-	                 String res = json.getString("response");
-	                 if(res.equals("Sucessfully Registered")) {
+	
+            		 String res = json.getString("response");
+	                 
+            		 if(res.equals("Sucessfully Registered")) 
+	                 {
 	                	 Toast.makeText(MainActivity.this,"Registered",Toast.LENGTH_SHORT).show();
-	                 }else{
+	                 }
+	                 else
+	                 {
 	                     Toast.makeText(MainActivity.this,res,Toast.LENGTH_SHORT).show();
 	                 }
+	                 
                  	 SharedPreferences.Editor edit = prefs.edit();
                      edit.putString("REG_FROM", prefs.getString(GlobalVariable.SPF_ID, ""));	// ������ ���Ⱑ mobno
                      edit.putString("FROM_NAME", prefs.getString(GlobalVariable.SPF_ID, ""));
                      edit.commit();
+                     
                  }
             	 else
             		 Toast.makeText(MainActivity.this,"JSON NULL in ChatActivity, Register ",Toast.LENGTH_SHORT).show();

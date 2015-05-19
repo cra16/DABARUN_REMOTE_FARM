@@ -20,7 +20,7 @@ public class FarmWeb extends Activity{
 		// 웹뷰에서 자바스크립트실행가능
 		mWebView.getSettings().setJavaScriptEnabled(true); 
 		// 구글홈페이지 지정
-	    mWebView.loadUrl("http://www.google.com");
+	    mWebView.loadUrl("http://strongegg.com");
 	    // WebViewClient 지정
 	    mWebView.setWebViewClient(new WebViewClientClass());  
 		

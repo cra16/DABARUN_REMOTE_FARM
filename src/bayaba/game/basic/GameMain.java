@@ -57,7 +57,7 @@ public class GameMain extends Activity {
 	public boolean storage_flag = false; //창고 팝업에 대한 불린
 	public boolean update_flag = false;
 	public boolean effect_flag = false;
-	
+	public int count = 0;
 	
 	//modNum 설정
 	public int modNum=-1; 
@@ -572,11 +572,13 @@ public class GameMain extends Activity {
 				MainUI.Draw(mGL, gInfo, font);
 			
 			
-			if(effect_flag == true){
+			if(effect_flag == true && count < 180){
 				drawEffect();
+				count++;
+				
 				
 			}
-						
+			
 			
 			
 			//strawFont.EndFont(gInfo);
@@ -601,8 +603,14 @@ public class GameMain extends Activity {
 				
 				
 				EffectObj.DrawSprite(gInfo);
-				EffectObj.AddFrameLoop(0.1f);
+				EffectObj.AddFrame(0.1f);
+				
 			}
+			
+			
+			
+			
+			
 			
 		}
 		
