@@ -208,7 +208,7 @@ public class GameMain extends Activity {
 		cabbageSpr.LoadSprite(mGL, MainContext, "crop/obj_cabbage.spr");  
 		menuSpr.LoadSprite(mGL, MainContext, "button/menuBtn.spr");
 		cirBtnSpr.LoadSprite(mGL, MainContext, "button/circleBtn.spr");
-		chatBtnSpr.LoadSprite(mGL, MainContext,"button/chat2.spr");
+		chatBtnSpr.LoadSprite(mGL, MainContext,"button/chatBtn.spr");
 		signSpr.LoadSprite(mGL, MainContext,"sign/sign.spr");
 		effectSpr.LoadSprite(mGL, MainContext, "effect/effect1.spr");
 		cloudSpr.LoadSprite(mGL, MainContext, "background/cloud.spr");
@@ -257,17 +257,12 @@ public class GameMain extends Activity {
 		}
 		
 		//화면 상단의 쪽지함과 채팅
-		for (int motion = 0; motion < 2; motion++) {
+		for (int motion = 0; motion < 3; motion++) {
 			temp = new ButtonObject();
 			temp.SetButton(chatBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, MENU_X + (motion * (MENU_XGAP-30)) + 180, MENU_Y-390, motion); 
 			chatButton.add(temp);
 		}
 		
-		
-		//PPPPPP버튼 보이기용 지워야함3/27
-		temp = new ButtonObject();
-		temp.SetButton(chatBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, MENU_X + (2 * (MENU_XGAP-30)) + 180, MENU_Y-390, 1); 
-		chatButton.add(temp);
 		
 		
 		//로딩 
