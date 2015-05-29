@@ -109,7 +109,7 @@ public class GameMain extends Activity {
 	public Sprite chatBtnSpr = new Sprite(); // 채팅과 쪽지함
 	public Sprite signSpr = new Sprite(); //sign
 	public Sprite effectSpr = new Sprite();//effect test임
-	
+	Sprite cloudSpr = new Sprite();
 	
 	
 	
@@ -148,6 +148,31 @@ public class GameMain extends Activity {
 
 	//화면 상단의 채팅과 쪽지함
 	public ArrayList<ButtonObject> chatButton = new ArrayList<ButtonObject>();
+	ArrayList<GameObject> Cloud = new ArrayList<GameObject>();
+	
+	long CloudTimer = 0;
+	
+	
+	void MakeCloud(){
+		
+		if (System.currentTimeMillis() - CloudTimer >= 50000) //50초마다 
+		
+		{
+			for (int i = 0; i < 6; i++) 
+			{
+				GameObject temp = new GameObject();
+				temp.SetObject(cloudSpr, 0, 0, MyRand.nextInt(70) + (i * 120) -100, 15 + MyRand.nextInt(70), 0, 0); 
+				
+				 
+				
+				Cloud.add(temp);
+			}
+			CloudTimer = System.currentTimeMillis(); //타이머 리셋
+		}
+	}
+	
+	
+
 	
 	//클래스 생성자 (메인 엑티비티에서 호출)
 	public GameMain(Context context, GameInfo info, Handler p_Handler) 
@@ -186,7 +211,7 @@ public class GameMain extends Activity {
 		chatBtnSpr.LoadSprite(mGL, MainContext,"button/chat2.spr");
 		signSpr.LoadSprite(mGL, MainContext,"sign/sign.spr");
 		effectSpr.LoadSprite(mGL, MainContext, "effect/effect1.spr");
-		
+		cloudSpr.LoadSprite(mGL, MainContext, "background/cloud.spr");
 	
 				// 화면을 서서히 밝아지도록 설정한다.
 				gInfo.Fade = 0f;
@@ -544,6 +569,29 @@ public class GameMain extends Activity {
 				}
 			}
 			
+			for (int i = 0; i <Cloud.size(); i++) 
+			{
+				Cloud.get(i).x += 0.2f;
+
+				Cloud.get(i).DrawSprite(gInfo);
+				if(Cloud.get(i).x >800)
+					Cloud.remove(i--);
+			}
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+
+			
+			////////////////////여기부터 팝업 등 UI임. 게임 관련은 위쪽에 작성
+			
+			
 			// 버튼들 그려주기
 			for (int i = 0; i < 4; i++) {
 				belowButton.get(i).DrawSprite(mGL, 0, gInfo, font);
@@ -572,6 +620,9 @@ public class GameMain extends Activity {
 			font.DrawColorFont(mGL, 50, 430, 1, 1, 1, 40f, userPoint);
 
 			
+			
+			
+			
 			//창고 팝업 그려주기
 			if (storage_flag == true){
 				StorageUI.Draw(mGL, gInfo, font);
@@ -596,7 +647,7 @@ public class GameMain extends Activity {
 				
 			}
 			
-			
+			MakeCloud();
 			
 			//strawFont.EndFont(gInfo);
 			//cabFont.EndFont(gInfo);
