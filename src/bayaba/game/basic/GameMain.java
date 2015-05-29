@@ -3,8 +3,11 @@
 //
 package bayaba.game.basic;
 
+import android.media.MediaPlayer;
 import android.os.Handler; //handler
 import android.os.Message;
+import android.os.Vibrator;
+
 import java.util.ArrayList;
 import java.util.Random;
 import javax.microedition.khronos.opengles.GL10;
@@ -19,6 +22,7 @@ import bayaba.engine.lib.GameObject;
 import bayaba.engine.lib.Sprite;
 import bayaba.engine.lib.UITool;
 import bayaba.engine.lib.GameInfo.FadeList;
+
 
 public class GameMain extends Activity {
 	//팝업 창
@@ -44,6 +48,12 @@ public class GameMain extends Activity {
 
 	}
 
+	
+	private MediaPlayer Music; // 음악을 연주하기 위한 객체
+	private Vibrator Vibe; // 진동을 주기 위한 객체
+
+	private int SndBuff[] = new int [20]; // 사운드를 로딩하기 위한 배열
+	
 	private static final int CROP_X = 150;
 	private static final int CROP_Y = 280;
 	private static final int CROP_XGAP = 150;
@@ -146,6 +156,13 @@ public class GameMain extends Activity {
 		gInfo = info; // 메인 액티비티에서 생성된 클래스를 가져온다.
 		mHandler = p_Handler; // 메인 액티비티에서 생성된 핸들러를 가져온다.
 
+		Music = MediaPlayer.create(context, R.raw.sand_castles);
+		Music.setLooping(true);
+		
+		Music.start();
+		
+		
+		
 		for (int i = 0; i < MenuSpr.length; i++)
 			MenuSpr[i] = new Sprite(); // 스프라이트용 배열 초기화
 		
