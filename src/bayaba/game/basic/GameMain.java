@@ -603,7 +603,7 @@ public class GameMain extends Activity {
 				
 				
 				EffectObj.DrawSprite(gInfo);
-				EffectObj.AddFrame(0.1f);
+				EffectObj.AddFrameLoop(0.1f);
 				
 			}
 			
