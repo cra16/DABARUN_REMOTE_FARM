@@ -395,7 +395,9 @@ public class GameMain extends Activity {
 		}
 		
 		if (push) {
-			/*빈 땅 이외의 곳을 클릭시 버튼 없어지게 */
+			
+			/*빈 땅 이외의 곳을 클릭시 버튼 없어지게 함 
+			 *터치도 안되게 해야되는데????*/
 			for (int i = 0; i < 4; i++)
 				Button.get(i).show = false;
 
@@ -407,9 +409,9 @@ public class GameMain extends Activity {
 					
 					modNum =i;
 					
-					Button.get(0).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x + 80, Current.y, 0);//심기
+					Button.get(0).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x + 45, Current.y, 0);//심기
 					Button.get(1).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x, Current.y - 45, 1);//거름
-					Button.get(2).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x - 80, Current.y, 2);//물
+					Button.get(2).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x - 45, Current.y, 2);//물
 					Button.get(3).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x, Current.y + 45, 3);//잡초
 					
 					for(int j=0; j<4; j++)
@@ -594,16 +596,11 @@ public class GameMain extends Activity {
 			}
 			
 			// 버튼들(쪽지함 채팅) 그려주기
-			for (int i = 0; i < 2; i++) {
+			for (int i = 0; i < 3; i++) {
 				chatButton.get(i).DrawSprite(mGL, 0, gInfo, font);
 				Button.get(i).DrawSprite(mGL, 0, gInfo, font); // 버튼들 그려주기
 			}
 			
-			
-			//PPPPPPPPP임시 사진 보기 버튼임 지워야함 
-			chatButton.get(2).DrawSprite(mGL, 0, gInfo, font);
-			
-		
 			
 			
 			
@@ -670,20 +667,8 @@ public class GameMain extends Activity {
 				
 			}
 			
-			
-			
-			
-			
-			
 		}
-		
-		
-		
+			
 	}
-	
-	
-	
-	
-	
-	
+		
 }

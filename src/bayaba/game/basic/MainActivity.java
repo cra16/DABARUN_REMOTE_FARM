@@ -388,13 +388,13 @@ public class MainActivity extends Activity {
 				/* 통신이 정상적이지 않으면 */
 				if (json == null) {
 				   if (fromWhere == WATER)
-						Toast.makeText(MainActivity.this, "water",
+						Toast.makeText(MainActivity.this, "물주기 요청",
 								Toast.LENGTH_SHORT).show();
 				   else if (fromWhere == FERTLIZER)
-						Toast.makeText(MainActivity.this, "fertilizer",
+						Toast.makeText(MainActivity.this, "거름주기 요청",
 								Toast.LENGTH_SHORT).show();
 				   else if (fromWhere == WEED)
-						Toast.makeText(MainActivity.this, "weed",
+						Toast.makeText(MainActivity.this, "잡초제거 요청",
 								Toast.LENGTH_SHORT).show();
 				   else if (fromWhere == NOTE) {
 					   Bundle args = new Bundle();
@@ -541,7 +541,7 @@ public class MainActivity extends Activity {
 	
             		 String res = json.getString("response");
 	                 
-            		 if(res.equals("Sucessfully Registered")) 
+            		 if(res.equals("로딩 완료")) 
 	                 {
 	                	 Toast.makeText(MainActivity.this,"Registered",Toast.LENGTH_SHORT).show();
 	                 }
