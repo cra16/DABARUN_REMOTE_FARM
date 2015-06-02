@@ -73,8 +73,8 @@ public class GameMain extends Activity {
 	public int modNum=-1; 
 	//public int cabHarvest = 0;
 	//public int strawHarvest = 0;
-	public String cabHarvest = null;
-	public String strawHarvest = null;
+	public String cabHarvest = "0";
+	public String strawHarvest = "0";
 	public String userPoint = null;
 	
 	
@@ -659,8 +659,6 @@ public class GameMain extends Activity {
 			
 			if(crop_effect[cropNum] == 1)
 			{
-				
-				
 				
 				EffectObj.DrawSprite(gInfo);
 				EffectObj.AddFrameLoop(0.1f);
