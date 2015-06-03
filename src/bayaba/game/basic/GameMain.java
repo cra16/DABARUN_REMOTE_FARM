@@ -26,13 +26,25 @@ import bayaba.engine.lib.GameInfo.FadeList;
 
 public class GameMain extends Activity {
 	//팝업 창
-	static class Select {
-		static class Group0 {
-			static final int POPUP_000 = 0;
-			static final int ONE_CLICK_001 = 1;
-			static final int ONE_CLICK_002 = 2;
-			static final int ONE_CLICK_003 = 3;
+//	static class Select {
+//		static class Group0 {
+//			static final int POPUP_000 = 0;
+//			static final int ONE_CLICK_001 = 1;
+//			static final int ONE_CLICK_002 = 2;
+//			static final int ONE_CLICK_003 = 3;
+//		}
+//	}
+	
+	static class UIButtonClass
+	{
+		static class Group0
+		{
+			static final int	POPUP_000		=	0;
+			static final int	ONE_CLICK_001		=	1;
+			static final int	ONE_CLICK_002		=	2;
+			static final int	ONE_CLICK_003		=	3;
 		}
+
 	}
 	
 	//창고 팝업 창
@@ -193,8 +205,6 @@ public class GameMain extends Activity {
 		for (int i = 0; i < ChatSpr.length; i++) //채팅과 쪽지함
 			ChatSpr[i] = new Sprite(); // 스프라이트용 배열 초기화
 		
-//		if(music_flag == true)
-//			Music.pause();
 	}
 
 	public void LoadGameData() // SurfaceClass에서 OpenGL이 초기화되면 최초로 호출되는 함수
@@ -225,7 +235,7 @@ public class GameMain extends Activity {
 		cropObj.dead = true; // 농작물은 죽어있는 상태다. false로 바꿔줘야만 메인에서 그려준다.
 		
 		// ui 적용
-		MainUI.LoadUI(mGL, MainContext, "UI/UIPack.ui"); // UI 파일을 로드한다.
+		MainUI.LoadUI(mGL, MainContext, "UI/Choice.ui"); // UI 파일을 로드한다.
 		MainUI.AddGroup(0, 1); /* 이걸 해주지 않으면 쓰레기값이 열리게 되더라.. */
 		
 		// ui 적용
@@ -421,11 +431,6 @@ public class GameMain extends Activity {
 				}
 			}
 		}
-		
-		
-		
-		
-		
 	}
 
 
@@ -453,7 +458,7 @@ public class GameMain extends Activity {
 			for (int i = 0; i < MainUI.UIList.size(); i++) {
 				
 				//취소버튼
-				if ((MainUI.UIList.get(i).index == Select.Group0.ONE_CLICK_001)
+				if ((MainUI.UIList.get(i).index == UIButtonClass.Group0.ONE_CLICK_001)
 						&& (MainUI.UIList.get(i).click == ButtonType.STATE_CLK_BUTTON)) {
 					//popup_flag = false;
 					
@@ -461,7 +466,7 @@ public class GameMain extends Activity {
 					MainUI.DeleteLastGroup(gInfo);
 
 				//배추 버튼	
-				}else if((MainUI.UIList.get(i).index == Select.Group0.ONE_CLICK_002)
+				}else if((MainUI.UIList.get(i).index == UIButtonClass.Group0.ONE_CLICK_002)
 						&& (MainUI.UIList.get(i).click == ButtonType.STATE_CLK_BUTTON)){
 					
 					//배추 버튼을 누르면  object 보임
@@ -486,7 +491,7 @@ public class GameMain extends Activity {
 					MainUI.DeleteLastGroup(gInfo);
 					
 				//딸기 버튼	
-				}else if((MainUI.UIList.get(i).index == Select.Group0.ONE_CLICK_003)
+				}else if((MainUI.UIList.get(i).index == UIButtonClass.Group0.ONE_CLICK_003)
 						&& (MainUI.UIList.get(i).click == ButtonType.STATE_CLK_BUTTON)){
 					//딸기 버튼을 누르면  object 보임
 					CropList.get(modNum).dead = false;
@@ -514,7 +519,7 @@ public class GameMain extends Activity {
 			for (int i = 0; i < StorageUI.UIList.size(); i++) {
 				
 				//취소버튼
-				if ((StorageUI.UIList.get(i).index == Select.Group0.ONE_CLICK_003)
+				if ((StorageUI.UIList.get(i).index == UIButtonClass.Group0.ONE_CLICK_003)
 						&& (StorageUI.UIList.get(i).click == ButtonType.STATE_CLK_BUTTON)) {
 					StorageUI.UIList.get(i).ResetButton();
 					StorageUI.DeleteLastGroup(gInfo);
