@@ -55,9 +55,9 @@ public class GameMain extends Activity {
 	private int SndBuff[] = new int [20]; // 사운드를 로딩하기 위한 배열
 	
 	private static final int CROP_X = 150;
-	private static final int CROP_Y = 280;
+	private static final int CROP_Y = 250;
 	private static final int CROP_XGAP = 150;
-	private static final int CROP_YGAP = 80;
+	private static final int CROP_YGAP = 110;
 	
 	private static final int MENU_X = 400;
 	private static final int MENU_Y = 430;
@@ -283,6 +283,35 @@ public class GameMain extends Activity {
 		MainUI.Touch(gInfo, (int) TouchX, (int) TouchY, push);
 		StorageUI.Touch(gInfo, (int) TouchX, (int) TouchY, push);
 		
+		if (push) {
+			
+			/*빈 땅 이외의 곳을 클릭시 버튼 없어지게 함 
+			 *터치도 안되게 해야되는데????*/
+			for (int i = 0; i < 4; i++)
+				Button.get(i).show = false;
+
+			
+			/* 빈땅 터치 체크 -> 4개버튼 활성화*/
+			for (int i = 0; i < EmptyList.size(); i++) 
+			{
+				if (EmptyList.get(i).CheckPos((int) TouchX, (int) TouchY))
+				{
+					Current = EmptyList.get(i); /* current : 터치된 오브젝트 */
+					
+					modNum =i;
+					
+					Button.get(0).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x - 90, Current.y - 55, 0);//심기
+					Button.get(1).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x - 30, Current.y - 55, 1);//거름
+					Button.get(2).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x + 30 , Current.y -55, 2);//물
+					Button.get(3).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x + 90, Current.y - 55, 3);//잡초
+					
+					for(int j=0; j<4; j++)
+						Button.get(j).show = true;
+					
+				}
+			}
+		}
+		
 		/* 십자 버튼 체크 */
 		for (int i = 0; i < Button.size(); i++) {
 			Button.get(i).CheckButton(gInfo, push, TouchX, TouchY);
@@ -394,32 +423,7 @@ public class GameMain extends Activity {
 			}
 		}
 		
-		if (push) {
-			
-			/*빈 땅 이외의 곳을 클릭시 버튼 없어지게 함 
-			 *터치도 안되게 해야되는데????*/
-			for (int i = 0; i < 4; i++)
-				Button.get(i).show = false;
-
-			for (int i = 0; i < EmptyList.size(); i++) /* 모든 빈땅 어레이리스트를 체크한다 */
-			{
-				if (EmptyList.get(i).CheckPos((int) TouchX, (int) TouchY))
-				{
-					Current = EmptyList.get(i); /* current : 터치된 오브젝트 */
-					
-					modNum =i;
-					
-					Button.get(0).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x + 45, Current.y, 0);//심기
-					Button.get(1).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x, Current.y - 45, 1);//거름
-					Button.get(2).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x - 45, Current.y, 2);//물
-					Button.get(3).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x, Current.y + 45, 3);//잡초
-					
-					for(int j=0; j<4; j++)
-						Button.get(j).show = true;
-					
-				}
-			}
-		}
+		
 		
 		
 		
@@ -566,6 +570,8 @@ public class GameMain extends Activity {
 				}
 			}
 			
+			
+			//구름 그리기
 			for (int i = 0; i <Cloud.size(); i++) 
 			{
 				Cloud.get(i).x += 0.2f;
@@ -589,16 +595,16 @@ public class GameMain extends Activity {
 			////////////////////여기부터 팝업 등 UI임. 게임 관련은 위쪽에 작성
 			
 			
-			// 버튼들 그려주기
+			// 아래 버튼, 4개버튼 
 			for (int i = 0; i < 4; i++) {
 				belowButton.get(i).DrawSprite(mGL, 0, gInfo, font);
-				Button.get(i).DrawSprite(mGL, 0, gInfo, font); // 버튼들 그려주기
+				Button.get(i).DrawSprite(mGL, 0, gInfo, font);
 			}
 			
-			// 버튼들(쪽지함 채팅) 그려주기
+			// 채팅,쪽지함,사진보기 버튼 
 			for (int i = 0; i < 3; i++) {
 				chatButton.get(i).DrawSprite(mGL, 0, gInfo, font);
-				Button.get(i).DrawSprite(mGL, 0, gInfo, font); // 버튼들 그려주기
+				
 			}
 			
 			
@@ -631,7 +637,7 @@ public class GameMain extends Activity {
 			if (popup_flag == true)
 				MainUI.Draw(mGL, gInfo, font);
 			
-			
+			//이펙트 
 			if(effect_flag == true && count < 180){
 				drawEffect();
 				count++;
