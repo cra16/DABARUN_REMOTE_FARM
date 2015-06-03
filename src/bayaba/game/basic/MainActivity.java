@@ -263,14 +263,10 @@ public class MainActivity extends Activity {
 		@Override
 		protected JSONObject doInBackground(String... params) {
 			//Log.d("test", "doInBackground");
-
-			// retrieve user info from shared preference
-			SharedPreferences spf = getSharedPreferences(GlobalVariable.DABARUNUSER, 0);
 			// session key value
 
 			// 프리퍼런스 가져오기(자동로그인 사용)
-			String id = spf.getString(GlobalVariable.SPF_ID, "");
-			gMain.id = id;
+			gMain.id = prefs.getString(GlobalVariable.SPF_ID, "");;
 			// Log.d("test", "id mainActivity "+ id);
 
 			try {
@@ -286,59 +282,56 @@ public class MainActivity extends Activity {
 					/* QQQQQQ song 대신에 아이디가 들어가야 한다 */
 					/* getCropList 최초 로딩시 불러진다 */
 					case LOADING:
-						idValuePair.add(new BasicNameValuePair("id", id));
+						idValuePair.add(new BasicNameValuePair("id", gMain.id));
 						httpPost1 = new HttpPost(GlobalVariable.getCropList);
 						break;
 
 					case CABB:
 						// 배추
-						idValuePair.add(new BasicNameValuePair("id", id));
+						idValuePair.add(new BasicNameValuePair("id", gMain.id));
 						idValuePair.add(new BasicNameValuePair("type", "1"));
-						idValuePair
-								.add(new BasicNameValuePair("modNum", modNum));
+						idValuePair.add(new BasicNameValuePair("modNum", modNum));
 						idValuePair.add(new BasicNameValuePair("point", "500"));
 						httpPost1 = new HttpPost(GlobalVariable.insertCrop);
 						break;
 					case STRAW:
 						// 딸기
-						idValuePair.add(new BasicNameValuePair("id", id));
+						idValuePair.add(new BasicNameValuePair("id", gMain.id));
 						idValuePair.add(new BasicNameValuePair("type", "2"));
-						idValuePair
-								.add(new BasicNameValuePair("modNum", modNum));
-						idValuePair
-								.add(new BasicNameValuePair("point", "1000"));
+						idValuePair.add(new BasicNameValuePair("modNum", modNum));
+						idValuePair.add(new BasicNameValuePair("point", "1000"));
 						httpPost1 = new HttpPost(GlobalVariable.insertCrop);
 						break;
 					case FERTLIZER:
-						idValuePair.add(new BasicNameValuePair("id", id));
+						idValuePair.add(new BasicNameValuePair("id", gMain.id));
 						idValuePair.add(new BasicNameValuePair("modNum", modNum));
 						idValuePair.add(new BasicNameValuePair("request", "2"));
 						httpPost1 = new HttpPost(GlobalVariable.insertRequest);
 						break;
 					case WATER:
-						idValuePair.add(new BasicNameValuePair("id", id));
+						idValuePair.add(new BasicNameValuePair("id", gMain.id));
 						idValuePair.add(new BasicNameValuePair("modNum", modNum));
 						idValuePair.add(new BasicNameValuePair("request", "1"));
 						httpPost1 = new HttpPost(GlobalVariable.insertRequest);
 						break;
 					case WEED:
-						idValuePair.add(new BasicNameValuePair("id", id));
+						idValuePair.add(new BasicNameValuePair("id", gMain.id));
 						idValuePair.add(new BasicNameValuePair("modNum", modNum));
 						idValuePair.add(new BasicNameValuePair("request", "3"));
 						httpPost1 = new HttpPost(GlobalVariable.insertRequest);
 						break;
 					case STORAGE:
-						idValuePair.add(new BasicNameValuePair("id", id));
+						idValuePair.add(new BasicNameValuePair("id", gMain.id));
 						httpPost1 = new HttpPost(GlobalVariable.getCropList);
 						storage_flag = true;
 						break;
 					case MESSAGE:
-						idValuePair.add(new BasicNameValuePair("id", id));
+						idValuePair.add(new BasicNameValuePair("id", gMain.id));
 						httpPost1 = new HttpPost(GlobalVariable.chatLogin);
 						break;
 						
 					case POINTCHECK:
-						idValuePair.add(new BasicNameValuePair("id", id));
+						idValuePair.add(new BasicNameValuePair("id", gMain.id));
 						httpPost1 = new HttpPost(GlobalVariable.getPoint);
 						Log.d("test", "point switch");
 						break;
@@ -364,6 +357,7 @@ public class MainActivity extends Activity {
 
 					// Log.d("test", "after execute : " + result2);
 					result2 = result2.trim().toString();
+					Log.d("test", "Main result2 : "+result2);
 					// Toast.makeText( MainActivity.this, result2,
 					// Toast.LENGTH_SHORT ).show();
 					// Log.d("test", "result : " + result2);
@@ -416,7 +410,13 @@ public class MainActivity extends Activity {
 
 				 
 					   
-				} else {
+				}else if("requestExist".equals(json.getString("result"))){
+					/// 만약에 이전에 한 요청이 존재하는 경우.
+					Toast.makeText(MainActivity.this, "요청을 이미 하셨습니다.", Toast.LENGTH_SHORT).show();
+					return;
+				}
+				
+				else {
 					
 					Log.d("test", "else");
 
