@@ -74,7 +74,7 @@ public class MainActivity extends Activity {
 	private static final int NOTE = 98;
 	private static final int MESSAGE = 99;
 	private static final int POINTCHECK = 10;
-	
+	private static final int LACKPOINT = 123;
 	
 	
 	public String modNum;
@@ -178,6 +178,11 @@ public class MainActivity extends Activity {
 			
 		case POINTCHECK:
 			new CropInfo(msg.what).execute();
+			break;
+			
+		case LACKPOINT:
+			Toast.makeText(MainActivity.this, "포인트가 부족합니다",Toast.LENGTH_SHORT).show();
+			
 			break;
 			
 		default:
@@ -339,6 +344,9 @@ public class MainActivity extends Activity {
 						httpPost1 = new HttpPost(GlobalVariable.getPoint);
 						Log.d("test", "point switch");
 						break;
+						
+					
+						
 						
 						
 					default:

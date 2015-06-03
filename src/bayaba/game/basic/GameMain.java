@@ -478,7 +478,19 @@ public class GameMain extends Activity {
 					
 					
 					popup_flag = false;
-
+					//500
+					if(Integer.parseInt(userPoint) < 500)
+					{
+						Message msg2 = ((MainActivity) MainContext).m_handler.obtainMessage();
+						msg2.what = 123;
+						((MainActivity) MainContext).m_handler.sendMessage(msg2);
+						
+						MainUI.UIList.get(i).ResetButton();
+						MainUI.DeleteLastGroup(gInfo);
+						break;
+					}
+					
+						
 					//배추 버튼을 누르면  object 보임
 					CropList.get(modNum).dead = false;
 					crop_type[modNum] = 1;
@@ -503,9 +515,27 @@ public class GameMain extends Activity {
 				//딸기 버튼	
 				}else if((MainUI.UIList.get(i).index == UIButtonClass.Group0.ONE_CLICK_003)
 						&& (MainUI.UIList.get(i).click == ButtonType.STATE_CLK_BUTTON)){
+					
+					
+					popup_flag = false;
+					//1000
+					if(Integer.parseInt(userPoint) < 1000)
+					{
+						Message msg2 = ((MainActivity) MainContext).m_handler.obtainMessage();
+						msg2.what = 123;
+						((MainActivity) MainContext).m_handler.sendMessage(msg2);
+						
+						MainUI.UIList.get(i).ResetButton();
+						MainUI.DeleteLastGroup(gInfo);
+						break;
+					}
+					
 					//딸기 버튼을 누르면  object 보임
 					CropList.get(modNum).dead = false;
 					crop_type[modNum] = 2;
+					
+					
+					
 					
 					Message msg = ((MainActivity) MainContext).m_handler.obtainMessage();
 					msg.what = 3;  //strawberry, case
@@ -518,7 +548,7 @@ public class GameMain extends Activity {
 					((MainActivity) MainContext).m_handler.sendMessage(msg2);
 					
 					
-					popup_flag = false;
+					
 
 					
 					MainUI.UIList.get(i).ResetButton();
