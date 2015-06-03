@@ -541,7 +541,7 @@ public class MainActivity extends Activity {
 	
             		 String res = json.getString("response");
 	                 
-            		 if(res.equals("로딩 완료")) 
+            		 if(res.equals("Successfully Registered")) 
 	                 {
 	                	 Toast.makeText(MainActivity.this,"Registered",Toast.LENGTH_SHORT).show();
 	                 }
