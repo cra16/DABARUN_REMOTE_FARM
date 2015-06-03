@@ -82,7 +82,7 @@ public class LoginActivity extends Activity {
       		{
       			//Log.d("test", "auto login in");
       			//Execute activity below
-      			Intent intent = new Intent(LoginActivity.this, PictureActivity.class);                                                                                                                                             
+      			Intent intent = new Intent(LoginActivity.this, EducateActivity.class);                                                                                                                                             
 				startActivity(intent);	
       		}
 

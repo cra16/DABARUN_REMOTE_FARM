@@ -13,6 +13,7 @@ public class GlobalVariable {
 	public final static String getCropList= url + "getCropList.php";
 	public final static String insertCrop = url + "insertCrop.php";
 	public final static String getPoint = url + "getPoint.php";
+	public final static String getPhoto = url + "getPhoto.php";
 	public final static String setPoint = url + "setPoint.php";
 	public final static String insertRequest = url + "insertRequest.php";
 	public final static String userLog = url + "getNoteList.php";
