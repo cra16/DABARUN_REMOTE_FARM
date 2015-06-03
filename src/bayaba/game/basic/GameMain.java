@@ -26,13 +26,25 @@ import bayaba.engine.lib.GameInfo.FadeList;
 
 public class GameMain extends Activity {
 	//팝업 창
-	static class Select {
-		static class Group0 {
-			static final int POPUP_000 = 0;
-			static final int ONE_CLICK_001 = 1;
-			static final int ONE_CLICK_002 = 2;
-			static final int ONE_CLICK_003 = 3;
+//	static class Select {
+//		static class Group0 {
+//			static final int POPUP_000 = 0;
+//			static final int ONE_CLICK_001 = 1;
+//			static final int ONE_CLICK_002 = 2;
+//			static final int ONE_CLICK_003 = 3;
+//		}
+//	}
+	
+	static class UIButtonClass
+	{
+		static class Group0
+		{
+			static final int	POPUP_000		=	0;
+			static final int	ONE_CLICK_001		=	1;
+			static final int	ONE_CLICK_002		=	2;
+			static final int	ONE_CLICK_003		=	3;
 		}
+
 	}
 	
 	//창고 팝업 창
@@ -67,14 +79,15 @@ public class GameMain extends Activity {
 	public boolean storage_flag = false; //창고 팝업에 대한 불린
 	public boolean update_flag = false;
 	public boolean effect_flag = false;
+	public boolean music_flag = false;  //음악에 대한 불린
 	public int count = 0;
 	
 	//modNum 설정
 	public int modNum=-1; 
 	//public int cabHarvest = 0;
 	//public int strawHarvest = 0;
-	public String cabHarvest = null;
-	public String strawHarvest = null;
+	public String cabHarvest = "0";
+	public String strawHarvest = "0";
 	public String userPoint = null;
 	
 	
@@ -188,19 +201,17 @@ public class GameMain extends Activity {
 		
 		Music.start();
 		
-		
-		
 		for (int i = 0; i < MenuSpr.length; i++)
 			MenuSpr[i] = new Sprite(); // 스프라이트용 배열 초기화
 		
 		for (int i = 0; i < ChatSpr.length; i++) //채팅과 쪽지함
 			ChatSpr[i] = new Sprite(); // 스프라이트용 배열 초기화
+		
 	}
 
 	public void LoadGameData() // SurfaceClass에서 OpenGL이 초기화되면 최초로 호출되는 함수
 	{
 		// 게임 데이터를 로드합니다.
-		
 		
 		//sprite loading
 		backSpr.LoadSprite(mGL, MainContext, "background/farmBackground.spr");
@@ -226,7 +237,7 @@ public class GameMain extends Activity {
 		cropObj.dead = true; // 농작물은 죽어있는 상태다. false로 바꿔줘야만 메인에서 그려준다.
 		
 		// ui 적용
-		MainUI.LoadUI(mGL, MainContext, "UI/UIPack.ui"); // UI 파일을 로드한다.
+		MainUI.LoadUI(mGL, MainContext, "UI/Choice.ui"); // UI 파일을 로드한다.
 		MainUI.AddGroup(0, 1); /* 이걸 해주지 않으면 쓰레기값이 열리게 되더라.. */
 		
 		// ui 적용
@@ -248,7 +259,6 @@ public class GameMain extends Activity {
 			Button.add(temp);
 		}
 		
-		
 		signBtn.show = false;
 
 		/* 밑에 메뉴버튼 생성 */
@@ -264,7 +274,6 @@ public class GameMain extends Activity {
 			temp.SetButton(chatBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, MENU_X + (motion * (MENU_XGAP-30)) + 180, MENU_Y-390, motion); 
 			chatButton.add(temp);
 		}
-		
 		
 		
 		//로딩 
@@ -428,12 +437,7 @@ public class GameMain extends Activity {
 			}
 		}
 		
-		
-		
-		
-		
-		
-		
+
 	}
 
 
@@ -442,6 +446,9 @@ public class GameMain extends Activity {
 	{
 		synchronized (mGL) {
 			
+			
+			if(music_flag == true)
+				Music.pause();
 			
 			// 화면을 서서히 밝아지도록 한다.
 			gInfo.DoFade();
@@ -458,7 +465,7 @@ public class GameMain extends Activity {
 			for (int i = 0; i < MainUI.UIList.size(); i++) {
 				
 				//취소버튼
-				if ((MainUI.UIList.get(i).index == Select.Group0.ONE_CLICK_001)
+				if ((MainUI.UIList.get(i).index == UIButtonClass.Group0.ONE_CLICK_001)
 						&& (MainUI.UIList.get(i).click == ButtonType.STATE_CLK_BUTTON)) {
 					popup_flag = false;
 					
@@ -466,7 +473,7 @@ public class GameMain extends Activity {
 					MainUI.DeleteLastGroup(gInfo);
 
 				//배추 버튼	
-				}else if((MainUI.UIList.get(i).index == Select.Group0.ONE_CLICK_002)
+				}else if((MainUI.UIList.get(i).index == UIButtonClass.Group0.ONE_CLICK_002)
 						&& (MainUI.UIList.get(i).click == ButtonType.STATE_CLK_BUTTON)){
 					
 					
@@ -494,7 +501,7 @@ public class GameMain extends Activity {
 					MainUI.DeleteLastGroup(gInfo);
 					
 				//딸기 버튼	
-				}else if((MainUI.UIList.get(i).index == Select.Group0.ONE_CLICK_003)
+				}else if((MainUI.UIList.get(i).index == UIButtonClass.Group0.ONE_CLICK_003)
 						&& (MainUI.UIList.get(i).click == ButtonType.STATE_CLK_BUTTON)){
 					//딸기 버튼을 누르면  object 보임
 					CropList.get(modNum).dead = false;
@@ -523,7 +530,7 @@ public class GameMain extends Activity {
 			for (int i = 0; i < StorageUI.UIList.size(); i++) {
 				
 				//취소버튼
-				if ((StorageUI.UIList.get(i).index == Select.Group0.ONE_CLICK_003)
+				if ((StorageUI.UIList.get(i).index == UIButtonClass.Group0.ONE_CLICK_003)
 						&& (StorageUI.UIList.get(i).click == ButtonType.STATE_CLK_BUTTON)) {
 					StorageUI.UIList.get(i).ResetButton();
 					StorageUI.DeleteLastGroup(gInfo);
@@ -674,8 +681,6 @@ public class GameMain extends Activity {
 			
 			if(crop_effect[cropNum] == 1)
 			{
-				
-				
 				
 				EffectObj.DrawSprite(gInfo);
 				EffectObj.AddFrameLoop(0.1f);

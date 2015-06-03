@@ -216,17 +216,9 @@ public class MainActivity extends Activity {
 		
 		new Register().execute();
 
-		
 		setContentView(play);
 		initPopup();
-		
-		
 	}
-	
-	
-	
-	
-	
 	
 	  @Override
 	    public void onBackPressed() {
@@ -237,6 +229,7 @@ public class MainActivity extends Activity {
 		        }
 	    	        if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
 	    	        	toast.cancel();
+	    	        	gMain.music_flag = true;
 	    	            this.finish();
 	    	            
 	    	        }
