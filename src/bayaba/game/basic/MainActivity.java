@@ -86,6 +86,8 @@ public class MainActivity extends Activity {
 	private long backKeyPressedTime = 0;
     Toast toast;
 
+	int cmd = 0;
+
 	public Handler m_handler = new Handler() {
 
 	public int someVal;
@@ -290,8 +292,7 @@ public class MainActivity extends Activity {
 						
 						if(isDuple(modNum))
 						{
-							Toast.makeText(MainActivity.this, "중복 심기는 불가능합니다",
-									Toast.LENGTH_SHORT).show();
+							cmd = 1;
 							break;
 						}
 					
@@ -304,6 +305,11 @@ public class MainActivity extends Activity {
 						httpPost1 = new HttpPost(GlobalVariable.insertCrop);
 						break;
 					case STRAW:
+						if(isDuple(modNum))
+						{
+							cmd = 1;
+							break;
+						}
 						// 딸기
 						idValuePair.add(new BasicNameValuePair("id", gMain.id));
 						idValuePair.add(new BasicNameValuePair("type", "2"));
@@ -354,6 +360,8 @@ public class MainActivity extends Activity {
 						break;
 					}
 
+					if(cmd == 1)
+						return null;
 					/* httpPost 변수에 idValue를 추가한다 */
 					UrlEncodedFormEntity entityRequest1 = new UrlEncodedFormEntity(
 							idValuePair, "UTF-8");
@@ -377,6 +385,7 @@ public class MainActivity extends Activity {
 
 					JSONObject jsonObj = new JSONObject(result2);
 					return jsonObj;
+					
 
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -389,20 +398,22 @@ public class MainActivity extends Activity {
 
 		boolean isDuple(String modNum){
 			
-			int temp;
-			temp = Integer.parseInt(modNum);
-			for(int i=0; i<8; i++)
-			{
+				int temp;
+				temp = Integer.parseInt(modNum);
 				if(gMain.crop_mod[temp] == 1)
 					return true;
-			}
-			
-			return false;
+				else
+					return false;
 		}
 		
 		
 		@Override
 		protected void onPostExecute(JSONObject json) {
+			if(cmd == 1){
+				Toast.makeText(MainActivity.this, "이미 심겨있습니다", Toast.LENGTH_SHORT).show();
+				cmd = 0;
+				return;
+			}
 			try {
 
 				/* 통신이 정상적이지 않으면 */

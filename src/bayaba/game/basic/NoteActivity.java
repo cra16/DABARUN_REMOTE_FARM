@@ -204,7 +204,7 @@ public class NoteActivity extends Activity {
 					cropSeq = c.getString(CROPSEQ);
 					String sendId = c.getString(SENDID);
 					
-					String modNum = c.getString(MODNUM);
+					int modNum = c.getInt(MODNUM);
 					int request = c.getInt(REQUEST);
 					String requestDate = c.getString(REQUESTDATE);
 					String finnDate = c.getString(FINNDATE);
@@ -216,7 +216,7 @@ public class NoteActivity extends Activity {
 						if (isFinn == 1) {
 							attr.clear();
 							attr.put(ID, id);
-							attr.put(MODNUM, modNum);
+							attr.put(MODNUM, ""+(modNum + 1));
 							attr.put(TYPE, GlobalVariable.getCropStr(type));
 							attr.put(REQUEST,"[완료]"+ GlobalVariable.getRequestStr(request));
 							attr.put("date", finnDate);
@@ -225,7 +225,7 @@ public class NoteActivity extends Activity {
 						if (isFinn == 2) {
 							attr.clear();
 							attr.put(ID, id);
-							attr.put(MODNUM, modNum);
+							attr.put(MODNUM, ""+(modNum + 1));
 							attr.put(TYPE, GlobalVariable.getCropStr(type));
 							attr.put(REQUEST,"[거절]"+ GlobalVariable.getRequestStr(request));
 							attr.put("date", finnDate);
@@ -233,7 +233,7 @@ public class NoteActivity extends Activity {
 						}
 						attr2.clear();
 						attr2.put(ID, id);
-						attr2.put(MODNUM, modNum);
+						attr2.put(MODNUM, ""+(modNum + 1));
 						attr2.put(TYPE, GlobalVariable.getCropStr(type));
 						attr2.put(REQUEST,"[요청]" + GlobalVariable.getRequestStr(request));
 						attr2.put("date", requestDate);
@@ -243,7 +243,7 @@ public class NoteActivity extends Activity {
 					else{
 						attr2.clear();
 						attr2.put(ID, id);
-						attr2.put(MODNUM, modNum);
+						attr2.put(MODNUM, ""+(modNum + 1));
 						attr2.put(TYPE, GlobalVariable.getCropStr(type));
 						if(request == 8)
 							attr2.put(REQUEST,"[알림]" + getReqText(request));
