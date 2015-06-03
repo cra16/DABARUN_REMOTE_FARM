@@ -292,6 +292,13 @@ public class MainActivity extends Activity {
 
 					case CABB:
 						// 배추
+						
+						if(isDuple(modNum))
+						{
+							Toast.makeText(MainActivity.this, "중복 심기는 불가능합니다",
+									Toast.LENGTH_SHORT).show();
+							break;
+						}
 						idValuePair.add(new BasicNameValuePair("id", id));
 						idValuePair.add(new BasicNameValuePair("type", "1"));
 						idValuePair
@@ -381,6 +388,20 @@ public class MainActivity extends Activity {
 			return null;
 		}
 
+		boolean isDuple(String modNum){
+			
+			int temp;
+			temp = Integer.parseInt(modNum);
+			for(int i=0; i<8; i++)
+			{
+				if(gMain.crop_mod[temp] == 1)
+					return true;
+			}
+			
+			return false;
+		}
+		
+		
 		@Override
 		protected void onPostExecute(JSONObject json) {
 			try {
@@ -463,7 +484,8 @@ public class MainActivity extends Activity {
 					int i_crop_mod;
 					int i_crop_level;
 					int i_crop_effect;
-					
+
+
 					
 					for (int i = 0; i < JsonArr.length(); i++) {
 						JSONObject c = JsonArr.getJSONObject(i);
@@ -473,7 +495,8 @@ public class MainActivity extends Activity {
 						crop_mod = c.getString(MODULE);
 						crop_level = c.getString(LEVEL);
 						crop_effect = c.getString("effect");
-						
+						Log.d("test",crop_mod + "'s effect:" + crop_effect);
+
 
 						i_crop_type = Integer.parseInt(crop_type);
 						i_crop_mod = Integer.parseInt(crop_mod);
@@ -485,6 +508,7 @@ public class MainActivity extends Activity {
 							gMain.crop_level[i_crop_mod] = i_crop_level;
 							gMain.crop_type[i_crop_mod] = i_crop_type;
 							gMain.crop_effect[i_crop_mod] = i_crop_effect;
+							gMain.crop_mod[i_crop_mod] = 1;//true
 							
 						}else if (i_crop_level == 6 && i_crop_type == 1){ //cabbage 수확
 							cabHarvestCount++;

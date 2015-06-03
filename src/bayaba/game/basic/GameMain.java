@@ -157,7 +157,7 @@ public class GameMain extends Activity {
 		
 		
 		
-		if ((System.currentTimeMillis() - CloudTimer >= 50000) && (Cloud.size() < 3)) 
+		if ((System.currentTimeMillis() - CloudTimer >= 50000) && (Cloud.size() < 5)) 
 		
 		{
 			for (int i = 0; i < 6; i++) 
@@ -243,7 +243,7 @@ public class GameMain extends Activity {
 		/* 십자모양 4개 생성 */
 		for (int motion = 0; motion < 4; motion++) {
 			temp = new ButtonObject();
-			temp.SetButton(cirBtnSpr, ButtonType.TYPE_POPUP, 0, 400, 330, motion);
+			temp.SetButton(cirBtnSpr, ButtonType.TYPE_POPUP, 1, 400, 330, motion);
 			temp.show = false;
 			Button.add(temp);
 		}
@@ -290,8 +290,10 @@ public class GameMain extends Activity {
 			/*빈 땅 이외의 곳을 클릭시 버튼 없어지게 함 
 			 *터치도 안되게 해야되는데????*/
 			for (int i = 0; i < 4; i++)
-				Button.get(i).show = false;
+				{
 
+					Button.get(i).show = false;
+				}
 			
 			/* 빈땅 터치 체크 -> 4개버튼 활성화*/
 			for (int i = 0; i < EmptyList.size(); i++) 
@@ -302,13 +304,13 @@ public class GameMain extends Activity {
 					
 					modNum =i;
 					
-					Button.get(0).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x - 90, Current.y - 55, 0);//심기
-					Button.get(1).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x - 30, Current.y - 55, 1);//거름
-					Button.get(2).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x + 30 , Current.y -55, 2);//물
-					Button.get(3).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, Current.x + 90, Current.y - 55, 3);//잡초
-					
+					Button.get(0).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 1, Current.x - 90, Current.y - 55, 0);//심기
+					Button.get(1).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 1, Current.x - 30, Current.y - 55, 1);//거름
+					Button.get(2).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 1, Current.x + 30 , Current.y -55, 2);//물
+					Button.get(3).SetButton(cirBtnSpr, ButtonType.TYPE_ONE_CLICK, 1, Current.x + 90, Current.y - 55, 3);//잡초
 					for(int j=0; j<4; j++)
 						Button.get(j).show = true;
+					
 					
 				}
 			}
@@ -355,7 +357,7 @@ public class GameMain extends Activity {
 					belowButton.get(i).ResetButton();
 				}
 				
-			}else if (Button.get(i).click == ButtonType.STATE_CLK_BUTTON) {
+			}else if (Button.get(i).click == ButtonType.STATE_CLK_BUTTON && (popup_flag == false)) {
 				
 				//Button.get(i).dead = false;
 //				MainUI.AddGroup(0, 1);
@@ -365,6 +367,7 @@ public class GameMain extends Activity {
 				
 				if(i == 0){ //심기
 					MainUI.AddGroup(0, 1);
+					
 					popup_flag = true;
 					Button.get(i).ResetButton();
 					
@@ -444,8 +447,8 @@ public class GameMain extends Activity {
 			gInfo.DoFade();
 			
 			font.BeginFont(gInfo);
-			cabFont.BeginFont(gInfo);
-			strawFont.BeginFont(gInfo);
+			//cabFont.BeginFont(gInfo);
+			//strawFont.BeginFont(gInfo);
 			
 			backSpr.PutAni(gInfo, 400, 240, 0, 0); // 백그라운드
 
@@ -457,7 +460,7 @@ public class GameMain extends Activity {
 				//취소버튼
 				if ((MainUI.UIList.get(i).index == Select.Group0.ONE_CLICK_001)
 						&& (MainUI.UIList.get(i).click == ButtonType.STATE_CLK_BUTTON)) {
-					//popup_flag = false;
+					popup_flag = false;
 					
 					MainUI.UIList.get(i).ResetButton();
 					MainUI.DeleteLastGroup(gInfo);
@@ -466,6 +469,9 @@ public class GameMain extends Activity {
 				}else if((MainUI.UIList.get(i).index == Select.Group0.ONE_CLICK_002)
 						&& (MainUI.UIList.get(i).click == ButtonType.STATE_CLK_BUTTON)){
 					
+					
+					popup_flag = false;
+
 					//배추 버튼을 누르면  object 보임
 					CropList.get(modNum).dead = false;
 					crop_type[modNum] = 1;
@@ -505,7 +511,8 @@ public class GameMain extends Activity {
 					((MainActivity) MainContext).m_handler.sendMessage(msg2);
 					
 					
-					
+					popup_flag = false;
+
 					
 					MainUI.UIList.get(i).ResetButton();
 					MainUI.DeleteLastGroup(gInfo);
@@ -636,7 +643,7 @@ public class GameMain extends Activity {
 				
 			
 			/*팝업 그려주기 */
-			if (popup_flag == true)
+			//if (popup_flag == true)
 				MainUI.Draw(mGL, gInfo, font);
 			
 			//이펙트 
