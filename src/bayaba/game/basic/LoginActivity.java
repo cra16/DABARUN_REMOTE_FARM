@@ -164,7 +164,7 @@ public class LoginActivity extends Activity {
   							spfEdit.commit();	//commit
 
   							//Execute activity below
-  		        			Intent intent = new Intent(LoginActivity.this, PictureActivity.class);                                                                                                                                             
+  		        			Intent intent = new Intent(LoginActivity.this, EducateActivity.class);                                                                                                                                             
   							startActivity(intent);
   		        		}	        		
   		        		

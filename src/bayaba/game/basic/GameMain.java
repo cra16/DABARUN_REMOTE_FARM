@@ -307,7 +307,7 @@ public class GameMain extends Activity {
 			/* 빈땅 터치 체크 -> 4개버튼 활성화*/
 			for (int i = 0; i < EmptyList.size(); i++) 
 			{
-				if (EmptyList.get(i).CheckPos((int) TouchX, (int) TouchY))
+				if (EmptyList.get(i).CheckPos((int) TouchX, (int) TouchY) && (popup_flag == false))
 				{
 					Current = EmptyList.get(i); /* current : 터치된 오브젝트 */
 					
@@ -678,15 +678,14 @@ public class GameMain extends Activity {
 
 			EffectObj.x = EmptyList.get(cropNum).x+50;
 			EffectObj.y = EmptyList.get(cropNum).y-80;
-			
-			if(crop_effect[cropNum] == 1)
-			{
+
+			if(crop_effect[cropNum] > 0 && crop_effect[cropNum] < 4){
 				
+				EffectObj.motion = crop_effect[cropNum];
 				EffectObj.DrawSprite(gInfo);
-				EffectObj.AddFrameLoop(0.1f);
-				
+				EffectObj.AddFrameLoop(0.05f);
 			}
-			
+		
 		}
 			
 	}

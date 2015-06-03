@@ -492,7 +492,7 @@ public class MainActivity extends Activity {
 						crop_mod = c.getString(MODULE);
 						crop_level = c.getString(LEVEL);
 						crop_effect = c.getString("effect");
-						Log.d("test",crop_mod + "'s effect:" + crop_effect);
+						Log.d("effect",crop_mod + "'s effect:" + crop_effect);
 
 
 						i_crop_type = Integer.parseInt(crop_type);
