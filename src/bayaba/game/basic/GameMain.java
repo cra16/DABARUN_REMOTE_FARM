@@ -67,6 +67,7 @@ public class GameMain extends Activity {
 	public boolean storage_flag = false; //창고 팝업에 대한 불린
 	public boolean update_flag = false;
 	public boolean effect_flag = false;
+	public boolean music_flag = false;  //음악에 대한 불린
 	public int count = 0;
 	
 	//modNum 설정
@@ -186,19 +187,19 @@ public class GameMain extends Activity {
 		
 		Music.start();
 		
-		
-		
 		for (int i = 0; i < MenuSpr.length; i++)
 			MenuSpr[i] = new Sprite(); // 스프라이트용 배열 초기화
 		
 		for (int i = 0; i < ChatSpr.length; i++) //채팅과 쪽지함
 			ChatSpr[i] = new Sprite(); // 스프라이트용 배열 초기화
+		
+//		if(music_flag == true)
+//			Music.pause();
 	}
 
 	public void LoadGameData() // SurfaceClass에서 OpenGL이 초기화되면 최초로 호출되는 함수
 	{
 		// 게임 데이터를 로드합니다.
-		
 		
 		//sprite loading
 		backSpr.LoadSprite(mGL, MainContext, "background/farmBackground.spr");
@@ -246,7 +247,6 @@ public class GameMain extends Activity {
 			Button.add(temp);
 		}
 		
-		
 		signBtn.show = false;
 
 		/* 밑에 메뉴버튼 생성 */
@@ -262,7 +262,6 @@ public class GameMain extends Activity {
 			temp.SetButton(chatBtnSpr, ButtonType.TYPE_ONE_CLICK, 0, MENU_X + (motion * (MENU_XGAP-30)) + 180, MENU_Y-390, motion); 
 			chatButton.add(temp);
 		}
-		
 		
 		
 		//로딩 
@@ -396,6 +395,8 @@ public class GameMain extends Activity {
 		
 		if (push) {
 			
+			
+			
 			/*빈 땅 이외의 곳을 클릭시 버튼 없어지게 함 
 			 *터치도 안되게 해야되는데????*/
 			for (int i = 0; i < 4; i++)
@@ -433,6 +434,9 @@ public class GameMain extends Activity {
 	{
 		synchronized (mGL) {
 			
+			
+			if(music_flag == true)
+				Music.pause();
 			
 			// 화면을 서서히 밝아지도록 한다.
 			gInfo.DoFade();
