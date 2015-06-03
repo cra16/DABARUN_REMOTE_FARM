@@ -155,13 +155,15 @@ public class GameMain extends Activity {
 	
 	void MakeCloud(){
 		
-		if (System.currentTimeMillis() - CloudTimer >= 50000) //50초마다 
+		
+		
+		if ((System.currentTimeMillis() - CloudTimer >= 50000) && (Cloud.size() < 3)) 
 		
 		{
 			for (int i = 0; i < 6; i++) 
 			{
 				GameObject temp = new GameObject();
-				temp.SetObject(cloudSpr, 0, 0, MyRand.nextInt(70) + (i * 120) -100, 15 + MyRand.nextInt(70), 0, 0); 
+				temp.SetObject(cloudSpr, 0, 0, MyRand.nextInt(70) + (i * 120) -600, 15 + MyRand.nextInt(70), 0, 0); 
 				
 				 
 				
