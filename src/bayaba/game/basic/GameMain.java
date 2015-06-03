@@ -643,7 +643,7 @@ public class GameMain extends Activity {
 				
 			
 			/*팝업 그려주기 */
-			//if (popup_flag == true)
+			if (popup_flag == true)
 				MainUI.Draw(mGL, gInfo, font);
 			
 			//이펙트 
