@@ -288,7 +288,7 @@ public class MainActivity extends Activity {
 
 					case CABB:
 						// 배추
-<<<<<<< HEAD
+
 						
 						if(isDuple(modNum))
 						{
@@ -296,10 +296,10 @@ public class MainActivity extends Activity {
 									Toast.LENGTH_SHORT).show();
 							break;
 						}
-						idValuePair.add(new BasicNameValuePair("id", id));
-=======
+					
+
 						idValuePair.add(new BasicNameValuePair("id", gMain.id));
->>>>>>> 45fc80833fa9653128b1de4f83d4f2d1ee0cfd96
+
 						idValuePair.add(new BasicNameValuePair("type", "1"));
 						idValuePair.add(new BasicNameValuePair("modNum", modNum));
 						idValuePair.add(new BasicNameValuePair("point", "500"));
