@@ -417,7 +417,7 @@ public class MainActivity extends Activity {
 			try {
 
 				/* 통신이 정상적이지 않으면 */
-				if (json == null) {
+				if (json == null || "success".equalsIgnoreCase(json.getString("result"))) {
 				   if (fromWhere == WATER)
 						Toast.makeText(MainActivity.this, "물주기 요청",
 								Toast.LENGTH_SHORT).show();

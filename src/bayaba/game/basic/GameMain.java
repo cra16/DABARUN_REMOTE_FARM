@@ -711,7 +711,7 @@ public class GameMain extends Activity {
 
 			if(crop_effect[cropNum] > 0 && crop_effect[cropNum] < 4){
 				
-				EffectObj.motion = crop_effect[cropNum];
+				EffectObj.motion = crop_effect[cropNum]-1;
 				EffectObj.DrawSprite(gInfo);
 				EffectObj.AddFrameLoop(0.05f);
 			}

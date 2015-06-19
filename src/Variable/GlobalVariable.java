@@ -27,8 +27,9 @@ public class GlobalVariable {
 	
 	public final static String url1 = "http://211.39.253.201/Dabarun/chat/";
 	public final static String chatLogin = url1 + "chatLogin.php";
-	
-	
+	public final static String PROJECT_ID = "486669052747";
+	public final static String url2 = "http://211.39.253.201/Dabarun/";
+	public final static String redIdSend = url2 + "push_insert.php";
 	public final static String getDoList = "http://211.39.253.201/Dabarun/farmer/getDoList.php";
 	
 	public static String getRequestStr(int request) {

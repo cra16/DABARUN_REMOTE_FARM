@@ -181,7 +181,7 @@ public class LoginActivity extends Activity {
   	/* we do not use gcm in this code*/
   	
   	
-  	/*
+  	
   	public void registerGCM(String id){
 		GCMRegistrar.checkDevice(this);		// ���� �ٱ� Ŭ������ �־�ߵ� ������ ���� �ȵ�.
 		GCMRegistrar.checkManifest(this);
@@ -189,7 +189,7 @@ public class LoginActivity extends Activity {
 		Log.d("test", "regId : "+regId);
 		if ("".equals(regId) || null == regId) {
 			Log.d("test", "regId check");
-		  GCMRegistrar.register(this, GCMVariable.PROJECT_ID);
+		  GCMRegistrar.register(this, GlobalVariable.PROJECT_ID);
 		} 
 		else {
 			Log.d("TAG", "Already registered");
@@ -202,7 +202,7 @@ public class LoginActivity extends Activity {
 			ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 			nameValuePairs.add(new BasicNameValuePair("phid", regId));	//key,value
 			nameValuePairs.add(new BasicNameValuePair("id", id));	//key, value
-			HttpPost httpPost = new HttpPost(GCMVariable.redIdSend);
+			HttpPost httpPost = new HttpPost(GlobalVariable.redIdSend);
 			UrlEncodedFormEntity entityRequest = new UrlEncodedFormEntity(nameValuePairs,"UTF-8");
 			httpPost.setEntity(entityRequest);
 			ResponseHandler<String> handler = new BasicResponseHandler();
@@ -213,5 +213,5 @@ public class LoginActivity extends Activity {
 			}catch(Exception e){}
 	}
   	//register ��
-  	*/
+  	
 }
